@@ -6,4 +6,4 @@
 target/
 
 # Configuration is also ignored.
-configuration/
+config/
