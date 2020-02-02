@@ -1,0 +1,9 @@
+# Remove intellij specific stuff
+.idea/
+*.iml
+
+# Build outputs ignored
+target/
+
+# Configuration is also ignored.
+configuration/
