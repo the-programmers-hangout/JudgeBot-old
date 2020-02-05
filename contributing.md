@@ -35,3 +35,8 @@ develop - all accepted MRs
 feature/A - Any feature, namely A
 feature/A_B - Any feature which depends on A
 feature/A_B_C - ... above
+
+
+### On your Merge request
+Detail every single change you made and if it's not obvious why, detail why. 
+Preferably include some sample screenshots when relevant.
