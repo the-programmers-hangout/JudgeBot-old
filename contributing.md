@@ -28,3 +28,10 @@ In general, if you want to contribute to the project it's no big deal, just
 keep your MR small, focused, clean, and try not to disturb to much code. 
 If it's clear that something needs to be refactored we can open an issue about it
 and move from there.
+
+### Branching scheme
+master - releases only
+develop - all accepted MRs 
+feature/A - Any feature, namely A
+feature/A_B - Any feature which depends on A
+feature/A_B_C - ... above
