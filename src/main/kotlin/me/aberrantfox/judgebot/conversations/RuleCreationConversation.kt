@@ -1,5 +1,6 @@
 package me.aberrantfox.judgebot.conversations
 
+import me.aberrantfox.judgebot.arguments.RuleWeightArg
 import me.aberrantfox.judgebot.configuration.*
 import me.aberrantfox.judgebot.services.EmbedService
 import me.aberrantfox.judgebot.localization.Messages
@@ -35,7 +36,7 @@ fun ruleCreationConversation(messages: Messages, dbService: DatabaseService, emb
             val description = blockingPrompt(SentenceArg) { messages.PROMPT_RULE_DESCRIPTION }
 
             val weight = blockingPromptUntil(
-                    argumentType = IntegerArg,
+                    argumentType = RuleWeightArg,
                     initialPrompt = { messages.PROMPT_RULE_WEIGHT },
                     until = { it in 1..5 },
                     errorMessage = { messages.ERROR_RULE_WEIGHT_TOO_LOW }
