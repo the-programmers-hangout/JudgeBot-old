@@ -27,9 +27,7 @@ class DatabaseService(val config: BotConfiguration) {
     fun deleteRule(rule: Rule) =
             ruleCollection.deleteOne(Rule::guildId eq rule.guildId, Rule::number eq rule.number)
 
-    fun updateRule(rule: Rule) {
-
-    }
+    fun updateRule(rule: Rule) = ruleCollection.updateOne(rule)
 
     fun insertUserRecord() {
 

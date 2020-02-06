@@ -16,6 +16,7 @@
 | createRule                  | <none>    | Use this to create new rules for your guild. |
 | deleteRule                  | <none>    | Use this to delete rules for your guild.     |
 | rules, showRules, readRules | <none>    | Displays all the rules and their weights.    |
+| updateRule                  | <none>    | Update a rule for this guild.                |
 
 ## Utility
 | Commands | Arguments | Description          |
