@@ -1,16 +1,18 @@
 package me.aberrantfox.judgebot.conversations
 
-import me.aberrantfox.judgebot.configuration.InfractionWeight
-import me.aberrantfox.judgebot.configuration.convertToInfractionType
 import me.aberrantfox.judgebot.extensions.next
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.DatabaseService
+import me.aberrantfox.judgebot.services.database.dataclasses.InfractionWeight
+import me.aberrantfox.judgebot.services.database.dataclasses.convertToInfractionType
 import me.aberrantfox.kjdautils.api.dsl.Convo
 import me.aberrantfox.kjdautils.api.dsl.conversation
 import me.aberrantfox.kjdautils.internal.arguments.BooleanArg
 import me.aberrantfox.kjdautils.internal.arguments.UserArg
 import me.aberrantfox.kjdautils.internal.arguments.ChoiceArg
 import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
+
+val infractionChoiceArg = ChoiceArg("InfractionTypes", "Note", "Borderline", "Lightly", "Clearly", "Harshly")
 
 @Convo
 fun createInfractionConversation(messages: Messages, databaseService: DatabaseService) = conversation("Infraction-Conversation") {
@@ -22,9 +24,7 @@ fun createInfractionConversation(messages: Messages, databaseService: DatabaseSe
 
     // TODO: Display server rules here
 
-    var infractionChoice = blockingPrompt(
-            ChoiceArg("InfractionTypes", "Note", "Borderline", "Lightly", "Clearly", "Harshly"))
-    { messages.PROMPT_USER_INFRACTION_TYPE }
+    var infractionChoice = blockingPrompt(infractionChoiceArg) { messages.PROMPT_USER_INFRACTION_TYPE }
 
     val  infractionType  = convertToInfractionType(infractionChoice)
 

@@ -2,7 +2,7 @@ package me.aberrantfox.judgebot.services
 
 import com.mongodb.MongoClient
 import me.aberrantfox.judgebot.configuration.BotConfiguration
-import me.aberrantfox.judgebot.configuration.GuildMember
+import me.aberrantfox.judgebot.services.database.dataclasses.GuildMember
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.extensions.jda.fullName
@@ -43,7 +43,6 @@ class DatabaseService(val config: BotConfiguration) {
             thumbnail = target.effectiveAvatarUrl
 
             field {
-                name = ""
                 value = "__**Summary**__"
                 inline = false
             }
