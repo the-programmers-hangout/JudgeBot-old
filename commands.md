@@ -11,9 +11,11 @@
 | Infract, Warn, Strike | <none>    | Use this to issue an infraction to a user |
 
 ## Rule Management
-| Commands | Arguments | Description                                  |
-| -------- | --------- | -------------------------------------------- |
-| NewRule  | <none>    | Use this to create new rules for your guild. |
+| Commands                    | Arguments | Description                                  |
+| --------------------------- | --------- | -------------------------------------------- |
+| createRule                  | <none>    | Use this to create new rules for your guild. |
+| deleteRule                  | <none>    | Use this to delete rules for your guild.     |
+| rules, showRules, readRules | <none>    | Displays all the rules and their weights.    |
 
 ## Utility
 | Commands | Arguments | Description          |
