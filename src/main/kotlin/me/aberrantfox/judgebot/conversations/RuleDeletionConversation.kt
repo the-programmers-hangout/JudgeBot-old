@@ -35,7 +35,6 @@ fun ruleDeletionConversation(messages: Messages, dbService: DatabaseService, emb
 
             if (sure.equals("y", ignoreCase = true)) {
                 respond(messages.RULE_DELETED)
-                respond(embeds.embedRuleDetailed(ruleToDelete))
                 dbService.deleteRule(ruleToDelete)
             } else {
                 respond(messages.RULE_NOT_DELETED)
