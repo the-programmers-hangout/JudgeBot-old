@@ -13,6 +13,7 @@ import me.aberrantfox.kjdautils.internal.arguments.*
 fun conversationCommands(conversationService: ConversationService, embeds: EmbedService, dbService: DatabaseService)
         = commands {
 
+
     command("createRule") {
         description = "Use this to create new rules for your guild."
         requiresGuild = true
