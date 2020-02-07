@@ -5,12 +5,12 @@ import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.EmbedService
 import me.aberrantfox.kjdautils.api.dsl.Convo
 import me.aberrantfox.kjdautils.api.dsl.conversation
+import me.aberrantfox.kjdautils.internal.arguments.BooleanArg
 import me.aberrantfox.kjdautils.internal.arguments.IntegerArg
 
 @Convo
 fun ruleUpdationConversation(messages: Messages, dbService: DatabaseService, embeds: EmbedService) =
         conversation(name = "Rule-Updation-Conversation") {
-            //TODO: Figure out if this is really necessary
             val rules = dbService.getRules(guild.id)
 
             respond(embeds.embedRulesDetailed(guild.id))
@@ -22,7 +22,10 @@ fun ruleUpdationConversation(messages: Messages, dbService: DatabaseService, emb
                     errorMessage = { messages.ERROR_RULE_NUMBER_NOT_EXISTS }
             )
 
-            val ruleToUpdate = rules.find { it.number == ruleNumberToUpdate }
+            val ruleToUpdate = rules.first { it.number == ruleNumberToUpdate }
 
+            val updateNumber = blockingPrompt(BooleanArg(truthValue = "y", falseValue = "n")) {
+                messages.PROMPT_UPDATE_RULE_NUMBER
+            }
 
         }

@@ -8,6 +8,7 @@ import org.litote.kmongo.newId
 data class BotConfiguration(
     val owner: String = "insert-owner-id",
     val whitelist: List<String> = listOf("insert-valid-guild-ids"),
+    val guilds: List<GuildConfiguration> = listOf(GuildConfiguration()),
     val dbConfiguration: DatabaseConfiguration = DatabaseConfiguration()
 )
 
@@ -15,10 +16,9 @@ data class DatabaseConfiguration(
     val address: String = "localhost:27017"
 )
 
-//TODO: Possibly delete this class?
 data class GuildConfiguration(
-    val owner: String = "insert-owner-id",
-    val rules: ArrayList<Rule> = arrayListOf(Rule())
+    val id: String = "insert-id",
+    val owner: String = "insert-owner-id"
 )
 
 //TODO: Figure out how to make composite id with rule number and guild id
@@ -32,7 +32,5 @@ data class Rule (
     val weight: Int = 1
 )
 
-fun GuildConfiguration.isRule(index: Int) = rules.size < index
 
-fun GuildConfiguration.getRuleOrNull(index: Int) = rules.getOrNull(index)
 

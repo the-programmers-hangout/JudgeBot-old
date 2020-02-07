@@ -7,7 +7,6 @@ import me.aberrantfox.kjdautils.api.dsl.command.CommandSet
 import me.aberrantfox.kjdautils.internal.services.ConversationService
 import me.aberrantfox.kjdautils.api.dsl.command.commands
 import me.aberrantfox.kjdautils.internal.arguments.*
-import me.aberrantfox.kjdautils.internal.command.ArgumentType
 
 
 @CommandSet("Rule Management")

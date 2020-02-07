@@ -25,5 +25,6 @@ data class Messages(
     val RULE_NOT_DELETED: String = "No rules have been deleted.",
 
     // Rule updation
-    val PROMPT_RULE_TO_UPDATE: String = "Enter the number of the rule you wish to update."
+    val PROMPT_RULE_TO_UPDATE: String = "Enter the number of the rule you wish to update.",
+    val PROMPT_UPDATE_RULE_NUMBER: String = "Do you want to update the rule number? Y/N:"
 )
