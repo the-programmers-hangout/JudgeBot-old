@@ -5,6 +5,7 @@ import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.EmbedService
 import me.aberrantfox.kjdautils.api.dsl.Convo
 import me.aberrantfox.kjdautils.api.dsl.conversation
+import me.aberrantfox.kjdautils.internal.arguments.BooleanArg
 import me.aberrantfox.kjdautils.internal.arguments.IntegerArg
 import me.aberrantfox.kjdautils.internal.arguments.WordArg
 
@@ -22,18 +23,15 @@ fun ruleDeletionConversation(messages: Messages, dbService: DatabaseService, emb
                     errorMessage = { messages.ERROR_RULE_NUMBER_NOT_EXISTS }
             )
 
-            val ruleToDelete = rules.find { it.number == ruleNumberToDelete }!!
+            val ruleToDelete = rules.first { it.number == ruleNumberToDelete }
             respond("You have chosen to delete rule number ${ruleNumberToDelete}:")
             respond(embeds.embedRuleDetailed(ruleToDelete))
 
-            val sure = blockingPromptUntil(
-                    argumentType = WordArg,
-                    initialPrompt = { messages.PROMPT_ARE_YOU_SURE },
-                    until = { it.equals("y", ignoreCase = true) || it.equals("n", ignoreCase = true) },
-                    errorMessage = { messages.ERROR_ANS_MUST_BE_Y_OR_N }
-            )
+            val sure = blockingPrompt(BooleanArg(truthValue = "y", falseValue = "n")) {
+                messages.PROMPT_ARE_YOU_SURE
+            }
 
-            if (sure.equals("y", ignoreCase = true)) {
+            if (sure) {
                 respond(messages.RULE_DELETED)
                 dbService.deleteRule(ruleToDelete)
             } else {
