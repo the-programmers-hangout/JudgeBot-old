@@ -28,7 +28,7 @@ fun conversationCommands(conversationService: ConversationService, embeds: Embed
             conversationService.createConversation(it.author, it.guild!!, "Rule-Deletion-Conversation")
         }
     }
-    command("rules", "showRules", "readRules") {
+    command("rules") {
         description = "Displays all the rules and their weights."
         requiresGuild = true
         execute {
