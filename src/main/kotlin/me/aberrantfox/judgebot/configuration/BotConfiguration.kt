@@ -13,7 +13,8 @@ data class BotConfiguration(
 )
 
 data class DatabaseConfiguration(
-        val address: String = "localhost:27017"
+        val address: String = "localhost:27017",
+        val databaseName: String = "judgebot"
 )
 
 data class GuildConfiguration(
