@@ -15,30 +15,30 @@ import org.litote.kmongo.newId
 @Convo
 fun ruleCreationConversation(messages: Messages, dbService: DatabaseService, embeds: EmbedService) =
         conversation(name = "Rule-Creation-Conversation") {
-            val rules = dbService.getRules(guild.id)
+            val guildRules = dbService.getRules(guild.id)
 
-            val number = blockingPromptUntil(
+            val ruleNumber = blockingPromptUntil(
                     argumentType = IntegerArg,
                     initialPrompt = { messages.PROMPT_RULE_NUMBER },
-                    until = { number -> !rules.any { it.number == number } },
+                    until = { number -> !guildRules.any { it.number == number } },
                     errorMessage = { messages.ERROR_RULE_NUMBER_EXISTS }
             )
 
-            val shortName = blockingPromptUntil(
+            val ruleShortName = blockingPromptUntil(
                     argumentType = WordArg,
                     initialPrompt = { messages.PROMPT_RULE_SHORTNAME },
-                    until = { shortName -> shortName.length < 16 && !rules.any { it.shortName == shortName } },
+                    until = { shortName -> shortName.length < 16 && !guildRules.any { it.shortName == shortName } },
                     errorMessage = { messages.ERROR_RULE_SHORTNAME_EXISTS }
             )
 
-            val title = blockingPrompt(SentenceArg) { messages.PROMPT_RULE_TITLE }
+            val ruleTitle = blockingPrompt(SentenceArg) { messages.PROMPT_RULE_TITLE }
 
-            val description = blockingPrompt(SentenceArg) { messages.PROMPT_RULE_DESCRIPTION }
+            val ruleDescription = blockingPrompt(SentenceArg) { messages.PROMPT_RULE_DESCRIPTION }
 
-            val weight = blockingPrompt(RuleWeightArg) { messages.PROMPT_RULE_WEIGHT }
+            val ruleWeight = blockingPrompt(RuleWeightArg) { messages.PROMPT_RULE_WEIGHT }
 
-            val rule = Rule(newId(), guild.id, number, shortName, title, description, weight)
+            val newRule = Rule(newId(), guild.id, ruleNumber, ruleShortName, ruleTitle, ruleDescription, ruleWeight)
             respond(messages.RULE_CREATED)
-            respond(embeds.embedRuleDetailed(rule))
-            dbService.addRule(rule)
+            respond(embeds.embedRuleDetailed(newRule))
+            dbService.addRule(newRule)
         }

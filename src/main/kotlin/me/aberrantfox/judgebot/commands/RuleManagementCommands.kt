@@ -48,8 +48,7 @@ fun conversationCommands(conversationService: ConversationService,
         description = messages.DISPLAY_RULE_DESCRIPTION
         requiresGuild = true
         execute(IntegerArg or WordArg) {
-            val rule: Rule?
-            rule = when (val input = it.args.first) {
+            val rule = when (val input = it.args.first) {
                 is Either.Left -> dbService.getRule(input.left, it.guild!!.id)
                 is Either.Right -> dbService.getRule(input.right, it.guild!!.id)
             }
