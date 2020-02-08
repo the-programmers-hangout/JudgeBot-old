@@ -43,7 +43,7 @@ data class Messages(
     val DISPLAY_RULE_DESCRIPTION: String = "Display a given rule.",
 
     // Rule command messages
-    val ERROR_COULD_NOT_FIND_RULE: String = "Could not find rule."
+    val ERROR_COULD_NOT_FIND_RULE: String = "Could not find rule.",
     val PROMPT_USER_ID_INFRACTION: String = "Please input the id of the user you would like to issue an Infraction, Strike, Warning. Making a note is also possible.",
 
     // Infractions

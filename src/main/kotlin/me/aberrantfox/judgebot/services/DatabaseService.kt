@@ -62,24 +62,23 @@ class DatabaseService(val config: BotConfiguration) {
     }
 }
 
-    private fun buildHistoryEmbed(target: User, member: GuildMember, includeModerator: Boolean)  =
-        embed {
-            title = "${target.fullName()}'s Record"
-            thumbnail = target.effectiveAvatarUrl
+private fun buildHistoryEmbed(target: User, member: GuildMember, includeModerator: Boolean)  =
+    embed {
+        title = "${target.fullName()}'s Record"
+        thumbnail = target.effectiveAvatarUrl
 
-            field {
-                value = "__**Summary**__"
-                inline = false
-            }
-
-            field {
-                name = "Information"
-
-                if(includeModerator){
-                    value +="\nHistory has been invoked **${member.historyCount}** times."
-                }
-            }
-
-            //TODO: Build out embed with more details
+        field {
+            value = "__**Summary**__"
+            inline = false
         }
+
+        field {
+            name = "Information"
+
+            if(includeModerator){
+                value +="\nHistory has been invoked **${member.historyCount}** times."
+            }
+        }
+
+        //TODO: Build out embed with more details
     }
