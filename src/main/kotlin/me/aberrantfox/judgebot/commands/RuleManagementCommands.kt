@@ -1,7 +1,6 @@
 package me.aberrantfox.judgebot.commands
 
 import me.aberrantfox.judgebot.configuration.Constants
-import me.aberrantfox.judgebot.configuration.Rule
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.EmbedService

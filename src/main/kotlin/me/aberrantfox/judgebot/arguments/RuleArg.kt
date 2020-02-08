@@ -1,6 +1,6 @@
 package me.aberrantfox.judgebot.arguments
 
-import me.aberrantfox.judgebot.configuration.Rule
+import me.aberrantfox.judgebot.services.database.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.dsl.command.CommandEvent
 import me.aberrantfox.kjdautils.internal.command.ArgumentResult
 import me.aberrantfox.kjdautils.internal.command.ArgumentType

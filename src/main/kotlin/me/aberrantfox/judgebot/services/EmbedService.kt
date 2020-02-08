@@ -1,6 +1,6 @@
 package me.aberrantfox.judgebot.services
 
-import me.aberrantfox.judgebot.configuration.Rule
+import me.aberrantfox.judgebot.services.database.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.api.dsl.menu

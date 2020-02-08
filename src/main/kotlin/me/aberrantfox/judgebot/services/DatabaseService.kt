@@ -3,8 +3,8 @@ package me.aberrantfox.judgebot.services
 import com.mongodb.MongoClient
 import com.mongodb.client.result.DeleteResult
 import me.aberrantfox.judgebot.configuration.BotConfiguration
-import me.aberrantfox.judgebot.configuration.Rule
 import me.aberrantfox.judgebot.services.database.dataclasses.GuildMember
+import me.aberrantfox.judgebot.services.database.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.annotation.Service
 import org.litote.kmongo.*
 import me.aberrantfox.kjdautils.api.dsl.embed
