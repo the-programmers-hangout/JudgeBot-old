@@ -1,6 +1,7 @@
 package me.aberrantfox.judgebot.services
 
 import com.mongodb.MongoClient
+import com.mongodb.client.result.DeleteResult
 import me.aberrantfox.judgebot.configuration.BotConfiguration
 import me.aberrantfox.judgebot.configuration.Rule
 import me.aberrantfox.kjdautils.api.annotation.Service
@@ -24,8 +25,8 @@ class DatabaseService(val config: BotConfiguration) {
 
     fun addRule(rule: Rule) = ruleCollection.insertOne(rule)
 
-    fun deleteRule(rule: Rule) =
-            ruleCollection.deleteOne(Rule::guildId eq rule.guildId, Rule::number eq rule.number)
+    fun deleteRule(rule: Rule) : DeleteResult =
+            ruleCollection.deleteOne(Rule::_id eq rule._id)
 
     fun updateRule(rule: Rule) = ruleCollection.updateOne(rule)
 
