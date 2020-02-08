@@ -90,9 +90,9 @@ fun ruleUpdationConversation(messages: Messages, dbService: DatabaseService, emb
                         )
 
                 dbService.updateRule(updatedRule)
-                respond("Rule updated!")
+                respond(messages.RULE_UPDATED)
                 respond(embeds.embedRuleDetailed(updatedRule))
             } else {
-                respond("No changes have been made.")
+                respond(messages.NO_CHANGES_MADE)
             }
         }

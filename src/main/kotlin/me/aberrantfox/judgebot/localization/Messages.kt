@@ -15,6 +15,7 @@ data class Messages(
     val PROMPT_RULE_DESCRIPTION: String = "Please input rule description. This is a detailed description of the rule.",
     val PROMPT_RULE_WEIGHT: String = "Please input rule weight. Weight decides how harshly users are punished for breaking the rule.",
     val ERROR_RULE_WEIGHT_TOO_LOW: String = "Weight must be at least 1!",
+    val RULE_CREATED: String = "Rule created!",
 
     // Rule deletion
     val PROMPT_RULE_TO_DELETE: String = "Enter the number of the rule you wish to delete.",
@@ -24,13 +25,15 @@ data class Messages(
     val RULE_DELETED: String = "Rule has been deleted!",
     val RULE_NOT_DELETED: String = "No rules have been deleted.",
 
-    // Rule updation
+    // Rule update
     val PROMPT_RULE_TO_UPDATE: String = "Enter the number of the rule you wish to update.",
     val PROMPT_UPDATE_RULE_NUMBER: String = "Do you want to update the rule number? Y/N:",
     val PROMPT_UPDATE_RULE_SHORTNAME: String = "Do you want to update the rule shortname? Y/N:",
     val PROMPT_UPDATE_RULE_TITLE: String = "Do you want to update the rule title? Y/N:",
     val PROMPT_UPDATE_RULE_DESCRIPTION: String = "Do you want to update the rule description? Y/N:",
     val PROMPT_UPDATE_RULE_WEIGHT: String = "Do you want to update the rule weight? Y/N:",
+    val RULE_UPDATED: String = "Rule updated!",
+    val NO_CHANGES_MADE: String = "No changes have been made.",
 
     // Rule Command Descriptions
     val CREATE_RULE_DESCRIPTION: String = "Use this to create new rules for your guild.",

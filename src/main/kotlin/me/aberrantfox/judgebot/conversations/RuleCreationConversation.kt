@@ -38,7 +38,7 @@ fun ruleCreationConversation(messages: Messages, dbService: DatabaseService, emb
             val weight = blockingPrompt(RuleWeightArg) { messages.PROMPT_RULE_WEIGHT }
 
             val rule = Rule(newId(), guild.id, number, shortName, title, description, weight)
-            respond("Rule created!")
+            respond(messages.RULE_CREATED)
             respond(embeds.embedRuleDetailed(rule))
             dbService.addRule(rule)
         }
