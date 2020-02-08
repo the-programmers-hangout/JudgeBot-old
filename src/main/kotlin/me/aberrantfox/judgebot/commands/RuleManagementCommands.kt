@@ -1,5 +1,6 @@
 package me.aberrantfox.judgebot.commands
 
+import me.aberrantfox.judgebot.configuration.Constants
 import me.aberrantfox.judgebot.configuration.Rule
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.DatabaseService
@@ -20,14 +21,14 @@ fun conversationCommands(conversationService: ConversationService,
         description = messages.CREATE_RULE_DESCRIPTION
         requiresGuild = true
         execute {
-            conversationService.createConversation(it.author, it.guild!!, "Rule-Creation-Conversation")
+            conversationService.createConversation(it.author, it.guild!!, Constants.RULE_CREATION_CONVERSATION)
         }
     }
     command("deleteRule") {
         description = messages.DELETE_RULE_DESCRIPTION
         requiresGuild = true
         execute {
-            conversationService.createConversation(it.author, it.guild!!, "Rule-Deletion-Conversation")
+            conversationService.createConversation(it.author, it.guild!!, Constants.RULE_DELETION_CONVERSATION)
         }
     }
     command("rules") {
@@ -41,7 +42,7 @@ fun conversationCommands(conversationService: ConversationService,
         description = messages.UPDATE_RULE_DESCRIPTION
         requiresGuild = true
         execute {
-            conversationService.createConversation(it.author, it.guild!!, conversationName = "Rule-Update-Conversation")
+            conversationService.createConversation(it.author, it.guild!!, conversationName = Constants.RULE_UPDATE_CONVERSATION)
         }
     }
     command("rule") {

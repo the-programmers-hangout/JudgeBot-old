@@ -1,6 +1,7 @@
 package me.aberrantfox.judgebot.conversations
 
 import me.aberrantfox.judgebot.arguments.RuleWeightArg
+import me.aberrantfox.judgebot.configuration.Constants
 import me.aberrantfox.judgebot.configuration.Rule
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.DatabaseService
@@ -14,7 +15,7 @@ import me.aberrantfox.kjdautils.internal.arguments.WordArg
 
 @Convo
 fun ruleUpdateConversation(messages: Messages, dbService: DatabaseService, embeds: EmbedService) =
-        conversation(name = "Rule-Update-Conversation") {
+        conversation(name = Constants.RULE_UPDATE_CONVERSATION) {
             val rules = dbService.getRules(guild.id)
 
             respond(embeds.embedRulesDetailed(guild.id))

@@ -1,5 +1,6 @@
 package me.aberrantfox.judgebot.conversations
 
+import me.aberrantfox.judgebot.configuration.Constants
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.EmbedService
@@ -11,7 +12,7 @@ import me.aberrantfox.kjdautils.internal.arguments.WordArg
 
 @Convo
 fun ruleDeletionConversation(messages: Messages, dbService: DatabaseService, embeds: EmbedService) =
-        conversation(name = "Rule-Deletion-Conversation") {
+        conversation(name = Constants.RULE_DELETION_CONVERSATION) {
             val rules = dbService.getRules(guild.id)
 
             respond(embeds.embedRulesDetailed(guild.id))

@@ -14,7 +14,7 @@ import org.litote.kmongo.newId
 
 @Convo
 fun ruleCreationConversation(messages: Messages, dbService: DatabaseService, embeds: EmbedService) =
-        conversation(name = "Rule-Creation-Conversation") {
+        conversation(name = Constants.RULE_CREATION_CONVERSATION) {
             val guildRules = dbService.getRules(guild.id)
 
             val ruleNumber = blockingPromptUntil(
