@@ -41,7 +41,7 @@ fun conversationCommands(conversationService: ConversationService,
         description = messages.UPDATE_RULE_DESCRIPTION
         requiresGuild = true
         execute {
-            conversationService.createConversation(it.author, it.guild!!, conversationName = "Rule-Updation-Conversation")
+            conversationService.createConversation(it.author, it.guild!!, conversationName = "Rule-Update-Conversation")
         }
     }
     command("rule") {
