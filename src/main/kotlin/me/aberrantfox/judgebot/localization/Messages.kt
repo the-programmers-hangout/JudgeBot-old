@@ -45,5 +45,4 @@ data class Messages(
 
     //Rule command messages
     val ERROR_COULD_NOT_FIND_RULE: String = "Could not find rule."
-
 )

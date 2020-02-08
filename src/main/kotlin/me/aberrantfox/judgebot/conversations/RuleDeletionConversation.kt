@@ -39,3 +39,4 @@ fun ruleDeletionConversation(messages: Messages, dbService: DatabaseService, emb
                 respond(messages.RULE_NOT_DELETED)
             }
 }
+
