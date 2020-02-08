@@ -13,7 +13,7 @@ import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
 import me.aberrantfox.kjdautils.internal.arguments.WordArg
 
 @Convo
-fun ruleUpdationConversation(messages: Messages, dbService: DatabaseService, embeds: EmbedService) =
+fun ruleUpdateConversation(messages: Messages, dbService: DatabaseService, embeds: EmbedService) =
         conversation(name = "Rule-Update-Conversation") {
             val rules = dbService.getRules(guild.id)
 
