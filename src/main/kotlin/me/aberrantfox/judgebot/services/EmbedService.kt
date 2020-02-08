@@ -3,6 +3,7 @@ package me.aberrantfox.judgebot.services
 import me.aberrantfox.judgebot.configuration.Rule
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
+import me.aberrantfox.kjdautils.api.dsl.menu
 import java.awt.Color
 
 @Service
@@ -27,8 +28,7 @@ class EmbedService(val dbService: DatabaseService) {
         color = ruleColor
         for (rule in rules) {
             field {
-                name = "**__${rule.number}: ${rule.title}__**"
-                value = rule.description
+                value = "**__${rule.number}: ${rule.title}__**\n${rule.description}"
                 inline = false
             }
         }
@@ -40,10 +40,17 @@ class EmbedService(val dbService: DatabaseService) {
         color = ruleColor
         for (rule in rules) {
             field {
-                name = "**__${rule.number}: ${rule.title}__**"
-                value = "**Short name:** ${rule.shortName}, **Weight:** ${rule.weight}\n${rule.description}"
+                name = "**Short name** :: ${rule.shortName.padEnd(20, ' ')} :: **Weight** :: ${rule.weight}"
+                value = "**__${rule.number}: ${rule.title}__**\n${rule.description}"
                 inline = false
             }
+        }
+    }
+
+    fun embedRulesMenu(guildId: String) = menu {
+        embed {
+            val rules = dbService.getRules(guildId).sortedBy { it.number }
+
         }
     }
 }

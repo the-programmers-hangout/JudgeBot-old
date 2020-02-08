@@ -30,6 +30,16 @@ data class Messages(
     val PROMPT_UPDATE_RULE_SHORTNAME: String = "Do you want to update the rule shortname? Y/N:",
     val PROMPT_UPDATE_RULE_TITLE: String = "Do you want to update the rule title? Y/N:",
     val PROMPT_UPDATE_RULE_DESCRIPTION: String = "Do you want to update the rule description? Y/N:",
-    val PROMPT_UPDATE_RULE_WEIGHT: String = "Do you want to update the rule weight? Y/N:"
+    val PROMPT_UPDATE_RULE_WEIGHT: String = "Do you want to update the rule weight? Y/N:",
+
+    // Rule Command Descriptions
+    val CREATE_RULE_DESCRIPTION: String = "Use this to create new rules for your guild.",
+    val DELETE_RULE_DESCRIPTION: String = "Use this to delete rules for your guild.",
+    val DISPLAY_RULES_DESCRIPTION: String = "Displays all the rules and their weights.",
+    val UPDATE_RULE_DESCRIPTION: String = "Update a rule for this guild.",
+    val DISPLAY_RULE_DESCRIPTION: String = "Display a given rule.",
+
+    //Rule command messages
+    val ERROR_COULD_NOT_FIND_RULE: String = "Could not find rule."
 
 )
