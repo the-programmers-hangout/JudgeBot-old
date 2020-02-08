@@ -2,6 +2,7 @@ package me.aberrantfox.judgebot.conversations
 
 import me.aberrantfox.judgebot.configuration.Constants
 import me.aberrantfox.judgebot.localization.Messages
+import me.aberrantfox.judgebot.localization.inject
 import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.EmbedService
 import me.aberrantfox.kjdautils.api.dsl.Convo
@@ -25,7 +26,7 @@ fun ruleDeletionConversation(messages: Messages, dbService: DatabaseService, emb
             )
 
             val ruleToDelete = rules.first { it.number == ruleNumberToDelete }
-            respond(messages.RULE_CHOSEN + ruleNumberToDelete)
+            respond(messages.RULE_CHOSEN.inject(ruleNumberToDelete.toString()))
             respond(embeds.embedRuleDetailed(ruleToDelete))
 
             val sure = blockingPrompt(BooleanArg(truthValue = "y", falseValue = "n")) {
