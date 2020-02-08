@@ -4,7 +4,6 @@ import me.aberrantfox.kjdautils.api.annotation.Data
 
 @Data("config/messages.json")
 data class Messages(
-    val PROMPT_USER_ID_INFRACTION: String = "Please input the id of the user you would like to issue an Infraction, Strike, Warning. Making a note is also possible.",
 
     // Rule creation
     val PROMPT_RULE_NUMBER: String = "Please input rule number.",
@@ -43,8 +42,15 @@ data class Messages(
     val UPDATE_RULE_DESCRIPTION: String = "Update a rule for this guild.",
     val DISPLAY_RULE_DESCRIPTION: String = "Display a given rule.",
 
-    //Rule command messages
+    // Rule command messages
     val ERROR_COULD_NOT_FIND_RULE: String = "Could not find rule."
+    val PROMPT_USER_ID_INFRACTION: String = "Please input the id of the user you would like to issue an Infraction, Strike, Warning. Making a note is also possible.",
+
+    // Infractions
+    val PROMPT_USER_INFRACTION_TYPE: String = "Please input the weight of the Infraction you would like to issue. Acceptable values are: Note, Borderline, Lightly, Clearly, Harshly",
+    val PROMPT_USER_ADD_PERSONAL_NOTE: String = "Would you like to add a note relating to this Infraction?",
+    val PROMPT_PERSONAL_NOTE: String = "Please input the note you would like to add.",
+    val PROMPT_INFRACTION_DETAILS: String = "Please input the details of the Infraction"
 )
 
 fun String.inject(vararg args: String) : String{
