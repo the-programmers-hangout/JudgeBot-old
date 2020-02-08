@@ -24,7 +24,7 @@ fun ruleDeletionConversation(messages: Messages, dbService: DatabaseService, emb
             )
 
             val ruleToDelete = rules.first { it.number == ruleNumberToDelete }
-            respond("You have chosen to delete rule number ${ruleNumberToDelete}:")
+            respond(messages.RULE_CHOSEN + ruleNumberToDelete)
             respond(embeds.embedRuleDetailed(ruleToDelete))
 
             val sure = blockingPrompt(BooleanArg(truthValue = "y", falseValue = "n")) {

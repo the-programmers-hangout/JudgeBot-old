@@ -24,6 +24,7 @@ data class Messages(
     //val ERROR_ANS_MUST_BE_Y_OR_N: String = "Answer must be Y or N.\nAre you sure? Y/N",
     val RULE_DELETED: String = "Rule has been deleted!",
     val RULE_NOT_DELETED: String = "No rules have been deleted.",
+    val RULE_CHOSEN: String = "You have chosen to delete rule number ",
 
     // Rule update
     val PROMPT_RULE_TO_UPDATE: String = "Enter the number of the rule you wish to update.",
