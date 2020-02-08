@@ -71,7 +71,7 @@ internal class DatabaseServiceTest {
             "Rule which should be updated is still present."
         }
         assertEquals(updatedRule, dbService.getRule(updatedRule.shortName, updatedRule.guildId)) {
-            "Updated rule is not in db."
+            "Updated rule is not in database."
         }
         dbService.deleteRule(updatedRule)
     }
