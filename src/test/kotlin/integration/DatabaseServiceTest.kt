@@ -1,49 +1,64 @@
-package me.aberrantfox.judgebot.services
+package integration
 
-import com.mongodb.MongoClient
 import me.aberrantfox.judgebot.configuration.BotConfiguration
 import me.aberrantfox.judgebot.configuration.DatabaseConfiguration
+import me.aberrantfox.judgebot.configuration.GuildConfiguration
+import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.database.dataclasses.Rule
 import org.junit.jupiter.api.*
 
 import org.junit.jupiter.api.Assertions.*
-import org.litote.kmongo.KMongo
+import org.litote.kmongo.newId
 
+/**
+ * Integration test, requires an instance of MongoDB
+ */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class DatabaseServiceTest {
-    val dbService = DatabaseService(BotConfiguration(dbConfiguration = DatabaseConfiguration(databaseName = "test")))
-    val defaultRule = Rule()
+    val dbTestConfiguration: DatabaseConfiguration = DatabaseConfiguration(databaseName = "test")
+    val botTestConfiguration: BotConfiguration = BotConfiguration(
+            owner = "test-owner",
+            whitelist = listOf("testGuild"),
+            guilds = listOf(GuildConfiguration("test-guild-id", "test-owner-id")),
+            dbConfiguration = dbTestConfiguration
+    )
+    val dbService = DatabaseService(botTestConfiguration)
+    val testRules: List<Rule> = listOf(
+            Rule(newId(), "test-guild", 1, "testRule1", "testTitle1", "testDescription1", 1),
+            Rule(newId(), "test-guild", 2, "testRule2", "testTitle2", "testDescription2", 2),
+            Rule(newId(), "test-guild", 3, "testRule3", "testTitle3", "testDescription3", 3)
+    )
 
     @BeforeAll
     internal fun setUp() {
-        for (rule in dbService.getRules("guild-id")) {
-            dbService.deleteRule(rule)
+        dbService.dropRuleCollection()
+        for (rule in testRules) {
+            dbService.addRule(rule)
         }
-        dbService.addRule(defaultRule)
     }
 
     @AfterAll
     internal fun tearDown() {
-        dbService.deleteRule(defaultRule)
+        dbService.dropRuleCollection()
     }
 
     @Test
     fun testGetRuleByShortName() {
-        assertEquals(defaultRule, dbService.getRule(defaultRule.shortName, defaultRule.guildId)) {
+        assertEquals(testRules[0], dbService.getRule("testRule1", "test-guild")) {
             "Failed to retrieve rule by short name."
         }
     }
 
     @Test
     fun testGetRuleByNumber() {
-        assertEquals(defaultRule, dbService.getRule(defaultRule.number, defaultRule.guildId)) {
+        assertEquals(testRules[0], dbService.getRule(1, "test-guild")) {
             "Failed to retrieve rule by number."
         }
     }
 
     @Test
     fun testGetRules() {
-        assertEquals(mutableListOf(defaultRule), dbService.getRules(defaultRule.guildId)) {
+        assertEquals(testRules, dbService.getRules("test-guild")) {
             "Failed to retrieve list of rules."
         }
     }

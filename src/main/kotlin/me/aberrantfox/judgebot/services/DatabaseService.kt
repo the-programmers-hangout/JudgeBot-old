@@ -10,6 +10,7 @@ import org.litote.kmongo.*
 import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.extensions.jda.fullName
 import net.dv8tion.jda.api.entities.*
+import org.bson.conversions.Bson
 
 @Service
 class DatabaseService(val config: BotConfiguration) {
@@ -59,6 +60,8 @@ class DatabaseService(val config: BotConfiguration) {
     fun getUserHistory() {
         TODO("Implement history embed")
     }
+
+    fun dropRuleCollection() = ruleCollection.drop()
 }
 
 private fun buildHistoryEmbed(target: User, member: GuildMember, includeModerator: Boolean)  =

@@ -3,7 +3,6 @@ package me.aberrantfox.judgebot.arguments
 import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.database.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.dsl.command.CommandEvent
-import me.aberrantfox.kjdautils.discord.Discord
 import me.aberrantfox.kjdautils.api.getInjectionObject
 import me.aberrantfox.kjdautils.extensions.stdlib.isInteger
 import me.aberrantfox.kjdautils.internal.command.ArgumentResult
@@ -11,7 +10,7 @@ import me.aberrantfox.kjdautils.internal.command.ArgumentType
 import me.aberrantfox.kjdautils.internal.command.ConsumptionType
 
 
-open class RuleArg(override val name : String = "Macro"): ArgumentType<Rule>() {
+open class RuleArg(override val name : String = "Rule"): ArgumentType<Rule>() {
     companion object : RuleArg()
 
     override val examples = arrayListOf("1", "2", "3", "4")

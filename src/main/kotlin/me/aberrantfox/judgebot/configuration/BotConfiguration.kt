@@ -1,8 +1,6 @@
 package me.aberrantfox.judgebot.configuration
 
 import me.aberrantfox.kjdautils.api.annotation.Data
-import org.litote.kmongo.Id
-import org.litote.kmongo.newId
 
 @Data("config/config.json")
 data class BotConfiguration(
