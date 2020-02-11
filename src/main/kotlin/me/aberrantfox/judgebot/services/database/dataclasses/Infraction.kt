@@ -1,6 +1,7 @@
 package me.aberrantfox.judgebot.services.database.dataclasses
 
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 
 enum class InfractionWeight {
     Note, Borderline, Lightly, Clearly, Harshly, Error
@@ -9,16 +10,12 @@ enum class InfractionWeight {
 data class Infraction(
         val moderator: String,
         val reason: String,
-        val dateTime: DateTime,
-        val weight: InfractionWeight
-)
+        val weight: InfractionWeight,
+        val guildId: String,
+        val infractionNote: String? = null,
+        val ruleBroken: Int? = null,
+        val dateTime: String = DateTime().toString(DateTimeFormat.forPattern("dd/MM/yyyy"))
+        )
 
 fun convertToInfractionType(infraction: String) =
-        when(infraction.toLowerCase()) {
-            "note" -> InfractionWeight.Note
-            "borderline" -> InfractionWeight.Borderline
-            "lightly" -> InfractionWeight.Lightly
-            "clearly" -> InfractionWeight.Clearly
-            "harshly" -> InfractionWeight.Harshly
-            else -> InfractionWeight.Error
-        }
+        InfractionWeight.values().firstOrNull {it.name.toLowerCase() == infraction.toLowerCase()}
