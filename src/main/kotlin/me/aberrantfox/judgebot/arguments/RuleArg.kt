@@ -16,7 +16,6 @@ open class RuleArg(override val name : String = "Rule"): ArgumentType<Rule>() {
     override val examples = arrayListOf("1", "2", "3", "4")
     override val consumptionType = ConsumptionType.Single
 
-
     override fun convert(arg: String, args: List<String>, event: CommandEvent<*>): ArgumentResult<Rule> {
         val guild = event.guild ?: return ArgumentResult.Error("Rule arguments cannot be used outside of guilds.")
 

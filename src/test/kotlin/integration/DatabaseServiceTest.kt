@@ -30,7 +30,7 @@ internal class DatabaseServiceTest {
     )
 
     @BeforeAll
-    internal fun setUp() {
+    internal fun `set up`() {
         dbService.dropRuleCollection()
         for (rule in testRules) {
             dbService.addRule(rule)
@@ -38,33 +38,41 @@ internal class DatabaseServiceTest {
     }
 
     @AfterAll
-    internal fun tearDown() {
+    internal fun `tear down`() {
         dbService.dropRuleCollection()
     }
 
     @Test
-    fun testGetRuleByShortName() {
+    fun `getting rule by short name`() {
         assertEquals(testRules[0], dbService.getRule("testRule1", "test-guild")) {
             "Failed to retrieve rule by short name."
         }
     }
 
     @Test
-    fun testGetRuleByNumber() {
+    fun `getting rule by rule number`() {
         assertEquals(testRules[0], dbService.getRule(1, "test-guild")) {
             "Failed to retrieve rule by number."
         }
     }
 
     @Test
-    fun testGetRules() {
+    fun `getting all rules for guild`() {
         assertEquals(testRules, dbService.getRules("test-guild")) {
             "Failed to retrieve list of rules."
         }
     }
 
     @Test
-    fun testAddAndDeleteRule() {
+    fun `getting all rules for guild but not other guilds`() {
+        dbService.addRule(Rule())
+        assertEquals(testRules, dbService.getRules("test-guild")) {
+            "Failed to retrieve list of rules."
+        }
+    }
+
+    @Test
+    fun `add and delete rule`() {
         val testRule = Rule(shortName = "testRule")
         dbService.addRule(testRule)
         assertEquals(testRule, dbService.getRule(testRule.shortName, testRule.guildId)) {
@@ -77,7 +85,7 @@ internal class DatabaseServiceTest {
     }
 
     @Test
-    fun testUpdateRule() {
+    fun `updating a rule`() {
         val testRule = Rule(shortName = "testRule")
         dbService.addRule(testRule)
         val updatedRule = Rule(_id = testRule._id, shortName = "updatedShortName")
