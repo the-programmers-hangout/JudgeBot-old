@@ -8,6 +8,7 @@ import me.aberrantfox.kjdautils.extensions.stdlib.isInteger
 import me.aberrantfox.kjdautils.internal.command.ArgumentResult
 import me.aberrantfox.kjdautils.internal.command.ArgumentType
 import me.aberrantfox.kjdautils.internal.command.ConsumptionType
+import net.dv8tion.jda.api.entities.Guild
 
 
 open class RuleArg(override val name : String = "Rule"): ArgumentType<Rule>() {
@@ -17,14 +18,14 @@ open class RuleArg(override val name : String = "Rule"): ArgumentType<Rule>() {
     override val consumptionType = ConsumptionType.Single
 
     override fun convert(arg: String, args: List<String>, event: CommandEvent<*>): ArgumentResult<Rule> {
-        val guild = event.guild ?: return ArgumentResult.Error("Rule arguments cannot be used outside of guilds.")
+        val guild : Guild = event.guild ?: return ArgumentResult.Error("Rule arguments cannot be used outside of guilds.")
 
         val dbService: DatabaseService = event.discord.getInjectionObject<DatabaseService>()
                 ?: return ArgumentResult.Error("Could not access database.")
 
         val rule: Rule? = when {
-            arg.isInteger() -> dbService.getRule(arg.toInt(), event.guild!!.id)
-            else -> dbService.getRule(arg, event.guild!!.id)
+            arg.isInteger() -> dbService.getRule(arg.toInt(), guild.id)
+            else -> dbService.getRule(arg, guild.id)
         }
         return if (rule == null) ArgumentResult.Error("Rule not found.") else ArgumentResult.Success(rule)
     }

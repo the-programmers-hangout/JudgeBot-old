@@ -1,4 +1,4 @@
-package integration
+package kt.dbtest
 
 import me.aberrantfox.judgebot.configuration.BotConfiguration
 import me.aberrantfox.judgebot.configuration.DatabaseConfiguration
