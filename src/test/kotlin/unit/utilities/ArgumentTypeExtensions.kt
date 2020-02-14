@@ -9,5 +9,6 @@ fun ArgumentType<*>.convertToError(input: String) = attemptConvert(input) as Arg
 
 fun ArgumentType<*>.attemptConvert(input: String) : ArgumentResult<*> {
     val split = input.split(" ")
-    return convert(split.first(), split, commandEventMock)
+
+    return convert(split.first(), split, commandEventMock())
 }
