@@ -1,4 +1,4 @@
-package kt.mock
+package mock
 
 import io.mockk.*
 import me.aberrantfox.judgebot.services.DatabaseService

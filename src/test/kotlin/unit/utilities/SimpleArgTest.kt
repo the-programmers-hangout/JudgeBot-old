@@ -1,4 +1,4 @@
-package kt.utilities
+package utilities
 
 import me.aberrantfox.kjdautils.internal.command.ArgumentResult
 import me.aberrantfox.kjdautils.internal.command.ArgumentType

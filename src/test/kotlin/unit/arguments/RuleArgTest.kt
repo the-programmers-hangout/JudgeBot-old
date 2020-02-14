@@ -1,8 +1,8 @@
 package arguments
 
-import kt.mock.testRules
+import mock.testRules
 import me.aberrantfox.judgebot.arguments.RuleArg
-import kt.utilities.SimpleArgTest
+import utilities.SimpleArgTest
 
 class RuleArgTest : SimpleArgTest() {
     override val argumentType = RuleArg

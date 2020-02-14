@@ -1,4 +1,4 @@
-package kt.mock
+package mock
 
 import me.aberrantfox.judgebot.services.database.dataclasses.Rule
 import org.litote.kmongo.newId
