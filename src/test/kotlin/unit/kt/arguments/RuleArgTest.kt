@@ -2,7 +2,6 @@ package arguments
 
 import kt.mock.testRules
 import me.aberrantfox.judgebot.arguments.RuleArg
-import me.aberrantfox.judgebot.services.database.dataclasses.Rule
 import kt.utilities.SimpleArgTest
 
 class RuleArgTest : SimpleArgTest() {
