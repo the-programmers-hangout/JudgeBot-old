@@ -33,7 +33,7 @@ fun conversationServiceMock() = mockk<ConversationService>(relaxed = true)
 
 fun embedServiceMock() = mockk<EmbedService>(relaxed = true)
 
-fun databaseServiceMock() = mockk<DatabaseService> {
+fun databaseServiceMock() = mockk<DatabaseService>(relaxed = true) {
     every { getRule(1, "test-guild") } returns TestData.testRules.first()
     every { getRule("testRule1", "test-guild") } returns TestData.testRules.first()
     every { getRule(15, "test-guild") } returns null
