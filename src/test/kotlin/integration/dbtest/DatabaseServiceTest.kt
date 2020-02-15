@@ -1,38 +1,24 @@
 package dbtest
 
-import me.aberrantfox.judgebot.configuration.BotConfiguration
 import me.aberrantfox.judgebot.configuration.DatabaseConfiguration
-import me.aberrantfox.judgebot.configuration.GuildConfiguration
 import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.database.dataclasses.Rule
+import mock.TestData
 import org.junit.jupiter.api.*
 
 import org.junit.jupiter.api.Assertions.*
-import org.litote.kmongo.newId
 
 /**
  * Integration test, requires an instance of MongoDB
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-internal class DatabaseServiceTest {
-    val dbTestConfiguration: DatabaseConfiguration = DatabaseConfiguration(databaseName = "test")
-    val botTestConfiguration: BotConfiguration = BotConfiguration(
-            owner = "test-owner",
-            whitelist = listOf("testGuild"),
-            guilds = listOf(GuildConfiguration("test-guild-id", "test-owner-id")),
-            dbConfiguration = dbTestConfiguration
-    )
-    val dbService = DatabaseService(botTestConfiguration)
-    val testRules: List<Rule> = listOf(
-            Rule(newId(), "test-guild", 1, "testRule1", "testTitle1", "testDescription1", 1),
-            Rule(newId(), "test-guild", 2, "testRule2", "testTitle2", "testDescription2", 2),
-            Rule(newId(), "test-guild", 3, "testRule3", "testTitle3", "testDescription3", 3)
-    )
+class DatabaseServiceTest {
+    val dbService = DatabaseService(TestData.botTestConfiguration)
 
     @BeforeAll
     internal fun `set up`() {
         dbService.dropRuleCollection()
-        for (rule in testRules) {
+        for (rule in TestData.testRules) {
             dbService.addRule(rule)
         }
     }
@@ -44,21 +30,21 @@ internal class DatabaseServiceTest {
 
     @Test
     fun `getting rule by short name`() {
-        assertEquals(testRules[0], dbService.getRule("testRule1", "test-guild")) {
+        assertEquals(TestData.testRules[0], dbService.getRule("testRule1", "test-guild")) {
             "Failed to retrieve rule by short name."
         }
     }
 
     @Test
     fun `getting rule by rule number`() {
-        assertEquals(testRules[0], dbService.getRule(1, "test-guild")) {
+        assertEquals(TestData.testRules[0], dbService.getRule(1, "test-guild")) {
             "Failed to retrieve rule by number."
         }
     }
 
     @Test
     fun `getting all rules for guild`() {
-        assertEquals(testRules, dbService.getRules("test-guild")) {
+        assertEquals(TestData.testRules, dbService.getRules("test-guild")) {
             "Failed to retrieve list of rules."
         }
     }
@@ -66,7 +52,7 @@ internal class DatabaseServiceTest {
     @Test
     fun `getting all rules for guild but not other guilds`() {
         dbService.addRule(Rule())
-        assertEquals(testRules, dbService.getRules("test-guild")) {
+        assertEquals(TestData.testRules, dbService.getRules("test-guild")) {
             "Failed to retrieve list of rules."
         }
     }

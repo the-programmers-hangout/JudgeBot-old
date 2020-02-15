@@ -42,6 +42,9 @@
             <artifactId>joda-time</artifactId>
             <version>${joda-time.version}</version>
         </dependency>
+
+        <!-- Test Dependencies -->
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -60,7 +63,11 @@
             <version>1.10.7</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-maven-allopen</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
