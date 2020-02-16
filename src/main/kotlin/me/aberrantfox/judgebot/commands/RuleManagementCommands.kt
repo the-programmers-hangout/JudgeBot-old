@@ -14,7 +14,6 @@ import me.aberrantfox.kjdautils.internal.arguments.*
 @CommandSet("Rule Management")
 fun createRulesManagementCommands(conversationService: ConversationService,
                          embeds: EmbedService,
-                         dbService: DatabaseService,
                          messages: Messages) = commands {
 
     command("createRule") {
