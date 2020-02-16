@@ -1,5 +1,6 @@
 package me.aberrantfox.judgebot.commands
 
+import me.aberrantfox.judgebot.arguments.RuleArg
 import me.aberrantfox.judgebot.configuration.Constants
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.DatabaseService
@@ -48,6 +49,7 @@ fun createRulesManagementCommands(conversationService: ConversationService,
         description = messages.DISPLAY_RULE_DESCRIPTION
         requiresGuild = true
         // TODO: Should be refactored to RuleArg if support for services in args becomes a thing
+        /*
         execute(IntegerArg or WordArg) {
             val rule = when (val input = it.args.first) {
                 is Either.Left -> dbService.getRule(input.left, it.guild!!.id)
@@ -58,6 +60,11 @@ fun createRulesManagementCommands(conversationService: ConversationService,
             } else {
                 it.respond(embeds.embedRule(rule))
             }
+        }*/
+
+        execute(RuleArg) {
+            val rule = it.args.first
+            it.respond(embeds.embedRule(rule))
         }
     }
 }

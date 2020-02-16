@@ -12,7 +12,7 @@ import me.aberrantfox.kjdautils.extensions.jda.fullName
 import net.dv8tion.jda.api.entities.*
 
 @Service
-class DatabaseService(val config: BotConfiguration) {
+open class DatabaseService(val config: BotConfiguration) {
     private val client: MongoClient = KMongo.createClient(config.dbConfiguration.address)
     private val db = client.getDatabase(config.dbConfiguration.databaseName)
     private val infractionCollection = db.getCollection("infractionCollection")
