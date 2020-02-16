@@ -31,6 +31,9 @@ open class DatabaseService(val config: BotConfiguration) {
     fun getRules(guildId: String) : MutableList<Rule> =
             ruleCollection.find(Rule::guildId eq guildId).toMutableList()
 
+    fun getRulesSortedByNumber(guildId: String) : List<Rule> =
+            ruleCollection.find(Rule::guildId eq guildId).toMutableList().sortedBy { it.number }
+
     fun addRule(rule: Rule) = ruleCollection.insertOne(rule)
 
     fun deleteRule(rule: Rule) : DeleteResult =

@@ -35,7 +35,7 @@ class EmbedService(val dbService: DatabaseService) {
     }
 
     fun embedRulesDetailed(guildId: String) = embed {
-        val rules = dbService.getRules(guildId).sortedBy { it.number }
+        val rules = dbService.getRulesSortedByNumber(guildId)
         title = "Server Rules"
         color = ruleColor
         for (rule in rules) {
