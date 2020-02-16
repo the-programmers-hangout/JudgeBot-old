@@ -3,6 +3,7 @@ package command
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import me.aberrantfox.judgebot.arguments.RuleArg
 import me.aberrantfox.judgebot.commands.createRulesManagementCommands
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.DatabaseService
@@ -13,10 +14,7 @@ import me.aberrantfox.kjdautils.internal.arguments.IntegerArg
 import me.aberrantfox.kjdautils.internal.arguments.WordArg
 import me.aberrantfox.kjdautils.internal.arguments.or
 import me.aberrantfox.kjdautils.internal.services.ConversationService
-import mock.commandEventMock
-import mock.conversationServiceMock
-import mock.databaseServiceMock
-import mock.embedServiceMock
+import mock.*
 import net.dv8tion.jda.api.entities.MessageEmbed
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -62,7 +60,7 @@ class RuleManagementCommandTest {
     @ParameterizedTest(name = "{index} : {0}")
     @MethodSource("events")
     fun `Rules can be obtained`(name: String, event: CommandEvent<ArgumentContainer>) {
-        commands["rule"]?.invoke(SingleArg(IntegerArg or WordArg), event)
+        commands["rule"]?.invoke(SingleArg(RuleArg), event)
 
         verify(exactly = 1) {
             event.respond(allAny() as MessageEmbed)
@@ -75,13 +73,13 @@ class RuleManagementCommandTest {
                 arrayOf(
                         "Can display by ID",
                         mockk<CommandEvent<ArgumentContainer>>(relaxed = true) {
-                            every { args } returns SingleArg(Either.Left(1))
+                            every { args } returns SingleArg(TestData.testRules.first())
                         }
                 ),
                 arrayOf(
                         "Can display by ShortName",
                         mockk<CommandEvent<ArgumentContainer>>(relaxed = true) {
-                            every { args } returns SingleArg(Either.Right("testRule1"))
+                            every { args } returns SingleArg(TestData.testRules.first())
                         }
                 )
         )

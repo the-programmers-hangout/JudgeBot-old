@@ -48,20 +48,6 @@ fun createRulesManagementCommands(conversationService: ConversationService,
     command("rule") {
         description = messages.DISPLAY_RULE_DESCRIPTION
         requiresGuild = true
-        // TODO: Should be refactored to RuleArg if support for services in args becomes a thing
-        /*
-        execute(IntegerArg or WordArg) {
-            val rule = when (val input = it.args.first) {
-                is Either.Left -> dbService.getRule(input.left, it.guild!!.id)
-                is Either.Right -> dbService.getRule(input.right, it.guild!!.id)
-            }
-            if (rule == null) {
-                it.respond(messages.ERROR_COULD_NOT_FIND_RULE)
-            } else {
-                it.respond(embeds.embedRule(rule))
-            }
-        }*/
-
         execute(RuleArg) {
             val rule = it.args.first
             it.respond(embeds.embedRule(rule))
