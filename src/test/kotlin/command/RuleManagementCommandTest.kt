@@ -35,7 +35,7 @@ class RuleManagementCommandTest {
         embedService = embedServiceMock()
         databaseService = databaseServiceMock()
         commandEvent = commandEventMock()
-        commands = createRulesManagementCommands(convoService, embedService, databaseService, Messages())
+        commands = createRulesManagementCommands(convoService, embedService, Messages())
     }
 
     @ParameterizedTest
