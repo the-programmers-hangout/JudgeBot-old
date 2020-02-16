@@ -18,11 +18,15 @@ open class DatabaseService(val config: BotConfiguration) {
     private val infractionCollection = db.getCollection("infractionCollection")
     private val ruleCollection = db.getCollection<Rule>("ruleCollection")
 
+    init {
+        ruleCollection.createIndex("{ shortName: 'text' }")
+    }
+
     fun getRule(ruleNumber: Int, guildId: String) : Rule? =
             ruleCollection.findOne(Rule::number eq ruleNumber, Rule::guildId eq guildId)
 
     fun getRule(ruleShortName: String, guildId: String) : Rule? =
-            ruleCollection.findOne(Rule::shortName eq ruleShortName, Rule::guildId eq guildId)
+            ruleCollection.findOne(Rule::guildId eq guildId, Rule::shortName regex "(?i)$ruleShortName")
 
     fun getRules(guildId: String) : MutableList<Rule> =
             ruleCollection.find(Rule::guildId eq guildId).toMutableList()
