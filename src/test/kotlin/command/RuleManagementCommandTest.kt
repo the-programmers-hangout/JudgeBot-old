@@ -9,10 +9,6 @@ import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.EmbedService
 import me.aberrantfox.kjdautils.api.dsl.command.*
-import me.aberrantfox.kjdautils.internal.arguments.Either
-import me.aberrantfox.kjdautils.internal.arguments.IntegerArg
-import me.aberrantfox.kjdautils.internal.arguments.WordArg
-import me.aberrantfox.kjdautils.internal.arguments.or
 import me.aberrantfox.kjdautils.internal.services.ConversationService
 import mock.*
 import net.dv8tion.jda.api.entities.MessageEmbed
@@ -59,11 +55,17 @@ class RuleManagementCommandTest {
 
     @ParameterizedTest(name = "{index} : {0}")
     @MethodSource("events")
-    fun `Rules can be obtained`(name: String, event: CommandEvent<ArgumentContainer>) {
+    fun `Rules can be obtained`(name: String, event: CommandEvent<ArgumentContainer>, valid: Boolean) {
         commands["rule"]?.invoke(SingleArg(RuleArg), event)
 
-        verify(exactly = 1) {
-            event.respond(allAny() as MessageEmbed)
+        if (valid) {
+            verify(exactly = 1) {
+                event.respond(allAny() as MessageEmbed)
+            }
+        } else {
+            verify(exactly = 1) {
+                event.unsafeRespond(allAny())
+            }
         }
     }
 
@@ -74,13 +76,29 @@ class RuleManagementCommandTest {
                         "Can display by ID",
                         mockk<CommandEvent<ArgumentContainer>>(relaxed = true) {
                             every { args } returns SingleArg(TestData.testRules.first())
-                        }
+                        },
+                        true
                 ),
                 arrayOf(
                         "Can display by ShortName",
                         mockk<CommandEvent<ArgumentContainer>>(relaxed = true) {
                             every { args } returns SingleArg(TestData.testRules.first())
-                        }
+                        },
+                        true
+                ),
+                arrayOf(
+                        "Will display error for invalid ShortName",
+                        mockk<CommandEvent<ArgumentContainer>>(relaxed = true) {
+                            every { args } returns SingleArg(null)
+                        },
+                        false
+                ),
+                arrayOf(
+                        "Will display error for invalid ShortName",
+                        mockk<CommandEvent<ArgumentContainer>>(relaxed = true) {
+                            every { args } returns SingleArg(null)
+                        },
+                        false
                 )
         )
     }
