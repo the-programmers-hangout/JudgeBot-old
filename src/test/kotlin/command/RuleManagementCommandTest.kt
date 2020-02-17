@@ -94,7 +94,7 @@ class RuleManagementCommandTest {
                         false
                 ),
                 arrayOf(
-                        "Will display error for invalid ShortName",
+                        "Will display error for invalid rule number",
                         mockk<CommandEvent<ArgumentContainer>>(relaxed = true) {
                             every { args } returns SingleArg(null)
                         },
