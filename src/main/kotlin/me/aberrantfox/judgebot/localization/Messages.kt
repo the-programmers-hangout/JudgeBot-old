@@ -17,6 +17,7 @@ data class Messages(
                 "Weight decides how harshly users are punished for breaking the rule.",
         val ERROR_RULE_WEIGHT_TOO_LOW: String = "Weight must be at least 1!",
         val RULE_CREATED: String = "Rule created!",
+        val PROMPT_CREATE_FIRST_RULE: String = "This is the first rule in this guild. Number will start at %0%. Is this correct? Y/N",
         val PROMPT_USE_NEXT_RULE_NUMBER: String = "The last rule in this guild is %0%, would you like this rule to be number %1%? Y/N",
 
     // Rule deletion
