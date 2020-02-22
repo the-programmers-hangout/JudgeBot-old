@@ -8,7 +8,7 @@ import me.aberrantfox.judgebot.services.UserService
 import me.aberrantfox.judgebot.services.database.dataclasses.Infraction
 import me.aberrantfox.judgebot.services.database.dataclasses.InfractionWeight
 import me.aberrantfox.judgebot.services.database.dataclasses.convertToInfractionType
-import me.aberrantfox.kjdautils.api.dsl.Convo
+import me.aberrantfox.kjdautils.api.annotation.Convo
 import me.aberrantfox.kjdautils.api.dsl.conversation
 import me.aberrantfox.kjdautils.internal.arguments.BooleanArg
 import me.aberrantfox.kjdautils.internal.arguments.UserArg

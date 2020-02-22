@@ -11,21 +11,16 @@ data class BotConfiguration(
 )
 
 data class DatabaseConfiguration(
-        val address: String = "localhost:27017"
+        val address: String = "localhost:27017",
+        val databaseName: String = "judgebot"
 )
 
 data class GuildConfiguration(
-        val id: String = "insert-id",
-        val rules: List<Rule> = listOf(Rule())
+    val id: String = "insert-id",
+    val owner: String = "insert-owner-id"
 )
 
-data class Rule (
-        val id: String = "Each rule must have a unique, unchanging ID",
-        val title: String = "A short description of the rule",
-        val description: String = "A detailed explanation for clarification purposes",
-        val weight: Int = 1
-)
 
-fun GuildConfiguration.isRule(index: Int) = rules.size < index
 
-fun GuildConfiguration.getRuleOrNull(index: Int) = rules.getOrNull(index)
+
+
