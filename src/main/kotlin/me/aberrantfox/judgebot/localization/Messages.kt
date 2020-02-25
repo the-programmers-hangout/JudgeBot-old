@@ -17,6 +17,7 @@ data class Messages(
                 "Weight decides how harshly users are punished for breaking the rule.",
         val ERROR_RULE_WEIGHT_TOO_LOW: String = "Weight must be at least 1!",
         val RULE_CREATED: String = "Rule created!",
+        val PROMPT_CREATE_FIRST_RULE: String = "This is the first rule in this guild. Number will start at %0%. Is this correct? Y/N",
         val PROMPT_USE_NEXT_RULE_NUMBER: String = "The last rule in this guild is %0%, would you like this rule to be number %1%? Y/N",
 
     // Rule deletion
@@ -53,7 +54,8 @@ data class Messages(
         val PROMPT_USER_INFRACTION_TYPE: String = "Please input the weight of the Infraction you would like to issue. Acceptable values are: Note, Borderline, Lightly, Clearly, Harshly",
         val PROMPT_USER_ADD_PERSONAL_NOTE: String = "Would you like to add a note relating to this Infraction?",
         val PROMPT_PERSONAL_NOTE: String = "Please input the note you would like to add.",
-        val PROMPT_INFRACTION_DETAILS: String = "Please input the details of the Infraction"
+        val PROMPT_INFRACTION_DETAILS: String = "Please input the details of the Infraction.",
+        val PROMPT_INFRACTION_RULE_BROKEN: String = "Please enter the rule that was broken by the user."
 )
 
 fun String.inject(vararg args: String) : String{

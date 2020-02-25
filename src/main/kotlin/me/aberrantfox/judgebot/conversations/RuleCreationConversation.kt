@@ -19,13 +19,19 @@ import org.litote.kmongo.newId
 fun ruleCreationConversation(messages: Messages, dbService: DatabaseService, embeds: EmbedService) =
         conversation(name = Constants.RULE_CREATION_CONVERSATION) {
             val guildRules = dbService.getRulesSortedByNumber(guild.id)
-            val lastUsedRuleNumber = guildRules.last().number
+            val lastUsedRuleNumber = if(guildRules.isNotEmpty()) guildRules.last().number else 0
 
             val useNextRuleNumber = blockingPrompt(BooleanArg(truthValue = "Y", falseValue = "N")) {
-                messages.PROMPT_USE_NEXT_RULE_NUMBER.inject(
-                        lastUsedRuleNumber.toString(),
-                        (lastUsedRuleNumber + 1).toString()
-                )
+                if (guildRules.isNotEmpty()) {
+                    messages.PROMPT_USE_NEXT_RULE_NUMBER.inject(
+                            lastUsedRuleNumber.toString(),
+                            (lastUsedRuleNumber + 1).toString()
+                    )
+                } else {
+                    messages.PROMPT_CREATE_FIRST_RULE.inject(
+                            lastUsedRuleNumber.toString()
+                    )
+                }
             }
 
             val ruleNumber = when {
