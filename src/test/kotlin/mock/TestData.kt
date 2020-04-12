@@ -6,6 +6,7 @@ import me.aberrantfox.judgebot.configuration.DatabaseConfiguration
 import me.aberrantfox.judgebot.configuration.GuildConfiguration
 import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.EmbedService
+import me.aberrantfox.judgebot.services.RuleService
 import me.aberrantfox.judgebot.services.database.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.dsl.command.ArgumentContainer
 import me.aberrantfox.kjdautils.api.dsl.command.CommandEvent
@@ -33,7 +34,7 @@ fun conversationServiceMock() = mockk<ConversationService>(relaxed = true)
 
 fun embedServiceMock() = mockk<EmbedService>(relaxed = true)
 
-fun databaseServiceMock() = mockk<DatabaseService>(relaxed = true) {
+fun databaseServiceMock() = mockk<RuleService>(relaxed = true) {
     every { getRule(1, "test-guild") } returns TestData.testRules.first()
     every { getRule("testRule1", "test-guild") } returns TestData.testRules.first()
     every { getRule(15, "test-guild") } returns null
@@ -45,9 +46,9 @@ object TestData {
     }
 
     val testRules: List<Rule> = listOf(
-            Rule(newId(), "test-guild", 1, "testRule1", "testTitle1", "testDescription1", 1),
-            Rule(newId(), "test-guild", 2, "testRule2", "testTitle2", "testDescription2", 2),
-            Rule(newId(), "test-guild", 3, "testRule3", "testTitle3", "testDescription3", 3)
+            Rule(newId(), "test-guild", 1, "testRule1", "testTitle1", "testDescription1", "",1),
+            Rule(newId(), "test-guild", 2, "testRule2", "testTitle2", "testDescription2", "", 2),
+            Rule(newId(), "test-guild", 3, "testRule3", "testTitle3", "testDescription3", "", 3)
     )
 
     val botTestConfiguration: BotConfiguration = BotConfiguration(

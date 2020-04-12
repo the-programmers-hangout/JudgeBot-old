@@ -2,10 +2,7 @@ package me.aberrantfox.judgebot.conversations
 
 import me.aberrantfox.judgebot.extensions.next
 import me.aberrantfox.judgebot.localization.Messages
-import me.aberrantfox.judgebot.services.DatabaseService
-import me.aberrantfox.judgebot.services.EmbedService
-import me.aberrantfox.judgebot.services.InfractionService
-import me.aberrantfox.judgebot.services.UserService
+import me.aberrantfox.judgebot.services.*
 import me.aberrantfox.judgebot.services.database.dataclasses.Infraction
 import me.aberrantfox.judgebot.services.database.dataclasses.InfractionWeight
 import me.aberrantfox.judgebot.services.database.dataclasses.convertToInfractionType
@@ -16,7 +13,7 @@ import me.aberrantfox.kjdautils.internal.arguments.*
 val infractionChoiceArg = ChoiceArg("InfractionTypes", "Note", "Borderline", "Lightly", "Clearly", "Harshly")
 
 @Convo
-fun createInfractionConversation(messages: Messages, infractionService: InfractionService, userService: UserService, embedService: EmbedService, ruleService: DatabaseService) = conversation("Infraction-Conversation") {
+fun createInfractionConversation(messages: Messages, infractionService: InfractionService, userService: UserService, embedService: EmbedService, ruleService: RuleService) = conversation("Infraction-Conversation") {
     val id = blockingPrompt(UserArg) { messages.PROMPT_USER_ID_INFRACTION }
     val userRecord = userService.getOrCreateUserRecord(id)
     var addPersonalNote: Boolean = false
