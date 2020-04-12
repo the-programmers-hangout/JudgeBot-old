@@ -5,6 +5,7 @@ import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.localization.inject
 import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.EmbedService
+import me.aberrantfox.judgebot.services.RuleService
 import me.aberrantfox.kjdautils.api.annotation.Convo
 import me.aberrantfox.kjdautils.api.dsl.conversation
 import me.aberrantfox.kjdautils.internal.arguments.BooleanArg
@@ -12,9 +13,9 @@ import me.aberrantfox.kjdautils.internal.arguments.IntegerArg
 import me.aberrantfox.kjdautils.internal.arguments.WordArg
 
 @Convo
-fun ruleDeletionConversation(messages: Messages, dbService: DatabaseService, embeds: EmbedService) =
+fun ruleDeletionConversation(messages: Messages, ruleService: RuleService, embeds: EmbedService) =
         conversation(name = Constants.RULE_DELETION_CONVERSATION) {
-            val rules = dbService.getRules(guild.id)
+            val rules = ruleService.getRules(guild.id)
 
             respond(embeds.embedRulesDetailed(guild.id))
 
@@ -35,7 +36,7 @@ fun ruleDeletionConversation(messages: Messages, dbService: DatabaseService, emb
 
             if (sure) {
                 respond(messages.RULE_DELETED)
-                dbService.deleteRule(ruleToDelete)
+                ruleService.deleteRule(ruleToDelete)
             } else {
                 respond(messages.RULE_NOT_DELETED)
             }

@@ -5,9 +5,10 @@ import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.api.dsl.menu
 import java.awt.Color
+import java.time.LocalDateTime
 
 @Service
-class EmbedService(val dbService: DatabaseService) {
+class EmbedService(private val ruleService: RuleService) {
     private val ruleColor = Color(0xff00ff)
 
     fun embedRule(rule: Rule) = embed {
@@ -22,9 +23,23 @@ class EmbedService(val dbService: DatabaseService) {
         color = ruleColor
     }
 
+    fun embedRulesShort(guildId: String) = embed {
+        val rules = ruleService.getRules(guildId).sortedBy { it.number }
+        title = "**__Server Rules__**"
+        color = ruleColor
+        field {
+            for (rule in rules) {
+                value += "**[${rule.number}](${rule.link})**. ${rule.title}\n"
+            }
+        }
+        footer {
+            timeStamp = LocalDateTime.now()
+        }
+    }
+
     fun embedRules(guildId: String) = embed {
-        val rules = dbService.getRules(guildId).sortedBy { it.number }
-        title = "Server Rules"
+        val rules = ruleService.getRules(guildId).sortedBy { it.number }
+        title = "**__Server Rules__**"
         color = ruleColor
         for (rule in rules) {
             field {
@@ -35,7 +50,7 @@ class EmbedService(val dbService: DatabaseService) {
     }
 
     fun embedRulesDetailed(guildId: String) = embed {
-        val rules = dbService.getRulesSortedByNumber(guildId)
+        val rules = ruleService.getRulesSortedByNumber(guildId)
         title = "Server Rules"
         color = ruleColor
         for (rule in rules) {
@@ -49,7 +64,7 @@ class EmbedService(val dbService: DatabaseService) {
 
     fun embedRulesMenu(guildId: String) = menu {
         embed {
-            val rules = dbService.getRules(guildId).sortedBy { it.number }
+            val rules = ruleService.getRules(guildId).sortedBy { it.number }
 
         }
     }

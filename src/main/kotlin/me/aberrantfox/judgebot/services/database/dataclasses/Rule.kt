@@ -11,5 +11,6 @@ data class Rule (
         val shortName: String = "short-name",
         val title: String = "A short description of the rule",
         val description: String = "A detailed explanation for clarification purposes",
+        val link: String = "",
         val weight: Int = 1
 )

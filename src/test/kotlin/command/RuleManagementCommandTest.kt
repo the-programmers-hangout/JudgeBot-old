@@ -6,8 +6,8 @@ import io.mockk.verify
 import me.aberrantfox.judgebot.arguments.RuleArg
 import me.aberrantfox.judgebot.commands.createRulesManagementCommands
 import me.aberrantfox.judgebot.localization.Messages
-import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.EmbedService
+import me.aberrantfox.judgebot.services.RuleService
 import me.aberrantfox.kjdautils.api.dsl.command.*
 import me.aberrantfox.kjdautils.internal.services.ConversationService
 import mock.*
@@ -22,14 +22,14 @@ class RuleManagementCommandTest {
     lateinit var commands: CommandsContainer
     lateinit var convoService: ConversationService
     lateinit var embedService: EmbedService
-    lateinit var databaseService: DatabaseService
+    lateinit var ruleService: RuleService
     lateinit var commandEvent: CommandEvent<ArgumentContainer>
 
     @BeforeEach
     fun beforeEach() {
         convoService = conversationServiceMock()
         embedService = embedServiceMock()
-        databaseService = databaseServiceMock()
+        ruleService = databaseServiceMock()
         commandEvent = commandEventMock()
         commands = createRulesManagementCommands(convoService, embedService, Messages())
     }

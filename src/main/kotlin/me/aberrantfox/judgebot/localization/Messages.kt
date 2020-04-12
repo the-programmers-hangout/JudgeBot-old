@@ -12,6 +12,7 @@ data class Messages(
         val PROMPT_RULE_SHORTNAME: String = "Please enter a unique shortname to identify this rule with.",
         val ERROR_RULE_SHORTNAME_EXISTS: String = "The rule shortname you have entered already exists in this guild, or it is too long.(15 char limit)",
         val PROMPT_RULE_TITLE: String = "Please input rule title.",
+        val PROMPT_RULE_LINK: String = "Please input link for rule.",
         val PROMPT_RULE_DESCRIPTION: String = "Please input rule description. This is a detailed description of the rule.",
         val PROMPT_RULE_WEIGHT: String = "Please input rule weight between ${Constants.MIN_RULE_WEIGHT} and ${Constants.MAX_RULE_WEIGHT}. " +
                 "Weight decides how harshly users are punished for breaking the rule.",
@@ -34,6 +35,7 @@ data class Messages(
         val PROMPT_UPDATE_RULE_NUMBER: String = "Do you want to update the rule number? Y/N:",
         val PROMPT_UPDATE_RULE_SHORTNAME: String = "Do you want to update the rule shortname? Y/N:",
         val PROMPT_UPDATE_RULE_TITLE: String = "Do you want to update the rule title? Y/N:",
+        val PROMPT_UPDATE_RULE_LINK: String =  "Do you want to add or update the rule link? Y/N:",
         val PROMPT_UPDATE_RULE_DESCRIPTION: String = "Do you want to update the rule description? Y/N:",
         val PROMPT_UPDATE_RULE_WEIGHT: String = "Do you want to update the rule weight? Y/N:",
         val RULE_UPDATED: String = "Rule updated!",
@@ -43,6 +45,7 @@ data class Messages(
         val CREATE_RULE_DESCRIPTION: String = "Use this to create new rules for your guild.",
         val DELETE_RULE_DESCRIPTION: String = "Use this to delete rules for your guild.",
         val DISPLAY_RULES_DESCRIPTION: String = "Displays all the rules and their weights.",
+        val DISPLAY_SHORT_RULES_DESCRIPTION: String = "Displays all the rule headings.",
         val UPDATE_RULE_DESCRIPTION: String = "Update a rule for this guild.",
         val DISPLAY_RULE_DESCRIPTION: String = "Display a given rule.",
 

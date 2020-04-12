@@ -17,6 +17,7 @@
 | deleteRule | <none>    | Use this to delete rules for your guild.     |
 | rule       | Rule      | Display a given rule.                        |
 | rules      | <none>    | Displays all the rules and their weights.    |
+| shortrules | <none>    | Displays all the rule headings.              |
 | updateRule | <none>    | Update a rule for this guild.                |
 
 ## Utility

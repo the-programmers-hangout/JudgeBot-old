@@ -3,20 +3,17 @@ package me.aberrantfox.judgebot.conversations
 import me.aberrantfox.judgebot.arguments.RuleWeightArg
 import me.aberrantfox.judgebot.configuration.Constants
 import me.aberrantfox.judgebot.localization.Messages
-import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.EmbedService
+import me.aberrantfox.judgebot.services.RuleService
 import me.aberrantfox.judgebot.services.database.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.annotation.Convo
 import me.aberrantfox.kjdautils.api.dsl.conversation
-import me.aberrantfox.kjdautils.internal.arguments.BooleanArg
-import me.aberrantfox.kjdautils.internal.arguments.IntegerArg
-import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
-import me.aberrantfox.kjdautils.internal.arguments.WordArg
+import me.aberrantfox.kjdautils.internal.arguments.*
 
 @Convo
-fun ruleUpdateConversation(messages: Messages, dbService: DatabaseService, embeds: EmbedService) =
+fun ruleUpdateConversation(messages: Messages, ruleService: RuleService, embeds: EmbedService) =
         conversation(name = Constants.RULE_UPDATE_CONVERSATION) {
-            val rules = dbService.getRules(guild.id)
+            val rules = ruleService.getRules(guild.id)
 
             respond(embeds.embedRulesDetailed(guild.id))
 
@@ -57,9 +54,18 @@ fun ruleUpdateConversation(messages: Messages, dbService: DatabaseService, embed
             val updateTitle = blockingPrompt(BooleanArg(truthValue = "Y", falseValue = "N")) {
                 messages.PROMPT_UPDATE_RULE_TITLE
             }
+
             val ruleTitle = when {
                 updateTitle -> blockingPrompt(SentenceArg) { messages.PROMPT_RULE_TITLE }
                 else -> ruleToUpdate.title
+            }
+
+            val updateLink = blockingPrompt(BooleanArg("Update rule link", "Y", "N"))
+            { messages.PROMPT_UPDATE_RULE_LINK }
+
+            val ruleLink = when {
+                updateLink -> blockingPrompt(UrlArg) { messages.PROMPT_RULE_LINK }
+                else -> ruleToUpdate.link
             }
 
             val updateDescription = blockingPrompt(BooleanArg(truthValue = "Y", falseValue = "N")) {
@@ -78,7 +84,7 @@ fun ruleUpdateConversation(messages: Messages, dbService: DatabaseService, embed
                 else -> ruleToUpdate.weight
             }
 
-            val updateMade = updateNumber || updateShortName || updateTitle || updateDescription || updateWeight
+            val updateMade = updateNumber || updateShortName || updateTitle || updateDescription || updateLink || updateWeight
             if (updateMade) {
                 val updatedRule = Rule(
                         ruleToUpdate._id,
@@ -87,10 +93,11 @@ fun ruleUpdateConversation(messages: Messages, dbService: DatabaseService, embed
                         ruleShortName,
                         ruleTitle,
                         ruleDescription,
+                        ruleLink,
                         ruleWeight
                         )
 
-                dbService.updateRule(updatedRule)
+                ruleService.updateRule(updatedRule)
                 respond(messages.RULE_UPDATED)
                 respond(embeds.embedRuleDetailed(updatedRule))
             } else {
