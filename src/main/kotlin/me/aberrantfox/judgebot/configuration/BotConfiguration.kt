@@ -7,7 +7,8 @@ data class BotConfiguration(
         val owner: String = "insert-owner-id",
         val whitelist: List<String> = listOf("insert-valid-guild-ids"),
         val guilds: List<GuildConfiguration> = listOf(GuildConfiguration()),
-        val dbConfiguration: DatabaseConfiguration = DatabaseConfiguration()
+        val dbConfiguration: DatabaseConfiguration = DatabaseConfiguration(),
+        val security: Security = Security()
 )
 
 data class DatabaseConfiguration(
@@ -16,10 +17,20 @@ data class DatabaseConfiguration(
 )
 
 data class GuildConfiguration(
-    val id: String = "insert-id",
-    val owner: String = "insert-owner-id"
+        val id: String = "insert-id",
+        val owner: String = "insert-owner-id"
 )
 
+data class Security(
+        val pointsToStatusMap: HashMap<Int, String> = hashMapOf(
+                0 to "Clear",
+                10 to "Green",
+                20 to "Yellow",
+                30 to "Orange",
+                40 to "Red"
+        ),
+        val pointsMax: Int = 50
+)
 
 
 

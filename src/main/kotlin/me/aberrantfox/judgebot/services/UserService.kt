@@ -1,7 +1,9 @@
 package me.aberrantfox.judgebot.services
 
 import me.aberrantfox.judgebot.services.database.dataclasses.GuildMember
+import me.aberrantfox.judgebot.services.database.dataclasses.Infraction
 import me.aberrantfox.judgebot.services.database.dataclasses.InfractionWeight
+import me.aberrantfox.judgebot.services.database.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.extensions.jda.fullName
@@ -10,13 +12,15 @@ import me.aberrantfox.kjdautils.extensions.stdlib.formatJdaDate
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.User
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 import org.litote.kmongo.eq
 import org.litote.kmongo.findOne
 import org.litote.kmongo.getCollection
 import org.litote.kmongo.updateOne
 
 @Service
-class UserService(private val databaseService: DatabaseService) {
+class UserService(private val databaseService: DatabaseService, private val ruleService: RuleService) {
     private val userCollection = databaseService.db.getCollection<GuildMember>("userCollection")
 
     fun getOrCreateUserRecord(target: User): GuildMember {
@@ -33,7 +37,7 @@ class UserService(private val databaseService: DatabaseService) {
         if(incrementHistoryCount) {
             this.incrementUserHistory(userRecord)
         }
-        return buildHistoryEmbed(target, userRecord, guild,true)
+        return userStatusEmbed(target, userRecord, guild,true)
     }
 
     fun updateUserRecord(user: GuildMember): GuildMember {
@@ -82,7 +86,7 @@ class UserService(private val databaseService: DatabaseService) {
                         inline = false
 
                         if(includeModerator) {
-                            value += "\nIssued by **${infraction.moderator}** on **${infraction.dateTime.toString()}**"
+                            value += "\nIssued by **${infraction.moderator}** on **${DateTime(infraction.dateTime).toString(DateTimeFormat.forPattern("dd/MM/yyyy"))}**"
                         }
                     }
 
@@ -129,4 +133,35 @@ class UserService(private val databaseService: DatabaseService) {
                 }
 
             }
+
+    private fun userStatusEmbed(target: User, member: GuildMember, guild: Guild, includeModerator: Boolean) =
+            embed {
+                val (notes, infractions) = member.infractions.partition { it.weight == InfractionWeight.Note }
+                title = "${target.fullName()}'s Record"
+                thumbnail = target.effectiveAvatarUrl
+
+                addInlineField("Notes", "${notes.size}")
+                addInlineField("Infractions", "${infractions.size}")
+                addInlineField("Status","${member.getStatus()}")
+                addInlineField("Join date", "${guild.getMemberJoinString(target)}")
+                addInlineField("Creation date", "${target.timeCreated.toString().formatJdaDate()}")
+                addInlineField("History Invokes","${member.historyCount}")
+
+                field {
+                    name = ""
+                    value = "**__Rule Summary:__**"
+                }
+                field {
+                    val rules = ruleService.getRules(guild.id)
+                    val rulesBroken = groupRulesBroken(member, rules)
+
+                    for (i in 1..rules.size) {
+                        name += "**#$i:**  ${rulesBroken[i] ?: 0}" + "${"".padEnd(10, ' ')}"
+                    }
+                }
+            }
+
+        private fun groupRulesBroken(user: GuildMember, rules: MutableList<Rule>): Map<Int?, Int> {
+            return user.infractions.groupBy { it.ruleBroken }.mapValues { it.value.size }
+        }
 }
