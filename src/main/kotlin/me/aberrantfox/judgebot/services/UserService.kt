@@ -18,6 +18,7 @@ import org.litote.kmongo.eq
 import org.litote.kmongo.findOne
 import org.litote.kmongo.getCollection
 import org.litote.kmongo.updateOne
+import java.awt.Color
 
 @Service
 class UserService(private val databaseService: DatabaseService, private val ruleService: RuleService) {
@@ -79,7 +80,7 @@ class UserService(private val databaseService: DatabaseService, private val rule
                     inline = false
                 }
 
-               infractions.forEach { infraction ->
+                infractions.forEach { infraction ->
                     field {
                         name = "Weight :: __${infraction.weight}__"
                         value = infraction.reason
@@ -90,13 +91,13 @@ class UserService(private val databaseService: DatabaseService, private val rule
                         }
                     }
 
-                   if(infraction.infractionNote != null) {
-                       field {
-                           name = "Moderator Note:"
-                           value = infraction.infractionNote
-                           inline = false
-                       }
-                   }
+                    if(infraction.infractionNote != null) {
+                        field {
+                            name = "Moderator Note:"
+                            value = infraction.infractionNote
+                            inline = false
+                        }
+                    }
                 }
 
                 if (infractions.isEmpty()) {
@@ -137,8 +138,12 @@ class UserService(private val databaseService: DatabaseService, private val rule
     private fun userStatusEmbed(target: User, member: GuildMember, guild: Guild, includeModerator: Boolean) =
             embed {
                 val (notes, infractions) = member.infractions.partition { it.weight == InfractionWeight.Note }
-                title = "${target.fullName()}'s Record"
-                thumbnail = target.effectiveAvatarUrl
+
+                author {
+                    name = "${target.asTag} + 's Record"
+                    iconUrl = target.effectiveAvatarUrl
+                }
+                color = getEmbedColor(member.getStatus())
 
                 addInlineField("Notes", "${notes.size}")
                 addInlineField("Infractions", "${infractions.size}")
@@ -151,17 +156,43 @@ class UserService(private val databaseService: DatabaseService, private val rule
                     name = ""
                     value = "**__Rule Summary:__**"
                 }
-                field {
-                    val rules = ruleService.getRules(guild.id)
-                    val rulesBroken = groupRulesBroken(member, rules)
 
-                    for (i in 1..rules.size) {
-                        name += "**#$i:**  ${rulesBroken[i] ?: 0}" + "${"".padEnd(10, ' ')}"
+                val rules = ruleService.getRules(guild.id)
+                val rulesBroken = groupRulesBroken(member, rules)
+                rules.chunked(2).forEachIndexed{
+                    index, chunkedRules ->
+                    chunkedRules.forEachIndexed {
+                        index, it ->
+                        if (index == 0) {
+                            field {
+                                name = "${it.number}: ${it.title}"
+                                value = "Weight: **${it.weight}** :: Broken: **${rulesBroken[it.number] ?: 0}** \u2800\u2800"
+                                inline = true
+                            }
+                        } else {
+                            field {
+                                name = "${it.number}: ${it.title}"
+                                value = "Weight: **${it.weight}** :: Broken: **${rulesBroken[it.number] ?: 0}**"
+                                inline = true
+                            }
+                        }
                     }
+                    if(index != rules.chunked(2).size - 1) addBlankField(false)
                 }
             }
 
-        private fun groupRulesBroken(user: GuildMember, rules: MutableList<Rule>): Map<Int?, Int> {
-            return user.infractions.groupBy { it.ruleBroken }.mapValues { it.value.size }
+    private fun groupRulesBroken(user: GuildMember, rules: MutableList<Rule>): Map<Int?, Int> {
+        return user.infractions.groupBy { it.ruleBroken }.mapValues { it.value.size }
+    }
+
+    private fun getEmbedColor(status: String): Color? {
+        return when(status) {
+            "Red" -> Color.RED
+            "Green" -> Color.GREEN
+            "Yellow" -> Color.YELLOW
+            "Orange" -> Color.ORANGE
+            "Clear" -> Color.LIGHT_GRAY
+            else -> Color.BLACK
         }
+    }
 }
