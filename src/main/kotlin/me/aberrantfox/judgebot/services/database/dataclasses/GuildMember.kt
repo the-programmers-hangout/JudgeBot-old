@@ -13,14 +13,15 @@ data class GuildMember (
         this.historyCount += 1
     }
 
-    fun addInfraction(infraction: Infraction) {
+    fun addInfraction(infraction: Infraction, points: Int) {
         this.infractions.add(infraction)
+        this.points += points
         this.lastInfraction = infraction.dateTime
     }
 
-    fun getStatus(): String {
+    fun getStatus(guildId: String, config: BotConfiguration): String {
         var status: String =""
-        for (entry in BotConfiguration().security.pointsToStatusMap.toSortedMap()) {
+        for (entry in config.getGuildConfig(guildId)!!.security.pointsToStatusMap.toSortedMap()) {
             if (this.points >= entry.key) status = entry.value
         }
         return status

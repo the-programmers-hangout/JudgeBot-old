@@ -1,9 +1,11 @@
 package me.aberrantfox.judgebot.services
 
+import me.aberrantfox.judgebot.configuration.BotConfiguration
 import me.aberrantfox.judgebot.services.database.dataclasses.GuildMember
 import me.aberrantfox.judgebot.services.database.dataclasses.Infraction
 import me.aberrantfox.judgebot.services.database.dataclasses.InfractionWeight
 import me.aberrantfox.judgebot.services.database.dataclasses.Rule
+import me.aberrantfox.judgebot.utility.getEmbedColor
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.extensions.jda.fullName
@@ -21,7 +23,7 @@ import org.litote.kmongo.updateOne
 import java.awt.Color
 
 @Service
-class UserService(private val databaseService: DatabaseService, private val ruleService: RuleService) {
+class UserService(private val databaseService: DatabaseService, private val ruleService: RuleService, private val config: BotConfiguration) {
     private val userCollection = databaseService.db.getCollection<GuildMember>("userCollection")
 
     fun getOrCreateUserRecord(target: User): GuildMember {
@@ -140,14 +142,14 @@ class UserService(private val databaseService: DatabaseService, private val rule
                 val (notes, infractions) = member.infractions.partition { it.weight == InfractionWeight.Note }
 
                 author {
-                    name = "${target.asTag} + 's Record"
+                    name = "${target.asTag}'s Record"
                     iconUrl = target.effectiveAvatarUrl
                 }
-                color = getEmbedColor(member.getStatus())
+                color = getEmbedColor(member.getStatus(guild.id, config))
 
                 addInlineField("Notes", "${notes.size}")
                 addInlineField("Infractions", "${infractions.size}")
-                addInlineField("Status","${member.getStatus()}")
+                addInlineField("Status","${member.getStatus(guild.id, config)}")
                 addInlineField("Join date", "${guild.getMemberJoinString(target)}")
                 addInlineField("Creation date", "${target.timeCreated.toString().formatJdaDate()}")
                 addInlineField("History Invokes","${member.historyCount}")
@@ -183,16 +185,5 @@ class UserService(private val databaseService: DatabaseService, private val rule
 
     private fun groupRulesBroken(user: GuildMember, rules: MutableList<Rule>): Map<Int?, Int> {
         return user.infractions.groupBy { it.ruleBroken }.mapValues { it.value.size }
-    }
-
-    private fun getEmbedColor(status: String): Color? {
-        return when(status) {
-            "Red" -> Color.RED
-            "Green" -> Color.GREEN
-            "Yellow" -> Color.YELLOW
-            "Orange" -> Color.ORANGE
-            "Clear" -> Color.LIGHT_GRAY
-            else -> Color.BLACK
-        }
     }
 }
