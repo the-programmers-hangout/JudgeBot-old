@@ -2,6 +2,7 @@ package dbtest
 
 import me.aberrantfox.judgebot.configuration.DatabaseConfiguration
 import me.aberrantfox.judgebot.services.DatabaseService
+import me.aberrantfox.judgebot.services.RuleService
 import me.aberrantfox.judgebot.services.database.dataclasses.Rule
 import mock.TestData
 import org.junit.jupiter.api.*
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Assertions.*
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DatabaseServiceTest {
-    val dbService = DatabaseService(TestData.botTestConfiguration)
+    val dbService = RuleService(DatabaseService(TestData.botTestConfiguration))
 
     @BeforeAll
     internal fun `set up`() {

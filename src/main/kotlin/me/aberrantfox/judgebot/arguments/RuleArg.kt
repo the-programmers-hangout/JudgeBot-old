@@ -1,6 +1,7 @@
 package me.aberrantfox.judgebot.arguments
 
 import me.aberrantfox.judgebot.services.DatabaseService
+import me.aberrantfox.judgebot.services.RuleService
 import me.aberrantfox.judgebot.services.database.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.dsl.command.CommandEvent
 import me.aberrantfox.kjdautils.api.getInjectionObject
@@ -20,12 +21,12 @@ open class RuleArg(override val name : String = "Rule"): ArgumentType<Rule>() {
     override fun convert(arg: String, args: List<String>, event: CommandEvent<*>): ArgumentResult<Rule> {
         val guild : Guild = event.guild ?: return ArgumentResult.Error("Rule arguments cannot be used outside of guilds.")
 
-        val dbService: DatabaseService = event.discord.getInjectionObject<DatabaseService>()
+        val ruleService: RuleService = event.discord.getInjectionObject<RuleService>()
                 ?: return ArgumentResult.Error("Could not access database.")
 
         val rule: Rule? = when {
-            arg.isInteger() -> dbService.getRule(arg.toInt(), guild.id)
-            else -> dbService.getRule(arg, guild.id)
+            arg.isInteger() -> ruleService.getRule(arg.toInt(), guild.id)
+            else -> ruleService.getRule(arg, guild.id)
         }
         return if (rule == null) ArgumentResult.Error("Rule not found.") else ArgumentResult.Success(rule)
     }
