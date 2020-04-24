@@ -9,10 +9,9 @@ enum class Permission {
     GuildOwner,
     Administrator,
     Staff,
-    Everyone
 }
 
-val DEFAULT_REQUIRED_PERMISSION = Permission.Everyone
+val DEFAULT_REQUIRED_PERMISSION = Permission.Staff
 
 @Service
 class PermissionsService(private val configuration: BotConfiguration) {
