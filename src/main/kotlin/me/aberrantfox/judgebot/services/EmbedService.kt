@@ -1,5 +1,6 @@
 package me.aberrantfox.judgebot.services
 
+import me.aberrantfox.judgebot.configuration.BotConfiguration
 import me.aberrantfox.judgebot.services.database.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
@@ -8,7 +9,7 @@ import java.awt.Color
 import java.time.LocalDateTime
 
 @Service
-class EmbedService(private val ruleService: RuleService) {
+class EmbedService(private val ruleService: RuleService, private val config: BotConfiguration) {
     private val ruleColor = Color(0xff00ff)
 
     fun embedRule(rule: Rule) = embed {
@@ -27,6 +28,9 @@ class EmbedService(private val ruleService: RuleService) {
         val rules = ruleService.getRules(guildId).sortedBy { it.number }
         title = "**__Server Rules__**"
         color = ruleColor
+        if(config.getGuildConfig(guildId)?.embedThumbnail != "") {
+            thumbnail = config.getGuildConfig(guildId)?.embedThumbnail
+        }
         field {
             for (rule in rules) {
                 value += "**[${rule.number}](${rule.link})**. ${rule.title}\n"
@@ -41,6 +45,9 @@ class EmbedService(private val ruleService: RuleService) {
         val rules = ruleService.getRules(guildId).sortedBy { it.number }
         title = "**__Server Rules__**"
         color = ruleColor
+        if(config.getGuildConfig(guildId)?.embedThumbnail != "") {
+            thumbnail = config.getGuildConfig(guildId)?.embedThumbnail
+        }
         for (rule in rules) {
             field {
                 value = "**__${rule.number}: ${rule.title}__**\n${rule.description}"

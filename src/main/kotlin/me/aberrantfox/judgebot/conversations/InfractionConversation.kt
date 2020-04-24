@@ -20,8 +20,7 @@ fun createInfractionConversation(messages: Messages, infractionService: Infracti
     var personalNote: String? = null
 
     this.respond(userService.getUserHistory(id, userRecord, this.guild, true))
-
-    this.respond(embedService.embedRulesDetailed(this.guild.id))
+    
     val rules = ruleService.getRules(guild.id)
     val ruleNumberChosen = blockingPromptUntil(
             argumentType = IntegerArg,

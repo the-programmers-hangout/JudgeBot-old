@@ -9,6 +9,7 @@
 | Commands              | Arguments | Description                               |
 | --------------------- | --------- | ----------------------------------------- |
 | Infract, Warn, Strike | <none>    | Use this to issue an infraction to a user |
+| history               | User      | Use this to view a user's record          |
 
 ## Rule Management
 | Commands   | Arguments | Description                                  |
