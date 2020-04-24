@@ -8,7 +8,12 @@ data class BotConfiguration(
         val owner: String = "insert-owner-id",
         val whitelist: List<String> = listOf("insert-valid-guild-ids"),
         val guilds: List<GuildConfiguration> = listOf(GuildConfiguration()),
+<<<<<<< Updated upstream
         val dbConfiguration: DatabaseConfiguration = DatabaseConfiguration()
+=======
+        val dbConfiguration: DatabaseConfiguration = DatabaseConfiguration(),
+        var prefix: String = "judge!"
+>>>>>>> Stashed changes
 ) {
         fun getGuildConfig(guildId: String) = guilds.firstOrNull { it.id == guildId }
 }
@@ -22,6 +27,11 @@ data class GuildConfiguration(
         val id: String = "insert-id",
         val owner: String = "insert-owner-id",
         val embedThumbnail: String = "",
+<<<<<<< Updated upstream
+=======
+        var staffRole: String = "",
+        var adminRole: String = "",
+>>>>>>> Stashed changes
         val security: Security = Security()
 )
 
