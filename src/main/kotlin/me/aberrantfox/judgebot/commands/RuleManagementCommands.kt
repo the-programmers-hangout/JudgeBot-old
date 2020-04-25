@@ -34,14 +34,14 @@ fun createRulesManagementCommands(conversationService: ConversationService,
         description = messages.DISPLAY_RULES_DESCRIPTION
         requiresGuild = true
         execute {
-            it.respond(embeds.embedRules(it.guild!!.id))
+            it.respond(embeds.embedRules(it.guild!!))
         }
     }
     command("shortrules") {
         description = messages.DISPLAY_SHORT_RULES_DESCRIPTION
         requiresGuild = true
         execute {
-            it.respond(embeds.embedRulesShort(it.guild!!.id))
+            it.respond(embeds.embedRulesShort(it.guild!!))
         }
     }
     command("updateRule") {

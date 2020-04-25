@@ -43,8 +43,7 @@ fun createInfractionConversation(messages: Messages, infractionService: Infracti
     }
 
     val infraction = Infraction(this.user.name, infractionDetails, infractionType!!, this.guild.id, personalNote, ruleNumberChosen)
-    infractionService.infract(id, userRecord, infraction)
-
+    infractionService.infract(id, this.guild, userRecord, infraction)
     this.respond(userService.getUserHistory(id, userRecord, this.guild,false))
 
     next()
