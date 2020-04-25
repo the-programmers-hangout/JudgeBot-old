@@ -1,4 +1,4 @@
-package me.aberrantfox.judgebot.services.database.dataclasses
+package me.aberrantfox.judgebot.dataclasses
 
 import org.litote.kmongo.Id
 import org.litote.kmongo.newId

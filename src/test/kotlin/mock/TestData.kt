@@ -4,20 +4,15 @@ import io.mockk.*
 import me.aberrantfox.judgebot.configuration.BotConfiguration
 import me.aberrantfox.judgebot.configuration.DatabaseConfiguration
 import me.aberrantfox.judgebot.configuration.GuildConfiguration
-import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.EmbedService
 import me.aberrantfox.judgebot.services.RuleService
-import me.aberrantfox.judgebot.services.database.dataclasses.Rule
+import me.aberrantfox.judgebot.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.dsl.command.ArgumentContainer
 import me.aberrantfox.kjdautils.api.dsl.command.CommandEvent
-import me.aberrantfox.kjdautils.api.dsl.command.NoArg
-import me.aberrantfox.kjdautils.api.getInjectionObject
 import me.aberrantfox.kjdautils.discord.Discord
 import me.aberrantfox.kjdautils.internal.services.ConversationService
 import net.dv8tion.jda.api.entities.Guild
-import org.junit.jupiter.api.Test
 import org.litote.kmongo.newId
-import kotlin.test.assertEquals
 
 fun guildMock() = mockk<Guild>(relaxed = true) {
     every { id } returns "test-guild"

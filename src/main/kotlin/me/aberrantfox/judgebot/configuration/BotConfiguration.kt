@@ -1,7 +1,6 @@
 package me.aberrantfox.judgebot.configuration
 
 import me.aberrantfox.kjdautils.api.annotation.Data
-import net.dv8tion.jda.api.entities.MessageEmbed
 
 @Data("config/config.json")
 data class BotConfiguration(

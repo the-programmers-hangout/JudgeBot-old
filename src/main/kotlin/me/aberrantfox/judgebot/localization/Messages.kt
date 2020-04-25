@@ -58,7 +58,10 @@ data class Messages(
         val PROMPT_USER_ADD_PERSONAL_NOTE: String = "Would you like to add a note relating to this Infraction?",
         val PROMPT_PERSONAL_NOTE: String = "Please input the note you would like to add.",
         val PROMPT_INFRACTION_DETAILS: String = "Please input the details of the Infraction.",
-        val PROMPT_INFRACTION_RULE_BROKEN: String = "Please enter the rule that was broken by the user."
+        val PROMPT_INFRACTION_RULE_BROKEN: String = "Please enter the rule that was broken by the user.",
+
+    // General Errors
+        val ERROR_USER_NOT_IN_GUILD: String = "**Error:** User not in this Guild"
 )
 
 fun String.inject(vararg args: String) : String{

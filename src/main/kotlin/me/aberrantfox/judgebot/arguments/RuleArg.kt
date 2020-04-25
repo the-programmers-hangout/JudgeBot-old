@@ -1,8 +1,7 @@
 package me.aberrantfox.judgebot.arguments
 
-import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.RuleService
-import me.aberrantfox.judgebot.services.database.dataclasses.Rule
+import me.aberrantfox.judgebot.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.dsl.command.CommandEvent
 import me.aberrantfox.kjdautils.api.getInjectionObject
 import me.aberrantfox.kjdautils.extensions.stdlib.isInteger

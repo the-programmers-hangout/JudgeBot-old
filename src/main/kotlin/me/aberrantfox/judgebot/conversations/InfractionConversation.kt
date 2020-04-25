@@ -3,9 +3,9 @@ package me.aberrantfox.judgebot.conversations
 import me.aberrantfox.judgebot.extensions.next
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.*
-import me.aberrantfox.judgebot.services.database.dataclasses.Infraction
-import me.aberrantfox.judgebot.services.database.dataclasses.InfractionWeight
-import me.aberrantfox.judgebot.services.database.dataclasses.convertToInfractionType
+import me.aberrantfox.judgebot.dataclasses.Infraction
+import me.aberrantfox.judgebot.dataclasses.InfractionWeight
+import me.aberrantfox.judgebot.dataclasses.convertToInfractionType
 import me.aberrantfox.kjdautils.api.annotation.Convo
 import me.aberrantfox.kjdautils.api.dsl.conversation
 import me.aberrantfox.kjdautils.internal.arguments.*
@@ -14,11 +14,16 @@ val infractionChoiceArg = ChoiceArg("InfractionTypes", "Note", "Borderline", "Li
 
 @Convo
 fun createInfractionConversation(messages: Messages, infractionService: InfractionService, userService: UserService, embedService: EmbedService, ruleService: RuleService) = conversation("Infraction-Conversation") {
-    val id = blockingPrompt(UserArg) { messages.PROMPT_USER_ID_INFRACTION }
-    val userRecord = userService.getOrCreateUserRecord(id)
+    val id = blockingPromptUntil(
+            UserArg,
+            { messages.PROMPT_USER_ID_INFRACTION },
+            {user -> guild.isMember(user)},
+            { messages.ERROR_USER_NOT_IN_GUILD }
+    )
+
+    val userRecord = userService.getOrCreateUserRecord(id, guild.id)
     var addPersonalNote: Boolean = false
     var personalNote: String? = null
-
     this.respond(userService.getUserHistory(id, userRecord, this.guild, true))
     
     val rules = ruleService.getRules(guild.id)

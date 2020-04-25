@@ -25,7 +25,7 @@ fun createInfractionCommands(conversationService: ConversationService, userServi
         requiresGuild = true
         requiredPermissionLevel = Permission.Staff
         execute(UserArg) {
-            val user = userService.getOrCreateUserRecord(it.args.first)
+            val user = userService.getOrCreateUserRecord(it.args.first, it.guild!!.id)
             it.respond(userService.getUserHistory(it.args.first, user , it.guild!!, true))
         }
     }
