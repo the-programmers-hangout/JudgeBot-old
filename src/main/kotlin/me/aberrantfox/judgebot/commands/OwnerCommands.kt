@@ -27,7 +27,7 @@ fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixSe
     }
 
     command("setAdminRole") {
-        description = "Sets the role that distinguishes an Administrator"
+        description = "Sets the Administrator role  "
         requiredPermissionLevel = Permission.BotOwner
 
         execute(RoleArg) {
@@ -39,7 +39,7 @@ fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixSe
     }
 
     command("setStaffRole") {
-        description = "Sets the role that distinguishes an Administrator"
+        description = "Sets the Staff role"
         requiredPermissionLevel = Permission.BotOwner
 
         execute(RoleArg) {
