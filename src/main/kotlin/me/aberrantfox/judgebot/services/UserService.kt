@@ -1,10 +1,7 @@
 package me.aberrantfox.judgebot.services
 
 import me.aberrantfox.judgebot.configuration.BotConfiguration
-import me.aberrantfox.judgebot.services.database.dataclasses.GuildMember
-import me.aberrantfox.judgebot.services.database.dataclasses.Infraction
-import me.aberrantfox.judgebot.services.database.dataclasses.InfractionWeight
-import me.aberrantfox.judgebot.services.database.dataclasses.Rule
+import me.aberrantfox.judgebot.dataclasses.*
 import me.aberrantfox.judgebot.utility.getEmbedColor
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
@@ -26,19 +23,28 @@ import java.awt.Color
 class UserService(private val databaseService: DatabaseService, private val ruleService: RuleService, private val config: BotConfiguration) {
     private val userCollection = databaseService.db.getCollection<GuildMember>("userCollection")
 
-    fun getOrCreateUserRecord(target: User): GuildMember {
+    fun getOrCreateUserRecord(target: User, guildId: String): GuildMember {
         var userRecord = userCollection.findOne(GuildMember::userId eq target.id)
-        return if(userRecord != null)
-            userRecord else
-        {
-            userCollection.insertOne(GuildMember(target.id))
-            return GuildMember(target.id)
+        return if(userRecord != null) {
+            userRecord.ensureGuildDetailsPresent(guildId)
+            userRecord
+        } else {
+            val guildMember = GuildMember(target.id)
+            guildMember.guilds.add(GuildDetails(guildId))
+            userCollection.insertOne(guildMember)
+            guildMember
         }
     }
 
     fun getUserHistory(target: User, userRecord: GuildMember, guild: Guild, incrementHistoryCount: Boolean): MessageEmbed {
+        if (!guild.isMember(target)) {
+            return embed {
+                color = Color.RED
+                title = "User not in this Guild."
+            }
+        }
         if(incrementHistoryCount) {
-            this.incrementUserHistory(userRecord)
+            this.incrementUserHistory(userRecord, guild.id)
         }
         return userStatusEmbed(target, userRecord, guild,true)
     }
@@ -48,15 +54,16 @@ class UserService(private val databaseService: DatabaseService, private val rule
         return user
     }
 
-    private fun incrementUserHistory(user: GuildMember): GuildMember {
-        user.incrementHistoryCount()
+    private fun incrementUserHistory(user: GuildMember, guildId: String): GuildMember {
+        user.incrementHistoryCount(guildId)
         this.updateUserRecord(user)
         return user
     }
 
     private fun buildHistoryEmbed(target: User, member: GuildMember, guild: Guild, includeModerator: Boolean)  =
             embed {
-                val (notes, infractions) = member.infractions.partition { it.weight == InfractionWeight.Note }
+                val guildDetails = member.guilds.find{ it.guildId == guild.id }!!
+                val (notes, infractions) = guildDetails.infractions.partition { it.weight == InfractionWeight.Note }
 
                 title = "${target.fullName()}'s Record"
                 thumbnail = target.effectiveAvatarUrl
@@ -74,7 +81,7 @@ class UserService(private val databaseService: DatabaseService, private val rule
                             "\nCreation date: **${target.timeCreated.toString().formatJdaDate()}**"
 
                     if(includeModerator){
-                        value +="\nHistory has been invoked **${member.historyCount}** times."
+                        value +="\nHistory has been invoked **${guildDetails.historyCount}** times."
                     }
                 }
                 field {
@@ -139,7 +146,8 @@ class UserService(private val databaseService: DatabaseService, private val rule
 
     private fun userStatusEmbed(target: User, member: GuildMember, guild: Guild, includeModerator: Boolean) =
             embed {
-                val (notes, infractions) = member.infractions.partition { it.weight == InfractionWeight.Note }
+                val guildDetails = member.guilds.find{ it.guildId == guild.id }!!
+                val (notes, infractions) = guildDetails.infractions.partition { it.weight == InfractionWeight.Note }
 
                 author {
                     name = "${target.asTag}'s Record"
@@ -147,12 +155,12 @@ class UserService(private val databaseService: DatabaseService, private val rule
                 }
                 color = getEmbedColor(member.getStatus(guild.id, config))
 
-                addInlineField("Notes", "${notes.size}")
-                addInlineField("Infractions", "${infractions.size}")
+                addInlineField("Notes", "${notes.filter{ it.guildId == guild.id }.size}")
+                addInlineField("Infractions", "${infractions.filter{ it.guildId == guild.id }.size}")
                 addInlineField("Status","${member.getStatus(guild.id, config)}")
                 addInlineField("Join date", "${guild.getMemberJoinString(target)}")
                 addInlineField("Creation date", "${target.timeCreated.toString().formatJdaDate()}")
-                addInlineField("History Invokes","${member.historyCount}")
+                addInlineField("History Invokes","${guildDetails.historyCount}")
 
                 field {
                     name = ""
@@ -160,7 +168,7 @@ class UserService(private val databaseService: DatabaseService, private val rule
                 }
 
                 val rules = ruleService.getRules(guild.id)
-                val rulesBroken = groupRulesBroken(member, rules)
+                val rulesBroken = groupRulesBroken(member, guild.id, rules)
                 rules.chunked(2).forEachIndexed{
                     index, chunkedRules ->
                     chunkedRules.forEachIndexed {
@@ -183,7 +191,10 @@ class UserService(private val databaseService: DatabaseService, private val rule
                 }
             }
 
-    private fun groupRulesBroken(user: GuildMember, rules: MutableList<Rule>): Map<Int?, Int> {
-        return user.infractions.groupBy { it.ruleBroken }.mapValues { it.value.size }
+    private fun groupRulesBroken(user: GuildMember, guildId: String, rules: MutableList<Rule>): Map<Int?, Int> {
+        return user.getGuildInfo(guildId)!!.infractions
+                .filter { it.guildId == guildId }
+                .groupBy { it.ruleBroken }
+                .mapValues { it.value.size }
     }
 }

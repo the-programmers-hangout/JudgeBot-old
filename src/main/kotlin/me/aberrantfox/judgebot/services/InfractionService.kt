@@ -1,9 +1,9 @@
 package me.aberrantfox.judgebot.services
 
 import me.aberrantfox.judgebot.configuration.BotConfiguration
-import me.aberrantfox.judgebot.services.database.dataclasses.GuildMember
-import me.aberrantfox.judgebot.services.database.dataclasses.Infraction
-import me.aberrantfox.judgebot.services.database.dataclasses.infractionMap
+import me.aberrantfox.judgebot.dataclasses.GuildMember
+import me.aberrantfox.judgebot.dataclasses.Infraction
+import me.aberrantfox.judgebot.dataclasses.infractionMap
 import me.aberrantfox.judgebot.utility.buildUserStatusText
 import me.aberrantfox.judgebot.utility.getEmbedColor
 import me.aberrantfox.kjdautils.api.annotation.Service
@@ -16,27 +16,34 @@ import org.joda.time.Days
 
 @Service
 class InfractionService(private val databaseService: DatabaseService, private val userService: UserService, private val ruleService: RuleService, private val config: BotConfiguration) {
-    private val infractionCollection = databaseService.db.getCollection("infractionCollection")
 
     fun infract(target: User, guild: Guild, userRecord: GuildMember, infraction: Infraction): GuildMember {
         userRecord.addInfraction(infraction, calculateInfractionPoints(userRecord, infraction))
         val infractionEmbed = buildInfractionEmbed(target, userRecord, guild, infraction, config)
+
+        // TODO: apply punishments for infraction to user
+
         target.sendPrivateMessage(infractionEmbed)
         return userService.updateUserRecord(userRecord)
     }
 
-    // TODO: apply punishments for infraction to user, send DM etc...
     private fun calculateInfractionPoints(userRecord: GuildMember, infraction: Infraction): Int {
         val rule = ruleService.getRule(infraction.ruleBroken!!, infraction.guildId)
-        val daysSinceLastInfraction = Days.daysBetween(DateTime(userRecord.lastInfraction).toLocalDate(), DateTime().toLocalDate()).days
+        val lastInfractionOffset = calculatePeriodOffset(userRecord, infraction.guildId)
 
-        var dayTotal = daysSinceLastInfraction / 30
-        if(dayTotal > 12) dayTotal = 12
-
-        var points = (rule!!.weight * infractionMap[infraction.weight]!!) - dayTotal
+        var points = (rule!!.weight * infractionMap[infraction.weight]!!) - lastInfractionOffset
         if (points < 0) points = 0
 
         return points
+    }
+
+    private fun calculatePeriodOffset(userRecord: GuildMember, guildId: String): Int {
+        if(userRecord.getGuildInfo(guildId)!!.infractions.size == 0) return 0
+
+        val daysSinceLastInfraction = Days.daysBetween(DateTime(userRecord.getGuildInfo(guildId)?.lastInfraction), DateTime()).days
+        var dayTotal = daysSinceLastInfraction / 30
+        if(dayTotal > 12) dayTotal = 12
+        return dayTotal
     }
 
     private fun buildInfractionEmbed(target: User, member: GuildMember, guild:Guild, infraction: Infraction, config: BotConfiguration) =

@@ -1,9 +1,8 @@
 package dbtest
 
-import me.aberrantfox.judgebot.configuration.DatabaseConfiguration
 import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.RuleService
-import me.aberrantfox.judgebot.services.database.dataclasses.Rule
+import me.aberrantfox.judgebot.dataclasses.Rule
 import mock.TestData
 import org.junit.jupiter.api.*
 

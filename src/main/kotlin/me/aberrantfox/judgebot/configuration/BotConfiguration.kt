@@ -8,7 +8,8 @@ data class BotConfiguration(
         val owner: String = "insert-owner-id",
         val whitelist: List<String> = listOf("insert-valid-guild-ids"),
         val guilds: List<GuildConfiguration> = listOf(GuildConfiguration()),
-        val dbConfiguration: DatabaseConfiguration = DatabaseConfiguration()
+        val dbConfiguration: DatabaseConfiguration = DatabaseConfiguration(),
+        val prefix: String = "judge!"
 ) {
         fun getGuildConfig(guildId: String) = guilds.firstOrNull { it.id == guildId }
 }

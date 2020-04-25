@@ -5,7 +5,7 @@ import me.aberrantfox.judgebot.configuration.Constants
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.EmbedService
 import me.aberrantfox.judgebot.services.RuleService
-import me.aberrantfox.judgebot.services.database.dataclasses.Rule
+import me.aberrantfox.judgebot.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.annotation.Convo
 import me.aberrantfox.kjdautils.api.dsl.conversation
 import me.aberrantfox.kjdautils.internal.arguments.*
