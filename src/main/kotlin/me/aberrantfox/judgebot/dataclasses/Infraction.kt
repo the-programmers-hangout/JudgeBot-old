@@ -1,4 +1,4 @@
-package me.aberrantfox.judgebot.services.database.dataclasses
+package me.aberrantfox.judgebot.dataclasses
 
 import java.util.Date;
 

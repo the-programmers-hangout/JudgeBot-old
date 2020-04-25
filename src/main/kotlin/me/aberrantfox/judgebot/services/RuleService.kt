@@ -1,7 +1,7 @@
 package me.aberrantfox.judgebot.services
 
 import com.mongodb.client.result.DeleteResult
-import me.aberrantfox.judgebot.services.database.dataclasses.Rule
+import me.aberrantfox.judgebot.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.annotation.Service
 import org.litote.kmongo.*
 

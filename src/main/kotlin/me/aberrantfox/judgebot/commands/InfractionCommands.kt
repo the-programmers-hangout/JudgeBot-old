@@ -21,7 +21,7 @@ fun createInfractionCommands(conversationService: ConversationService, userServi
         description = "Use this to view a user's record"
         requiresGuild = true
         execute(UserArg) {
-            val user = userService.getOrCreateUserRecord(it.args.first)
+            val user = userService.getOrCreateUserRecord(it.args.first, it.guild!!.id)
             it.respond(userService.getUserHistory(it.args.first, user , it.guild!!, true))
         }
     }
