@@ -9,6 +9,7 @@ enum class Permission {
     GuildOwner,
     Administrator,
     Staff,
+    Everyone
 }
 
 val DEFAULT_REQUIRED_PERMISSION = Permission.Staff
