@@ -12,11 +12,11 @@
 | history               | User      | Use this to view a user's record          |
 
 ## Owner
-| Commands     | Arguments | Description                                       |
-| ------------ | --------- | ------------------------------------------------- |
-| SetPrefix    | Prefix    | Set the bot's prefix.                             |
-| setAdminRole | Role      | Sets the role that distinguishes an Administrator |
-| setStaffRole | Role      | Sets the role that distinguishes an Administrator |
+| Commands     | Arguments | Description                   |
+| ------------ | --------- | ----------------------------- |
+| SetPrefix    | Prefix    | Set the bot's prefix.         |
+| setAdminRole | Role      | Sets the Administrator role   |
+| setStaffRole | Role      | Sets the Staff role           |
 
 ## Rule Management
 | Commands     | Arguments | Description                                  |
