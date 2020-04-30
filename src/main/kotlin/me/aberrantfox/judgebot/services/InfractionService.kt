@@ -14,7 +14,7 @@ import org.joda.time.DateTime
 import org.joda.time.Days
 
 @Service
-class InfractionService(private val databaseService: DatabaseService, private val userService: UserService, private val ruleService: RuleService, private val config: BotConfiguration) {
+class InfractionService(private val userService: UserService, private val ruleService: RuleService, private val config: BotConfiguration) {
 
     fun infract(target: User, userRecord: GuildMember, infraction: Infraction): GuildMember {
         userRecord.addInfraction(infraction, calculateInfractionPoints(userRecord, infraction))
