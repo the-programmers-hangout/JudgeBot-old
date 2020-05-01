@@ -1,5 +1,7 @@
 package me.aberrantfox.judgebot.configuration
 
+import me.aberrantfox.judgebot.dataclasses.PunishmentConfig
+import me.aberrantfox.judgebot.dataclasses.PunishmentType
 import me.aberrantfox.kjdautils.api.annotation.Data
 
 @Data("config/config.json")
@@ -29,13 +31,36 @@ data class GuildConfiguration(
 data class Security(
         val pointsToStatusMap: HashMap<Int, String> = hashMapOf(
                 0 to "Clear",
-                10 to "Green",
-                20 to "Yellow",
-                30 to "Orange",
-                40 to "Red"
+                15 to "Green",
+                30 to "Yellow",
+                45 to "Orange",
+                60 to "Red"
         ),
-        val pointsMax: Int = 50
+        val pointsToPunishmentMap: HashMap<Int, PunishmentConfig> = hashMapOf(
+                0 to PunishmentConfig(PunishmentType.Warn),
+                3 to PunishmentConfig(PunishmentType.Mute, 60 * 5),
+                5 to PunishmentConfig(PunishmentType.Mute, 60 * 30),
+                8 to PunishmentConfig(PunishmentType.Mute, 60 * 60),
+                10 to PunishmentConfig(PunishmentType.Mute, 60 * 60 * 4),
+                12 to PunishmentConfig(PunishmentType.Mute, 60 * 60 * 16),
+                18 to PunishmentConfig(PunishmentType.Mute, 60 * 60 * 24),
+                20 to PunishmentConfig(PunishmentType.Mute, 60 * 60 * 48),
+                25 to PunishmentConfig(PunishmentType.Blindfold, 60 * 60 * 24),
+                30 to PunishmentConfig(PunishmentType.Blindfold, 60 * 60 * 48),
+                35 to PunishmentConfig(PunishmentType.Blindfold, 60 * 60 * 24 * 7),
+                40 to PunishmentConfig(PunishmentType.Blindfold, 60 * 60 * 24 * 14),
+                45 to PunishmentConfig(PunishmentType.Blindfold, 60 * 60 * 24 * 30),
+                50 to PunishmentConfig(PunishmentType.AppealableBan, 60 * 60 * 24 * 30),
+                55 to PunishmentConfig(PunishmentType.AppealableBan, 60 * 60 * 24 * 90),
+                60 to PunishmentConfig(PunishmentType.PermanentBan)
+        ),
+        val pointsMax: Int = 60,
+        val mutedRole: String = "",
+        val blindfoldRole: String = ""
 )
+
+
+
 
 
 
