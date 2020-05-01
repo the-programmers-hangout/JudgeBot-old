@@ -12,9 +12,9 @@ import net.dv8tion.jda.api.entities.Guild
 
 
 open class RuleArg(override val name : String = "Rule"): ArgumentType<Rule>() {
-    companion object : RuleArg()
+    override fun generateExamples(event: CommandEvent<*>): MutableList<String> = mutableListOf("1", "2", "shortName")
 
-    override val examples = arrayListOf("1", "2", "shortName")
+    companion object : RuleArg()
     override val consumptionType = ConsumptionType.Single
 
     override fun convert(arg: String, args: List<String>, event: CommandEvent<*>): ArgumentResult<Rule> {

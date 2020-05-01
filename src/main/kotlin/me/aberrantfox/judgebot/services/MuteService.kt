@@ -8,7 +8,7 @@ import me.aberrantfox.judgebot.utility.buildMuteEmbed
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.discord.Discord
 import me.aberrantfox.kjdautils.extensions.jda.sendPrivateMessage
-import me.aberrantfox.kjdautils.extensions.stdlib.convertToTimeString
+import me.aberrantfox.kjdautils.extensions.stdlib.toTimeString
 import net.dv8tion.jda.api.entities.Member
 import org.joda.time.DateTime
 import org.litote.kmongo.and
@@ -42,7 +42,7 @@ class MuteService(private val configuration: BotConfiguration,
         }
         muteCollection.insertOne(Punishment(user.id, guild.id, PunishmentType.Mute, unmuteTime, reason))
         guild.addRoleToMember(member, roleService.getMutedRole(guild)).queue()
-        member.user.sendPrivateMessage(buildMuteEmbed(member.asMention, time.convertToTimeString(), reason))
+        member.user.sendPrivateMessage(buildMuteEmbed(member.asMention, time.toTimeString(), reason))
         unmuteTimerTaskMap[toKey(member)] = scheduleUnmute(member, time)
     }
 

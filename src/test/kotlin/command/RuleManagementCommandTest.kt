@@ -5,6 +5,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import me.aberrantfox.judgebot.arguments.RuleArg
 import me.aberrantfox.judgebot.commands.createRulesManagementCommands
+import me.aberrantfox.judgebot.conversations.RuleCreationConversation
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.EmbedService
 import me.aberrantfox.judgebot.services.RuleService
@@ -40,7 +41,7 @@ class RuleManagementCommandTest {
         commands[commandName]?.invoke(NoArg(), commandEvent)
 
         verify(exactly = 1) {
-            convoService.createConversation(allAny(), allAny(), allAny())
+            convoService.startConversation<RuleCreationConversation>(allAny(), allAny(), allAny())
         }
     }
 

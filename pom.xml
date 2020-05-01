@@ -10,8 +10,8 @@
 
     <properties>
         <project.repository>https://gitlab.com/AberrantFox/Judgebot</project.repository>
-        <kotlin.version>1.3.61</kotlin.version>
-        <kutils.version>0.14.0</kutils.version>
+        <kotlin.version>1.3.71</kotlin.version>
+        <kutils.version>0.15.0</kutils.version>
         <joda-time.version>2.6</joda-time.version>
         <mockk.version>1.9.3</mockk.version>
     </properties>

@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
         exitProcess(-1)
     }
 
-    startBot(token) {
+    startBot(token,"me.aberrantfox.judgebot.") {
 
     }
 }

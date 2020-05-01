@@ -7,9 +7,9 @@ import me.aberrantfox.kjdautils.internal.command.ArgumentType
 import me.aberrantfox.kjdautils.internal.command.ConsumptionType
 
 open class RuleWeightArg(override val name: String = "Weight") : ArgumentType<Int>() {
-    companion object : RuleWeightArg()
+    override fun generateExamples(event: CommandEvent<*>): MutableList<String> = mutableListOf("1", "2", "3")
 
-    override val examples = arrayListOf("1", "2", "3")
+    companion object : RuleWeightArg()
     override val consumptionType = ConsumptionType.Single
 
     override fun convert(arg: String, args: List<String>, event: CommandEvent<*>): ArgumentResult<Int> {

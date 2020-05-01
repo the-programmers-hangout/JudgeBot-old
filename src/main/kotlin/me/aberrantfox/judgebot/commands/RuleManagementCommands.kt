@@ -2,6 +2,9 @@ package me.aberrantfox.judgebot.commands
 
 import me.aberrantfox.judgebot.arguments.RuleArg
 import me.aberrantfox.judgebot.configuration.Constants
+import me.aberrantfox.judgebot.conversations.RuleCreationConversation
+import me.aberrantfox.judgebot.conversations.RuleDeletionConversation
+import me.aberrantfox.judgebot.conversations.RuleUpdateConversation
 import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.DatabaseService
@@ -24,7 +27,7 @@ fun createRulesManagementCommands(conversationService: ConversationService,
         requiredPermissionLevel = Permission.Administrator
 
         execute {
-            conversationService.createConversation(it.author, it.guild!!, Constants.RULE_CREATION_CONVERSATION)
+            conversationService.startConversation<RuleCreationConversation>(it.author, it.guild!!)
         }
     }
     command("deleteRule") {
@@ -33,7 +36,7 @@ fun createRulesManagementCommands(conversationService: ConversationService,
         requiredPermissionLevel = Permission.Administrator
 
         execute {
-            conversationService.createConversation(it.author, it.guild!!, Constants.RULE_DELETION_CONVERSATION)
+            conversationService.startConversation<RuleDeletionConversation>(it.author, it.guild!!)
         }
     }
     command("rules") {
@@ -60,7 +63,7 @@ fun createRulesManagementCommands(conversationService: ConversationService,
         requiredPermissionLevel = Permission.Administrator
 
         execute {
-            conversationService.createConversation(it.author, it.guild!!, conversationName = Constants.RULE_UPDATE_CONVERSATION)
+            conversationService.startConversation<RuleUpdateConversation>(it.author, it.guild!!)
         }
     }
     command("rule") {
