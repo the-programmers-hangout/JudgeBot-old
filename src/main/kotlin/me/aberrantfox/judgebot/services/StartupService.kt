@@ -34,6 +34,12 @@ class StartupService(configuration: BotConfiguration,
             deleteMode = PrefixDeleteMode.None
             allowMentionPrefix = true
 
+            colors {
+                infoColor = Color.CYAN
+                failureColor = Color.RED
+                successColor = Color.GREEN
+            }
+
             mentionEmbed {
 
                     val self = it.guild.jda.selfUser
