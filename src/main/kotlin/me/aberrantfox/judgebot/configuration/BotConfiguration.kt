@@ -1,7 +1,6 @@
 package me.aberrantfox.judgebot.configuration
 
 import me.aberrantfox.kjdautils.api.annotation.Data
-import net.dv8tion.jda.api.entities.MessageEmbed
 
 @Data("config/config.json")
 data class BotConfiguration(
@@ -9,7 +8,7 @@ data class BotConfiguration(
         val whitelist: List<String> = listOf("insert-valid-guild-ids"),
         val guilds: List<GuildConfiguration> = listOf(GuildConfiguration()),
         val dbConfiguration: DatabaseConfiguration = DatabaseConfiguration(),
-        val prefix: String = "judge!"
+        var prefix: String = "judge!"
 ) {
         fun getGuildConfig(guildId: String) = guilds.firstOrNull { it.id == guildId }
 }
@@ -23,10 +22,10 @@ data class GuildConfiguration(
         val id: String = "insert-id",
         val owner: String = "insert-owner-id",
         val embedThumbnail: String = "",
-        var requiredRole: String = "",
+        var staffRole: String = "",
+        var adminRole: String = "",
         val security: Security = Security()
-) {
-}
+)
 
 data class Security(
         val pointsToStatusMap: HashMap<Int, String> = hashMapOf(
