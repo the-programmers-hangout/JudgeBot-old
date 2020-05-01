@@ -1,5 +1,6 @@
 package me.aberrantfox.judgebot.commands
 
+import me.aberrantfox.judgebot.conversations.InfractionConversation
 import me.aberrantfox.judgebot.services.BlindfoldService
 import me.aberrantfox.judgebot.services.MuteService
 import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
@@ -21,7 +22,7 @@ fun createInfractionCommands(conversationService: ConversationService, userServi
         requiresGuild = true
         requiredPermissionLevel = Permission.Staff
         execute {
-            conversationService.createConversation(it.author, it.guild!!, "Infraction-Conversation")
+            conversationService.startConversation<InfractionConversation>(it.author, it.guild!!)
         }
     }
 

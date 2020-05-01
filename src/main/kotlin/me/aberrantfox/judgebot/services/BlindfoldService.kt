@@ -1,18 +1,14 @@
 package me.aberrantfox.judgebot.services
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import me.aberrantfox.judgebot.configuration.BotConfiguration
 import me.aberrantfox.judgebot.dataclasses.Punishment
 import me.aberrantfox.judgebot.dataclasses.PunishmentType
 import me.aberrantfox.judgebot.utility.buildBlindfoldEmbed
-import me.aberrantfox.judgebot.utility.buildMuteEmbed
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.discord.Discord
 import me.aberrantfox.kjdautils.extensions.jda.sendPrivateMessage
-import me.aberrantfox.kjdautils.extensions.stdlib.convertToTimeString
+import me.aberrantfox.kjdautils.extensions.stdlib.toTimeString
 import net.dv8tion.jda.api.entities.Member
 import org.joda.time.DateTime
 import org.litote.kmongo.and
@@ -46,7 +42,7 @@ class BlindfoldService(private val configuration: BotConfiguration,
         }
         blindfoldCollection.insertOne(Punishment(user.id, guild.id, PunishmentType.Blindfold, unblindfoldTime, reason))
         guild.addRoleToMember(member, roleService.getBlindfoldRole(guild)).queue()
-        member.user.sendPrivateMessage(buildBlindfoldEmbed(member.asMention, time.convertToTimeString(), reason))
+        member.user.sendPrivateMessage(buildBlindfoldEmbed(member.asMention, time.toTimeString(), reason))
         blindfoldTimerMap[toKey(member)] = scheduleUnblindfold(member, time)
     }
 

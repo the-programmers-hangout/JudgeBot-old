@@ -32,10 +32,10 @@ class StartupService(configuration: BotConfiguration,
         with(discord.configuration) {
             prefix = configuration.prefix
             deleteMode = PrefixDeleteMode.None
-            globalPath = "me.aberrantfox.judgebot."
+            allowMentionPrefix = true
 
-            mentionEmbed = {
-                embed {
+            mentionEmbed {
+
                     val self = it.guild.jda.selfUser
                     val requiredRole = configuration.getGuildConfig(it.guild.id)?.staffRole ?: "<Not Configured>"
                     val milliseconds = Date().time - startTime.time
@@ -59,14 +59,14 @@ class StartupService(configuration: BotConfiguration,
 
                         addInlineField("Source", repository)
                     }
-                }
+
             }
 
-            visibilityPredicate = predicate@{ command: Command, user: User, _: MessageChannel, guild: Guild? ->
-                guild ?: return@predicate false
+            visibilityPredicate predicate@{
+                it.guild ?: return@predicate false
 
-                val member = user.toMember(guild)!!
-                val permission = command.requiredPermissionLevel
+                val member = it.user.toMember(it.guild!!)!!
+                val permission = it.command.requiredPermissionLevel
 
                 permissionsService.hasClearance(member, permission)
             }
