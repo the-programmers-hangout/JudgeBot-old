@@ -5,6 +5,8 @@ import me.aberrantfox.judgebot.dataclasses.Rule
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.api.dsl.menu
+import net.dv8tion.jda.api.entities.Guild
+import org.joda.time.DateTime
 import java.awt.Color
 import java.time.LocalDateTime
 
@@ -24,30 +26,29 @@ class EmbedService(private val ruleService: RuleService, private val config: Bot
         color = ruleColor
     }
 
-    fun embedRulesShort(guildId: String) = embed {
-        val rules = ruleService.getRules(guildId).sortedBy { it.number }
+    fun embedRulesShort(guild: Guild) = embed {
+        val rules = ruleService.getRules(guild.id).sortedBy { it.number }
         title = "**__Server Rules__**"
         color = ruleColor
-        if(config.getGuildConfig(guildId)?.embedThumbnail != "") {
-            thumbnail = config.getGuildConfig(guildId)?.embedThumbnail
-        }
+        thumbnail = guild.iconUrl
+
         field {
             for (rule in rules) {
                 value += "**[${rule.number}](${rule.link})**. ${rule.title}\n"
             }
         }
         footer {
+            text = guild.name
             timeStamp = LocalDateTime.now()
         }
     }
 
-    fun embedRules(guildId: String) = embed {
-        val rules = ruleService.getRules(guildId).sortedBy { it.number }
+    fun embedRules(guild: Guild) = embed {
+        val rules = ruleService.getRules(guild.id).sortedBy { it.number }
         title = "**__Server Rules__**"
         color = ruleColor
-        if(config.getGuildConfig(guildId)?.embedThumbnail != "") {
-            thumbnail = config.getGuildConfig(guildId)?.embedThumbnail
-        }
+        thumbnail = guild.iconUrl
+
         for (rule in rules) {
             field {
                 value = "**__${rule.number}: ${rule.title}__**\n${rule.description}"
