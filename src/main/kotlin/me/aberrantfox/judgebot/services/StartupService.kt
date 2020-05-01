@@ -2,11 +2,17 @@ package me.aberrantfox.judgebot.services
 
 import com.google.gson.Gson
 import me.aberrantfox.judgebot.configuration.BotConfiguration
+import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.PrefixDeleteMode
+import me.aberrantfox.kjdautils.api.dsl.command.Command
 import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.discord.Discord
 import me.aberrantfox.kjdautils.extensions.jda.fullName
+import me.aberrantfox.kjdautils.extensions.jda.toMember
+import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.MessageChannel
+import net.dv8tion.jda.api.entities.User
 import java.awt.Color
 
 data class Properties(val author: String, val version: String, val kutils: String, val repository: String)
@@ -16,7 +22,7 @@ val project: Properties = Gson().fromJson(propFile, Properties::class.java)
 
 @Service
 class StartupService(configuration: BotConfiguration,
-                     discord: Discord) {
+                     discord: Discord, permissionsService: PermissionsService) {
     init {
         with(discord.configuration) {
             prefix = configuration.prefix
@@ -46,6 +52,15 @@ class StartupService(configuration: BotConfiguration,
                         addInlineField("Source", repository)
                     }
                 }
+            }
+
+            visibilityPredicate = predicate@{ command: Command, user: User, _: MessageChannel, guild: Guild? ->
+                guild ?: return@predicate false
+
+                val member = user.toMember(guild)!!
+                val permission = command.requiredPermissionLevel
+
+                permissionsService.hasClearance(member, permission)
             }
         }
     }
