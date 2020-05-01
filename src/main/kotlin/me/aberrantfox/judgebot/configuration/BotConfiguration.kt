@@ -21,7 +21,6 @@ data class DatabaseConfiguration(
 data class GuildConfiguration(
         val id: String = "insert-id",
         val owner: String = "insert-owner-id",
-        val embedThumbnail: String = "",
         var staffRole: String = "",
         var adminRole: String = "",
         val security: Security = Security()

@@ -42,7 +42,7 @@ fun createRulesManagementCommands(conversationService: ConversationService,
         requiredPermissionLevel = Permission.Staff
 
         execute {
-            it.respond(embeds.embedRules(it.guild!!.id))
+            it.respond(embeds.embedRules(it.guild!!))
         }
     }
     command("ruleHeadings") {
@@ -51,7 +51,7 @@ fun createRulesManagementCommands(conversationService: ConversationService,
         requiredPermissionLevel = Permission.Staff
 
         execute {
-            it.respond(embeds.embedRulesShort(it.guild!!.id))
+            it.respond(embeds.embedRulesShort(it.guild!!))
         }
     }
     command("updateRule") {
