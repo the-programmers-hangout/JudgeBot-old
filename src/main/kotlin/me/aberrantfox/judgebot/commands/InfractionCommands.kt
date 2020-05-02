@@ -21,8 +21,8 @@ fun createInfractionCommands(conversationService: ConversationService, userServi
         description = "Use this to issue an infraction to a user"
         requiresGuild = true
         requiredPermissionLevel = Permission.Staff
-        execute {
-            conversationService.startConversation<InfractionConversation>(it.author, it.guild!!)
+        execute(MemberArg()) {
+            conversationService.startConversation<InfractionConversation>(it.author, it.guild!!, it.args.first)
         }
     }
 
@@ -30,9 +30,9 @@ fun createInfractionCommands(conversationService: ConversationService, userServi
         description = "Use this to view a user's record"
         requiresGuild = true
         requiredPermissionLevel = Permission.Staff
-        execute(UserArg) {
+        execute(MemberArg) {
             val user = userService.getOrCreateUserRecord(it.args.first, it.guild!!.id)
-            it.respond(userService.getUserHistory(it.args.first, user , it.guild!!, true))
+            it.respond(userService.getUserHistory(it.args.first, user, it.guild!!, true))
         }
     }
 
@@ -40,9 +40,9 @@ fun createInfractionCommands(conversationService: ConversationService, userServi
         description = "Use this to mute a member"
         requiresGuild = true
         execute(MemberArg, TimeStringArg, SentenceArg) {
-            val time = (it.args.second as Double).roundToLong() * 1000
-            muteService.mute(it.args.first, time, it.args.third)
-            it.respond("User ${it.args.first.fullName()} has been muted")
+            val (targetMember, time, reason) = it.args
+            muteService.mute(targetMember, (time as Double).roundToLong() * 1000, reason)
+            it.respond("User ${targetMember.fullName()} has been muted")
         }
     }
 
@@ -59,9 +59,9 @@ fun createInfractionCommands(conversationService: ConversationService, userServi
         description = "Use this to mute a member"
         requiresGuild = true
         execute(MemberArg, TimeStringArg, SentenceArg) {
-            val time = (it.args.second as Double).roundToLong() * 1000
-            blindfoldService.blindfold(it.args.first, time, it.args.third)
-            it.respond("User ${it.args.first.fullName()} has been blindfolded")
+            val (targetMember, time, reason) = it.args
+            blindfoldService.blindfold(targetMember, (time as Double).roundToLong() * 1000, reason)
+            it.respond("User ${targetMember.fullName()} has been blindfolded")
         }
     }
     command("unblindfold") {

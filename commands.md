@@ -8,9 +8,9 @@
 ## Infraction
 | Commands              | Arguments          | Description                               |
 | --------------------- | ------------------ | ----------------------------------------- |
-| Infract, Warn, Strike | <none>             | Use this to issue an infraction to a user |
+| Infract, Warn, Strike | Member             | Use this to issue an infraction to a user |
 | blindfold             | Member, Time, Text | Use this to mute a member                 |
-| history               | User               | Use this to view a user's record          |
+| history               | Member             | Use this to view a user's record          |
 | mute                  | Member, Time, Text | Use this to mute a member                 |
 | unblindfold           | Member             | Use this to mute a member                 |
 | unmute                | Member             | Use this to mute a member                 |

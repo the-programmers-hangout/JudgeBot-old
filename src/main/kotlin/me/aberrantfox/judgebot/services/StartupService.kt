@@ -6,14 +6,9 @@ import me.aberrantfox.judgebot.utility.timeToString
 import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.api.dsl.PrefixDeleteMode
-import me.aberrantfox.kjdautils.api.dsl.command.Command
-import me.aberrantfox.kjdautils.api.dsl.embed
 import me.aberrantfox.kjdautils.discord.Discord
 import me.aberrantfox.kjdautils.extensions.jda.fullName
 import me.aberrantfox.kjdautils.extensions.jda.toMember
-import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.MessageChannel
-import net.dv8tion.jda.api.entities.User
 import java.awt.Color
 import java.util.*
 

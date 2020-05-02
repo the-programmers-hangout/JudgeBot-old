@@ -11,29 +11,23 @@ import me.aberrantfox.kjdautils.api.dsl.conversation
 import me.aberrantfox.kjdautils.api.getInjectionObject
 import me.aberrantfox.kjdautils.internal.arguments.*
 import net.dv8tion.jda.api.entities.Guild
+import net.dv8tion.jda.api.entities.Member
 
 val infractionChoiceArg = ChoiceArg("InfractionTypes", "Note", "Borderline", "Lightly", "Clearly", "Harshly")
 
 class InfractionConversation(): Conversation() {
     @Start
-    fun createInfractionConversation(guild: Guild) = conversation {
+    fun createInfractionConversation(guild: Guild, targetMember: Member) = conversation {
         val messages = discord.getInjectionObject<Messages>()!!
         val infractionService = discord.getInjectionObject<InfractionService>()!!
         val userService = discord.getInjectionObject<UserService>()!!
         val ruleService = discord.getInjectionObject<RuleService>()!!
 
-        val id = blockingPromptUntil(
-                UserArg,
-                { messages.PROMPT_USER_ID_INFRACTION },
-                { user -> guild.isMember(user) },
-                { messages.ERROR_USER_NOT_IN_GUILD }
-        )
-
-        val userRecord = userService.getOrCreateUserRecord(id, guild.id)
+        val userRecord = userService.getOrCreateUserRecord(targetMember, guild.id)
         var addPersonalNote: Boolean = false
         var personalNote: String? = null
 
-        respond(userService.getUserHistory(id, userRecord, guild, true))
+        respond(userService.getUserHistory(targetMember, userRecord, guild, true))
 
         val rules = ruleService.getRules(guild.id)
         val ruleNumberChosen = blockingPromptUntil(
@@ -57,9 +51,9 @@ class InfractionConversation(): Conversation() {
         }
 
         val infraction = Infraction(this.user.name, infractionDetails, infractionType!!, guild.id, personalNote, ruleNumberChosen)
-        infractionService.infract(id, guild, userRecord, infraction)
+        infractionService.infract(targetMember.user, guild, userRecord, infraction)
 
-        respond(userService.getUserHistory(id, userRecord, guild, false))
+        respond(userService.getUserHistory(targetMember, userRecord, guild, false))
 
         next()
     }
