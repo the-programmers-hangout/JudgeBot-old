@@ -12,9 +12,8 @@ import me.aberrantfox.kjdautils.extensions.jda.toMember
 import java.awt.Color
 import java.util.*
 
-data class Properties(val author: String, val version: String, val kutils: String, val repository: String)
-
 private val propFile = Properties::class.java.getResource("/properties.json").readText()
+data class Properties(val author: String, val version: String, val kutils: String, val repository: String)
 val project: Properties = Gson().fromJson(propFile, Properties::class.java)
 
 @Service
@@ -23,7 +22,6 @@ class StartupService(configuration: BotConfiguration,
                      permissionsService: PermissionsService) {
     init {
         val startTime = Date()
-
         with(discord.configuration) {
             prefix = configuration.prefix
             deleteMode = PrefixDeleteMode.None
@@ -36,7 +34,6 @@ class StartupService(configuration: BotConfiguration,
             }
 
             mentionEmbed {
-
                     val self = it.guild.jda.selfUser
                     val requiredRole = configuration.getGuildConfig(it.guild.id)?.staffRole ?: "<Not Configured>"
                     val milliseconds = Date().time - startTime.time
@@ -60,15 +57,12 @@ class StartupService(configuration: BotConfiguration,
 
                         addInlineField("Source", repository)
                     }
-
             }
 
             visibilityPredicate predicate@{
                 it.guild ?: return@predicate false
-
                 val member = it.user.toMember(it.guild!!)!!
                 val permission = it.command.requiredPermissionLevel
-
                 permissionsService.hasClearance(member, permission)
             }
         }

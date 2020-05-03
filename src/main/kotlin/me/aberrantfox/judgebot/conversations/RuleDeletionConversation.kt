@@ -2,8 +2,8 @@ package me.aberrantfox.judgebot.conversations
 
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.localization.inject
+import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.EmbedService
-import me.aberrantfox.judgebot.services.RuleService
 import me.aberrantfox.kjdautils.api.dsl.Conversation
 import me.aberrantfox.kjdautils.api.dsl.conversation
 import me.aberrantfox.kjdautils.api.getInjectionObject
@@ -15,10 +15,10 @@ class RuleDeletionConversation() : Conversation() {
     @Start
     fun ruleDeletionConversation(guild: Guild) = conversation {
         val messages = discord.getInjectionObject<Messages>()!!
-        val ruleService = discord.getInjectionObject<RuleService>()!!
+        val databaseService = discord.getInjectionObject<DatabaseService>()!!
         val embeds = discord.getInjectionObject<EmbedService>()!!
 
-        val rules = ruleService.getRules(guild.id)
+        val rules = databaseService.rules.getRules(guild.id)
         respond(embeds.embedRulesDetailed(guild.id))
 
         val ruleNumberToDelete = blockingPromptUntil(
@@ -38,7 +38,7 @@ class RuleDeletionConversation() : Conversation() {
 
         if (sure) {
             respond(messages.RULE_DELETED)
-            ruleService.deleteRule(ruleToDelete)
+            databaseService.rules.deleteRule(ruleToDelete)
         } else {
             respond(messages.RULE_NOT_DELETED)
         }

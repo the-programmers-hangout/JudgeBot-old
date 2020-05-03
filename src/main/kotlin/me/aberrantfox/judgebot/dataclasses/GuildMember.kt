@@ -29,6 +29,7 @@ data class GuildMember (
     fun getStatus(guildId: String, config: BotConfiguration): String {
         val guildDetails = this.getGuildInfo(guildId)
         var status: String = ""
+
         for (entry in config.getGuildConfig(guildId)!!.security.pointsToStatusMap.toSortedMap()) {
             if (guildDetails!!.points >= entry.key) status = entry.value
         }

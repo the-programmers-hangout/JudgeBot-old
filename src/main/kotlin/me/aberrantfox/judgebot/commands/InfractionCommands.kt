@@ -1,23 +1,20 @@
 package me.aberrantfox.judgebot.commands
 
+import me.aberrantfox.judgebot.configuration.BotConfiguration
 import me.aberrantfox.judgebot.conversations.InfractionConversation
-import me.aberrantfox.judgebot.services.BlindfoldService
-import me.aberrantfox.judgebot.services.MuteService
 import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
-import me.aberrantfox.judgebot.services.Permission
-import me.aberrantfox.judgebot.services.UserService
+import me.aberrantfox.judgebot.services.*
+import me.aberrantfox.judgebot.utility.buildUserStatusEmbed
 import me.aberrantfox.kjdautils.api.annotation.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.command.commands
-import me.aberrantfox.kjdautils.extensions.jda.fullName
 import me.aberrantfox.kjdautils.internal.arguments.*
 import me.aberrantfox.kjdautils.internal.services.ConversationService
-import kotlin.math.roundToLong
-
 
 @CommandSet("Infraction")
-fun createInfractionCommands(conversationService: ConversationService, userService: UserService, muteService: MuteService,
-                             blindfoldService: BlindfoldService) = commands {
-    command("Infract", "Warn", "Strike") {
+fun createInfractionCommands(conversationService: ConversationService,
+                             config: BotConfiguration,
+                             databaseService: DatabaseService) = commands {
+    command("infract", "warn", "strike") {
         description = "Use this to issue an infraction to a user"
         requiresGuild = true
         requiredPermissionLevel = Permission.Staff
@@ -26,50 +23,15 @@ fun createInfractionCommands(conversationService: ConversationService, userServi
         }
     }
 
-    command("history") {
+    command("history", "h") {
         description = "Use this to view a user's record"
         requiresGuild = true
         requiredPermissionLevel = Permission.Staff
         execute(MemberArg) {
-            val user = userService.getOrCreateUserRecord(it.args.first, it.guild!!.id)
-            it.respond(userService.getUserHistory(it.args.first, user, it.guild!!, true))
-        }
-    }
-
-    command("mute") {
-        description = "Use this to mute a member"
-        requiresGuild = true
-        execute(MemberArg, TimeStringArg, SentenceArg) {
-            val (targetMember, time, reason) = it.args
-            muteService.mute(targetMember, (time as Double).roundToLong() * 1000, reason)
-            it.respond("User ${targetMember.fullName()} has been muted")
-        }
-    }
-
-    command("unmute") {
-        description = "Use this to mute a member"
-        requiresGuild = true
-        execute(MemberArg) {
-            muteService.unmute(it.args.first)
-            it.respond("User ${it.args.first.fullName()} has been unmuted")
-        }
-    }
-
-    command("blindfold") {
-        description = "Use this to mute a member"
-        requiresGuild = true
-        execute(MemberArg, TimeStringArg, SentenceArg) {
-            val (targetMember, time, reason) = it.args
-            blindfoldService.blindfold(targetMember, (time as Double).roundToLong() * 1000, reason)
-            it.respond("User ${targetMember.fullName()} has been blindfolded")
-        }
-    }
-    command("unblindfold") {
-        description = "Use this to mute a member"
-        requiresGuild = true
-        execute(MemberArg) {
-            blindfoldService.unblindfold(it.args.first)
-            it.respond("User ${it.args.first.fullName()} has been unblindfolded")
+            val user = databaseService.users.getOrCreateUser(it.args.first, it.guild!!.id)
+            val rules = databaseService.rules.getRules(it.guild!!.id)
+            databaseService.users.incrementUserHistory(user, it.guild!!.id)
+            it.respond(buildUserStatusEmbed(it.args.first, user, it.guild!!, config, rules, true))
         }
     }
 }

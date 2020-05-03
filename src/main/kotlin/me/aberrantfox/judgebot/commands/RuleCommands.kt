@@ -1,22 +1,18 @@
 package me.aberrantfox.judgebot.commands
 
 import me.aberrantfox.judgebot.arguments.RuleArg
-import me.aberrantfox.judgebot.configuration.Constants
 import me.aberrantfox.judgebot.conversations.RuleCreationConversation
 import me.aberrantfox.judgebot.conversations.RuleDeletionConversation
 import me.aberrantfox.judgebot.conversations.RuleUpdateConversation
 import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
 import me.aberrantfox.judgebot.localization.Messages
-import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.EmbedService
 import me.aberrantfox.judgebot.services.Permission
 import me.aberrantfox.kjdautils.api.annotation.CommandSet
 import me.aberrantfox.kjdautils.internal.services.ConversationService
 import me.aberrantfox.kjdautils.api.dsl.command.commands
-import me.aberrantfox.kjdautils.internal.arguments.*
 
-
-@CommandSet("Rule Management")
+@CommandSet("Rules")
 fun createRulesManagementCommands(conversationService: ConversationService,
                          embeds: EmbedService,
                          messages: Messages) = commands {
@@ -48,7 +44,7 @@ fun createRulesManagementCommands(conversationService: ConversationService,
             it.respond(embeds.embedRules(it.guild!!))
         }
     }
-    command("ruleHeadings") {
+    command("ruleList") {
         description = messages.DISPLAY_SHORT_RULES_DESCRIPTION
         requiresGuild = true
         requiredPermissionLevel = Permission.Staff

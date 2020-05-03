@@ -1,7 +1,14 @@
 package me.aberrantfox.judgebot.utility
 
+import me.aberrantfox.judgebot.dataclasses.PunishmentType
 import me.aberrantfox.kjdautils.api.dsl.embed
+import net.dv8tion.jda.api.entities.MessageEmbed
 import java.awt.Color
+
+fun buildInfractionEmbed(userMention: String, timeString: String, reason: String, type: PunishmentType): MessageEmbed {
+    return if (type == PunishmentType.Mute) buildMuteEmbed(userMention, timeString, reason)
+    else buildBlindfoldEmbed(userMention, timeString, reason)
+}
 
 fun buildMuteEmbed(userMention: String, timeString: String, reason: String) = embed {
     title = "Mute"

@@ -4,6 +4,7 @@ import me.aberrantfox.judgebot.configuration.BotConfiguration
 import me.aberrantfox.judgebot.dataclasses.GuildMember
 import me.aberrantfox.judgebot.dataclasses.Infraction
 import me.aberrantfox.judgebot.dataclasses.infractionMap
+import me.aberrantfox.judgebot.services.database.RuleOperations
 import me.aberrantfox.judgebot.utility.buildUserStatusText
 import me.aberrantfox.judgebot.utility.getEmbedColor
 import me.aberrantfox.kjdautils.api.annotation.Service
@@ -15,7 +16,9 @@ import org.joda.time.DateTime
 import org.joda.time.Days
 
 @Service
-class InfractionService(private val userService: UserService, private val ruleService: RuleService, private val config: BotConfiguration) {
+class InfractionService(private val ruleOperations: RuleOperations,
+                        private val config: BotConfiguration,
+                        private val databaseService: DatabaseService) {
 
     fun infract(target: User, guild: Guild, userRecord: GuildMember, infraction: Infraction): GuildMember {
         userRecord.addInfraction(infraction, calculateInfractionPoints(userRecord, infraction))
@@ -24,11 +27,11 @@ class InfractionService(private val userService: UserService, private val ruleSe
         // TODO: apply punishments for infraction to user
 
         target.sendPrivateMessage(infractionEmbed)
-        return userService.updateUserRecord(userRecord)
+        return databaseService.users.updateUser(userRecord)
     }
 
     private fun calculateInfractionPoints(userRecord: GuildMember, infraction: Infraction): Int {
-        val rule = ruleService.getRule(infraction.ruleBroken!!, infraction.guildId)
+        val rule = ruleOperations.getRule(infraction.ruleBroken!!, infraction.guildId)
         val lastInfractionOffset = calculatePeriodOffset(userRecord, infraction.guildId)
 
         var points = (rule!!.weight * infractionMap[infraction.weight]!!) - lastInfractionOffset
@@ -48,14 +51,13 @@ class InfractionService(private val userService: UserService, private val ruleSe
 
     private fun buildInfractionEmbed(target: User, member: GuildMember, guild:Guild, infraction: Infraction, config: BotConfiguration) =
             embed {
-                val guildConfig = config.getGuildConfig(infraction.guildId)
                 val memberStatus = member.getStatus(infraction.guildId, config)
                 color = getEmbedColor(memberStatus)
                 title = "${target.name}, you have been infracted"
                 thumbnail = guild.iconUrl
                 description = "Infractions are formal warnings for breaking the rules in TPH.\n" +
                         "If you think your infraction is undoubtedly unjustified, please **do not** post about it in a public channel but DM Modmail with your complaint."
-                val rule = ruleService.getRule(infraction.ruleBroken!!, infraction.guildId)
+                val rule = ruleOperations.getRule(infraction.ruleBroken!!, infraction.guildId)
                 field {
                     name = "Rule Broken"
                     value = "**[${rule!!.title}](${rule.link})** \n${rule.description}"
