@@ -4,8 +4,8 @@ import me.aberrantfox.judgebot.arguments.RuleWeightArg
 import me.aberrantfox.judgebot.services.EmbedService
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.localization.inject
-import me.aberrantfox.judgebot.services.RuleService
 import me.aberrantfox.judgebot.dataclasses.Rule
+import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.kjdautils.api.dsl.Conversation
 import me.aberrantfox.kjdautils.api.dsl.conversation
 import me.aberrantfox.kjdautils.api.getInjectionObject
@@ -17,10 +17,10 @@ class RuleCreationConversation(): Conversation() {
     @Start
     fun ruleCreationConversation(guild: Guild) = conversation {
         val messages = discord.getInjectionObject<Messages>()!!
-        val ruleService = discord.getInjectionObject<RuleService>()!!
+        val databaseService = discord.getInjectionObject<DatabaseService>()!!
         val embeds = discord.getInjectionObject<EmbedService>()!!
 
-        val guildRules = ruleService.getRulesSortedByNumber(guild.id)
+        val guildRules = databaseService.rules.getRulesSortedByNumber(guild.id)
         val lastUsedRuleNumber = if (guildRules.isNotEmpty()) guildRules.last().number else 0
 
         val useNextRuleNumber = blockingPrompt(BooleanArg(truthValue = "Y", falseValue = "N")) {
@@ -71,6 +71,6 @@ class RuleCreationConversation(): Conversation() {
 
         respond(messages.RULE_CREATED)
         respond(embeds.embedRuleDetailed(newRule))
-        ruleService.addRule(newRule)
+        databaseService.rules.addRule(newRule)
     }
 }

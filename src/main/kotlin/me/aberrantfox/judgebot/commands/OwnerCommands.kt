@@ -12,7 +12,7 @@ import me.aberrantfox.kjdautils.internal.services.PersistenceService
 
 @CommandSet("Owner")
 fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixService, persistenceService: PersistenceService) = commands {
-    command("SetPrefix") {
+    command("setPrefix") {
         description = "Set the bot's prefix."
         requiredPermissionLevel = Permission.BotOwner
 

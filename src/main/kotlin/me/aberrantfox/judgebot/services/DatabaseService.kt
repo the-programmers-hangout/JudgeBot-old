@@ -1,12 +1,14 @@
 package me.aberrantfox.judgebot.services
 
-import com.mongodb.MongoClient
 import me.aberrantfox.judgebot.configuration.BotConfiguration
+import me.aberrantfox.judgebot.services.database.PunishmentOperations
+import me.aberrantfox.judgebot.services.database.RuleOperations
+import me.aberrantfox.judgebot.services.database.UserOperations
 import me.aberrantfox.kjdautils.api.annotation.Service
-import org.litote.kmongo.*
 
 @Service
-open class DatabaseService(val config: BotConfiguration) {
-    private val client: MongoClient = KMongo.createClient(config.dbConfiguration.address)
-    val db = client.getDatabase(config.dbConfiguration.databaseName)
+open class DatabaseService(val config: BotConfiguration,
+                           val punishments: PunishmentOperations,
+                           val users: UserOperations,
+                           val rules: RuleOperations) {
 }

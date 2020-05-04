@@ -1,4 +1,4 @@
-package me.aberrantfox.judgebot.services
+package me.aberrantfox.judgebot.services.database
 
 import com.mongodb.client.result.DeleteResult
 import me.aberrantfox.judgebot.dataclasses.Rule
@@ -6,8 +6,8 @@ import me.aberrantfox.kjdautils.api.annotation.Service
 import org.litote.kmongo.*
 
 @Service
-class RuleService(private val databaseService: DatabaseService) {
-    private val ruleCollection = databaseService.db.getCollection<Rule>("ruleCollection")
+class RuleOperations(private val connection: ConnectionService) {
+    private val ruleCollection = connection.db.getCollection<Rule>("RuleCollection")
 
     init {
         ruleCollection.createIndex("{ shortName: 'text' }")

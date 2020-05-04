@@ -5,8 +5,10 @@ import me.aberrantfox.judgebot.configuration.BotConfiguration
 import me.aberrantfox.judgebot.configuration.DatabaseConfiguration
 import me.aberrantfox.judgebot.configuration.GuildConfiguration
 import me.aberrantfox.judgebot.services.EmbedService
-import me.aberrantfox.judgebot.services.RuleService
+import me.aberrantfox.judgebot.services.database.RuleOperations
 import me.aberrantfox.judgebot.dataclasses.Rule
+import me.aberrantfox.judgebot.services.database.PunishmentOperations
+import me.aberrantfox.judgebot.services.database.UserOperations
 import me.aberrantfox.kjdautils.api.dsl.command.ArgumentContainer
 import me.aberrantfox.kjdautils.api.dsl.command.CommandEvent
 import me.aberrantfox.kjdautils.discord.Discord
@@ -29,7 +31,14 @@ fun conversationServiceMock() = mockk<ConversationService>(relaxed = true)
 
 fun embedServiceMock() = mockk<EmbedService>(relaxed = true)
 
-fun databaseServiceMock() = mockk<RuleService>(relaxed = true) {
+fun punishmentMock() = mockk<PunishmentOperations>(relaxed = true) {}
+
+fun userMock() = mockk<UserOperations>(relaxed = true) {}
+
+fun ruleMock() = mockk<RuleOperations>(relaxed = true) {}
+
+
+fun databaseServiceMock() = mockk<RuleOperations>(relaxed = true) {
     every { getRule(1, "test-guild") } returns TestData.testRules.first()
     every { getRule("testRule1", "test-guild") } returns TestData.testRules.first()
     every { getRule(15, "test-guild") } returns null
@@ -52,5 +61,9 @@ object TestData {
             guilds = listOf(GuildConfiguration("test-guild-id", "test-owner-id")),
             dbConfiguration = Database.dbTestConfiguration
     )
+
+    val punishments = punishmentMock()
+    val users = userMock()
+    val rules = ruleMock()
 
 }
