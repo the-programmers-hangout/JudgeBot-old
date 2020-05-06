@@ -14,8 +14,7 @@ fun createBanCommands() = commands {
     command("ban") {
         description = "Bans a member for the passed reason, deleting a given number of days messages."
         requiresGuild = true
-        requiredPermissionLevel = Permission.Staff
-
+        requiredPermissionLevel = Permission.Moderator
         execute(LowerMemberArg, SentenceArg) {
             val (target, reason) = it.args
             //TODO: record ban reason in DB
@@ -28,8 +27,7 @@ fun createBanCommands() = commands {
     command("unban") {
         description = "Unbans a target user"
         requiresGuild = true
-        requiredPermissionLevel = Permission.Staff
-
+        requiredPermissionLevel = Permission.Moderator
         execute(UserArg) {
             val target = it.args.first
             it.guild!!.unban(it.args.first).queue { _ ->

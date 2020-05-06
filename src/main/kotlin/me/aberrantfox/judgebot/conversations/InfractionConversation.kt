@@ -54,7 +54,7 @@ class InfractionConversation(): Conversation() {
         }
 
         val infraction = Infraction(this.user.name, infractionDetails, infractionType!!, guild.id, personalNote, ruleNumberChosen)
-        infractionService.infract(targetMember.user, guild, userRecord, infraction)
+        infractionService.infract(targetMember, guild, userRecord, infraction)
 
         respond(buildUserStatusEmbed(targetMember, userRecord, guild, config, rules, true))
 

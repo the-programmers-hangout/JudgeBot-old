@@ -7,6 +7,7 @@ import me.aberrantfox.judgebot.services.PrefixService
 import me.aberrantfox.kjdautils.api.annotation.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.command.commands
 import me.aberrantfox.kjdautils.internal.arguments.RoleArg
+import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
 import me.aberrantfox.kjdautils.internal.arguments.WordArg
 import me.aberrantfox.kjdautils.internal.services.PersistenceService
 
@@ -47,6 +48,18 @@ fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixSe
             configuration.getGuildConfig(it.guild!!.id)?.staffRole = role.name
             persistenceService.save(configuration)
             return@execute it.respond("Staff role set to \"${role.name}\"")
+        }
+    }
+
+    command("setModeratorRole") {
+        description = "Sets the Moderator role"
+        requiredPermissionLevel = Permission.BotOwner
+
+        execute(RoleArg) {
+            val (role) = it.args
+            configuration.getGuildConfig(it.guild!!.id)?.moderatorRole = role.name
+            persistenceService.save(configuration)
+            return@execute it.respond("Moderator role set to \"${role.name}\"")
         }
     }
 }
