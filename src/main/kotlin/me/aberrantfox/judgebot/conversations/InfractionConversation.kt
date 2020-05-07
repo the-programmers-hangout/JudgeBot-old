@@ -10,21 +10,18 @@ import me.aberrantfox.judgebot.dataclasses.convertToInfractionType
 import me.aberrantfox.judgebot.utility.buildUserStatusEmbed
 import me.aberrantfox.kjdautils.api.dsl.Conversation
 import me.aberrantfox.kjdautils.api.dsl.conversation
-import me.aberrantfox.kjdautils.api.getInjectionObject
 import me.aberrantfox.kjdautils.internal.arguments.*
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 
 val infractionChoiceArg = ChoiceArg("InfractionTypes", "Note", "Borderline", "Lightly", "Clearly", "Harshly")
 
-class InfractionConversation(): Conversation() {
+class InfractionConversation(private val messages: Messages,
+                             private val infractionService: InfractionService,
+                             private val databaseService: DatabaseService,
+                             private val config: BotConfiguration): Conversation() {
     @Start
-    fun createInfractionConversation(guild: Guild, targetMember: Member) = conversation {
-        val messages = discord.getInjectionObject<Messages>()!!
-        val infractionService = discord.getInjectionObject<InfractionService>()!!
-        val databaseService = discord.getInjectionObject<DatabaseService>()!!
-        val config = discord.getInjectionObject<BotConfiguration>()!!
-
+    fun createInfractionConversation(guild: Guild, targetMember: Member) = conversation(messages.CONVERSATION_EXIT_STRING) {
         val userRecord = databaseService.users.getOrCreateUser(targetMember, guild.id)
         var addPersonalNote: Boolean = false
         var personalNote: String? = null
@@ -35,7 +32,7 @@ class InfractionConversation(): Conversation() {
         val rules = databaseService.rules.getRules(guild.id)
         val ruleNumberChosen = blockingPromptUntil(
                 argumentType = IntegerArg,
-                initialPrompt = { messages.PROMPT_INFRACTION_RULE_BROKEN },
+                initialPrompt = { messages.PROMPT_INFRACTION_RULE_BROKEN + messages.PROMPT_CONVERSATION_EXIT },
                 until = { number -> rules.any { it.number == number } },
                 errorMessage = { messages.ERROR_RULE_NUMBER_NOT_EXISTS }
         )

@@ -10,9 +10,9 @@ import me.aberrantfox.judgebot.services.*
 import me.aberrantfox.judgebot.utility.buildUserStatusEmbed
 import me.aberrantfox.kjdautils.api.annotation.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.command.commands
-import me.aberrantfox.kjdautils.extensions.jda.sendPrivateMessage
 import me.aberrantfox.kjdautils.extensions.stdlib.toTimeString
 import me.aberrantfox.kjdautils.internal.arguments.*
+import me.aberrantfox.kjdautils.internal.services.ConversationResult
 import me.aberrantfox.kjdautils.internal.services.ConversationService
 
 @CommandSet("Infraction")
@@ -27,7 +27,13 @@ fun createInfractionCommands(conversationService: ConversationService,
         requiresGuild = true
         requiredPermissionLevel = Permission.Staff
         execute(MemberArg()) {
-            conversationService.startConversation<InfractionConversation>(it.author, it.guild!!, it.args.first)
+            val response = when (conversationService.startConversation<InfractionConversation>(it.author, it.guild!!, it.args.first)) {
+                ConversationResult.COMPLETE -> "Infraction completed."
+                ConversationResult.EXITED -> "Infraction cancelled."
+                ConversationResult.INVALID_USER -> "Cannot start a conversation with this user."
+                ConversationResult.HAS_CONVO -> "This user already has a conversation."
+            }
+            it.respond(response)
         }
     }
 
@@ -53,7 +59,7 @@ fun createInfractionCommands(conversationService: ConversationService,
             val timeLimit = 1000 * 60 * minutesUntilBan
 
             if (!it.args.second)
-                when(badPfpService.hasBadPfp(target)) {
+                when (badPfpService.hasBadPfp(target)) {
                     true -> {
                         badPfpService.cancelBadPfp(target)
                         return@execute it.unsafeRespond("Badpfp cancelled for ${target.asMention} ")
