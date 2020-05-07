@@ -6,11 +6,11 @@ import me.aberrantfox.judgebot.dataclasses.Punishment
 import me.aberrantfox.judgebot.dataclasses.PunishmentType
 import me.aberrantfox.judgebot.utility.applyRoleWithTimer
 import me.aberrantfox.judgebot.utility.buildInfractionEmbed
+import me.aberrantfox.judgebot.utility.timeToString
 import me.aberrantfox.kjdautils.api.annotation.Service
 import me.aberrantfox.kjdautils.discord.Discord
 import me.aberrantfox.kjdautils.extensions.jda.getRoleByName
 import me.aberrantfox.kjdautils.extensions.jda.sendPrivateMessage
-import me.aberrantfox.kjdautils.extensions.stdlib.toTimeString
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
@@ -37,7 +37,11 @@ class RoleService(val configuration: BotConfiguration,
     private fun toKey(member: Member) = member.guild.id to member.user.id
 
     init {
-        discord.jda.guilds.forEach { setupRoles(it) }
+        discord.jda.guilds.forEach {
+            setupRoles(it)
+            handleExistingRoles(it)
+        }
+
     }
 
     fun getRole(guild: Guild, type: PunishmentType) =
@@ -57,7 +61,7 @@ class RoleService(val configuration: BotConfiguration,
         }
         val punishment = Punishment(user.id, guild.id, type, clearTime, reason)
         databaseService.punishments.addPunishment(punishment)
-        member.user.sendPrivateMessage(buildInfractionEmbed(member.asMention, time.toTimeString(), reason, type))
+        member.user.sendPrivateMessage(buildInfractionEmbed(member.asMention, reason, type, timeToString(time))!!)
         punishmentTimerMap[toKey(member)] = applyRoleWithTimer(member, getRole(guild, type)!!, time) {
             removeRole(member, type)
         }
@@ -66,10 +70,12 @@ class RoleService(val configuration: BotConfiguration,
     fun removeRole(member: Member, type: PunishmentType) {
         val user = member.user
         val guild = member.guild
+        val key = toKey(member)
         if (user.mutualGuilds.isNotEmpty()) {
             guild.removeRoleFromMember(member, getRole(guild, type)!!).queue()
         }
         databaseService.punishments.removePunishment(member, guild, type)
+        punishmentTimerMap[key]?.cancel()
         punishmentTimerMap.remove(toKey(member))
     }
 

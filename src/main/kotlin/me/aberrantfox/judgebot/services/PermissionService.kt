@@ -1,13 +1,17 @@
 package me.aberrantfox.judgebot.services
 
 import me.aberrantfox.judgebot.configuration.BotConfiguration
+import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
 import me.aberrantfox.kjdautils.api.annotation.Service
+import me.aberrantfox.kjdautils.api.dsl.command.Command
+import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 
 enum class Permission {
     BotOwner,
     GuildOwner,
     Administrator,
+    Moderator,
     Staff,
     Everyone
 }
@@ -26,6 +30,7 @@ class PermissionsService(private val configuration: BotConfiguration) {
                 isBotOwner() -> Permission.BotOwner
                 isGuildOwner() -> Permission.GuildOwner
                 isAdministrator() -> Permission.Administrator
+                isModerator() -> Permission.Moderator
                 isStaff() -> Permission.Staff
                 else -> Permission.Everyone
             }
@@ -36,6 +41,15 @@ class PermissionsService(private val configuration: BotConfiguration) {
         val guildConfig = configuration.getGuildConfig(guild.id)!!
 
         val requiredRole = guildConfig.adminRole?.let {
+            guild.getRolesByName(it, true).firstOrNull()
+        } ?: return false
+
+        return requiredRole in roles
+    }
+    private fun Member.isModerator(): Boolean {
+        val guildConfig = configuration.getGuildConfig(guild.id)!!
+
+        val requiredRole = guildConfig.moderatorRole?.let {
             guild.getRolesByName(it, true).firstOrNull()
         } ?: return false
 

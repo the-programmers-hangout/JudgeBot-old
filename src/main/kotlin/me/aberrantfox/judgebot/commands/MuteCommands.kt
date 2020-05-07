@@ -2,6 +2,8 @@ package me.aberrantfox.judgebot.commands
 
 import me.aberrantfox.judgebot.arguments.LowerMemberArg
 import me.aberrantfox.judgebot.dataclasses.PunishmentType
+import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
+import me.aberrantfox.judgebot.services.Permission
 import me.aberrantfox.judgebot.services.RoleService
 import me.aberrantfox.judgebot.services.RoleState
 import me.aberrantfox.kjdautils.api.annotation.CommandSet
@@ -16,6 +18,7 @@ fun createMuteCommands(roleService: RoleService) = commands {
     command("mute") {
         description = "Use this to mute a member"
         requiresGuild = true
+        requiredPermissionLevel = Permission.Staff
         execute(LowerMemberArg, TimeStringArg, SentenceArg) {
             val (targetMember, time, reason) = it.args
             roleService.applyRole(targetMember, time.roundToLong() * 1000, reason, PunishmentType.Mute)
@@ -26,6 +29,7 @@ fun createMuteCommands(roleService: RoleService) = commands {
     command("gag") {
         description = "Temporarily mute a member for 5 minutes"
         requiresGuild = true
+        requiredPermissionLevel = Permission.Staff
         execute(LowerMemberArg) {
             val targetMember = it.args.first
             roleService.applyRole(targetMember, 1000 * 60 * 5, "You've been muted temporarily so that a mod can handle something.", PunishmentType.Mute)
@@ -35,6 +39,7 @@ fun createMuteCommands(roleService: RoleService) = commands {
     command("unmute") {
         description = "Use this to mute a member"
         requiresGuild = true
+        requiredPermissionLevel = Permission.Staff
         execute(LowerMemberArg) {
             val targetMember = it.args.first
             if (roleService.checkRoleState(targetMember, it.guild!!, PunishmentType.Mute) == RoleState.None)
@@ -47,6 +52,7 @@ fun createMuteCommands(roleService: RoleService) = commands {
     command("blindfold") {
         description = "Use this to mute a member"
         requiresGuild = true
+        requiredPermissionLevel = Permission.Moderator
         execute(LowerMemberArg, TimeStringArg, SentenceArg) {
             val (targetMember, time, reason) = it.args
             roleService.applyRole(targetMember, time.roundToLong() * 1000, reason, PunishmentType.Blindfold)
@@ -56,6 +62,7 @@ fun createMuteCommands(roleService: RoleService) = commands {
     command("unblindfold") {
         description = "Use this to mute a member"
         requiresGuild = true
+        requiredPermissionLevel = Permission.Moderator
         execute(LowerMemberArg) {
             val targetMember = it.args.first
             if (roleService.checkRoleState(targetMember, it.guild!!, PunishmentType.Blindfold) == RoleState.None)

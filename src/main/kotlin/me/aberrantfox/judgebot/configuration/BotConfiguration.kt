@@ -23,8 +23,9 @@ data class DatabaseConfiguration(
 data class GuildConfiguration(
         val id: String = "insert-id",
         val owner: String = "insert-owner-id",
-        var staffRole: String = "",
         var adminRole: String = "",
+        var moderatorRole: String = "",
+        var staffRole: String = "",
         val security: Security = Security()
 )
 
@@ -48,15 +49,16 @@ data class Security(
                 25 to PunishmentConfig(PunishmentType.Blindfold, 60 * 60 * 24),
                 30 to PunishmentConfig(PunishmentType.Blindfold, 60 * 60 * 48),
                 35 to PunishmentConfig(PunishmentType.Blindfold, 60 * 60 * 24 * 7),
-                40 to PunishmentConfig(PunishmentType.Blindfold, 60 * 60 * 24 * 14),
-                45 to PunishmentConfig(PunishmentType.Blindfold, 60 * 60 * 24 * 30),
-                50 to PunishmentConfig(PunishmentType.AppealableBan, 60 * 60 * 24 * 30),
-                55 to PunishmentConfig(PunishmentType.AppealableBan, 60 * 60 * 24 * 90),
-                60 to PunishmentConfig(PunishmentType.PermanentBan)
+                40 to PunishmentConfig(PunishmentType.TemporaryBan, 60 * 60 * 24 * 14),
+                45 to PunishmentConfig(PunishmentType.TemporaryBan, 60 * 60 * 24 * 14),
+                50 to PunishmentConfig(PunishmentType.TemporaryBan, 60 * 60 * 24 * 30),
+                55 to PunishmentConfig(PunishmentType.AppealableBan, 60 * 60 * 24 * 30),
+                60 to PunishmentConfig(PunishmentType.AppealableBan, 60 * 60 * 24 * 90),
+                65 to PunishmentConfig(PunishmentType.PermanentBan)
         ),
-        val pointsMax: Int = 60,
-        val mutedRole: String = "",
-        val blindfoldRole: String = ""
+        val pointsMax: Int = 65,
+        val mutedRole: String = "muted",
+        val blindfoldRole: String = "blindfolded"
 )
 
 
