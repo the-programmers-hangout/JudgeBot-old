@@ -8,18 +8,15 @@ import me.aberrantfox.judgebot.dataclasses.Rule
 import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.kjdautils.api.dsl.Conversation
 import me.aberrantfox.kjdautils.api.dsl.conversation
-import me.aberrantfox.kjdautils.api.getInjectionObject
 import me.aberrantfox.kjdautils.internal.arguments.*
 import net.dv8tion.jda.api.entities.Guild
 import org.litote.kmongo.newId
 
-class RuleCreationConversation(): Conversation() {
+class RuleCreationConversation(private val messages: Messages,
+                               private val databaseService: DatabaseService,
+                               private val embeds: EmbedService): Conversation() {
     @Start
-    fun ruleCreationConversation(guild: Guild) = conversation {
-        val messages = discord.getInjectionObject<Messages>()!!
-        val databaseService = discord.getInjectionObject<DatabaseService>()!!
-        val embeds = discord.getInjectionObject<EmbedService>()!!
-
+    fun ruleCreationConversation(guild: Guild) = conversation(messages.CONVERSATION_EXIT_STRING) {
         val guildRules = databaseService.rules.getRulesSortedByNumber(guild.id)
         val lastUsedRuleNumber = if (guildRules.isNotEmpty()) guildRules.last().number else 0
 
@@ -28,7 +25,7 @@ class RuleCreationConversation(): Conversation() {
                 messages.PROMPT_USE_NEXT_RULE_NUMBER.inject(
                         lastUsedRuleNumber.toString(),
                         (lastUsedRuleNumber + 1).toString()
-                )
+                ) + messages.PROMPT_CONVERSATION_EXIT
             } else {
                 messages.PROMPT_CREATE_FIRST_RULE.inject(
                         lastUsedRuleNumber.toString()

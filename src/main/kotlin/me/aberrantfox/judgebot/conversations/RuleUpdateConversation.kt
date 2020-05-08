@@ -11,19 +11,17 @@ import me.aberrantfox.kjdautils.api.getInjectionObject
 import me.aberrantfox.kjdautils.internal.arguments.*
 import net.dv8tion.jda.api.entities.Guild
 
-class RuleUpdateConversation() : Conversation() {
+class RuleUpdateConversation(private val messages: Messages,
+                             private val databaseService: DatabaseService,
+                             private val embeds: EmbedService) : Conversation() {
     @Start
-    fun ruleUpdateConversation(guild: Guild) = conversation {
-        val messages = discord.getInjectionObject<Messages>()!!
-        val databaseService = discord.getInjectionObject<DatabaseService>()!!
-        val embeds = discord.getInjectionObject<EmbedService>()!!
-
+    fun ruleUpdateConversation(guild: Guild) = conversation(messages.CONVERSATION_EXIT_STRING) {
         val rules = databaseService.rules.getRules(guild.id)
         respond(embeds.embedRulesDetailed(guild.id))
 
         val ruleNumberToUpdate = blockingPromptUntil(
                 argumentType = IntegerArg,
-                initialPrompt = { messages.PROMPT_RULE_TO_UPDATE },
+                initialPrompt = { messages.PROMPT_RULE_TO_UPDATE + messages.PROMPT_CONVERSATION_EXIT},
                 until = { number -> rules.any { it.number == number } },
                 errorMessage = { messages.ERROR_RULE_NUMBER_NOT_EXISTS }
         )
