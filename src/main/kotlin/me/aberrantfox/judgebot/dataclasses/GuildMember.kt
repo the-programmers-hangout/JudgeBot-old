@@ -1,10 +1,13 @@
 package me.aberrantfox.judgebot.dataclasses
 
 import me.aberrantfox.judgebot.configuration.BotConfiguration
+import net.dv8tion.jda.api.entities.Guild
+import java.util.*
 
 data class GuildDetails (
         val guildId: String,
         val infractions: MutableList<Infraction> = mutableListOf<Infraction>(),
+        val notes: MutableList<Note> = mutableListOf<Note>(),
         var historyCount: Int = 0,
         var points: Int = 0,
         var lastInfraction: Long = 0
@@ -19,11 +22,14 @@ data class GuildMember (
         this.getGuildInfo(guildId)!!.historyCount += 1
     }
 
-    fun addInfraction(infraction: Infraction, points: Int) {
-        val guildDetails = this.getGuildInfo(infraction.guildId)!!
-        guildDetails.infractions.add(infraction)
-        guildDetails.lastInfraction = infraction.dateTime
-        guildDetails.points += points
+    fun addInfraction(infraction: Infraction, points: Int) = with(this.getGuildInfo(infraction.guildId)) {
+        this?.infractions?.add(infraction)
+        this?.lastInfraction = infraction.dateTime
+        this!!.points += points
+    }
+
+    fun addNote(note: String, moderator: String, guild: Guild) = with(this.getGuildInfo(guild.id)) {
+       this?.notes?.add(Note(note, moderator, Date().time, this.notes.size + 1))
     }
 
     fun getStatus(guildId: String, config: BotConfiguration): String {

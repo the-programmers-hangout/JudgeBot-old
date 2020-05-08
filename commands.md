@@ -28,6 +28,12 @@
 | unblindfold | Lower Ranked member             | Use this to mute a member               |
 | unmute      | Lower Ranked member             | Use this to mute a member               |
 
+## Notes
+| Commands  | Arguments            | Description                       |
+| --------- | -------------------- | --------------------------------- |
+| note      | Member, Note Content | Use this to add a note to a user. |
+| viewNotes | Member               | Use this to add a note to a user. |
+
 ## Owner
 | Commands         | Arguments | Description                   |
 | ---------------- | --------- | ----------------------------- |
