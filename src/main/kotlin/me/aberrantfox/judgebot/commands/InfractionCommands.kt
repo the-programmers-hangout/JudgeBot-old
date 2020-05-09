@@ -32,6 +32,7 @@ fun createInfractionCommands(conversationService: ConversationService,
                 ConversationResult.EXITED -> "Infraction cancelled."
                 ConversationResult.INVALID_USER -> "Cannot start a conversation with this user."
                 ConversationResult.HAS_CONVO -> "This user already has a conversation."
+                ConversationResult.CANNOT_DM -> "This user has DM's disabled."
             }
             it.respond(response)
         }

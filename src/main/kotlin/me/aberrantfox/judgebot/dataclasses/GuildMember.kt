@@ -2,7 +2,7 @@ package me.aberrantfox.judgebot.dataclasses
 
 import me.aberrantfox.judgebot.configuration.BotConfiguration
 import net.dv8tion.jda.api.entities.Guild
-import java.util.*
+import org.joda.time.DateTime
 
 data class GuildDetails (
         val guildId: String,
@@ -29,15 +29,19 @@ data class GuildMember (
     }
 
     fun addNote(note: String, moderator: String, guild: Guild) = with(this.getGuildInfo(guild.id)) {
-       this?.notes?.add(Note(note, moderator, Date().time, this.notes.size + 1))
+        val nextId: Int = if (this!!.notes.isEmpty()) 1 else this.notes.maxBy { it.id }!!.id + 1
+        this?.notes?.add(Note(note, moderator, DateTime.now().millis, nextId))
     }
 
-    fun getStatus(guildId: String, config: BotConfiguration): String {
-        val guildDetails = this.getGuildInfo(guildId)
+    fun deleteNote(noteId: Int, guild: Guild) = with(this.getGuildInfo(guild.id)) {
+        this?.notes?.removeIf { it.id == noteId }
+    }
+
+    fun getStatus(guildId: String, config: BotConfiguration): String = with(this.getGuildInfo(guildId)) {
         var status: String = ""
 
         for (entry in config.getGuildConfig(guildId)!!.security.pointsToStatusMap.toSortedMap()) {
-            if (guildDetails!!.points >= entry.key) status = entry.value
+            if (this!!.points >= entry.key) status = entry.value
         }
         return status
     }

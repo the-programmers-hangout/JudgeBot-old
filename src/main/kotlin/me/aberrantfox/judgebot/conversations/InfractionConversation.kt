@@ -5,8 +5,9 @@ import me.aberrantfox.judgebot.extensions.next
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.*
 import me.aberrantfox.judgebot.dataclasses.Infraction
-import me.aberrantfox.judgebot.dataclasses.InfractionWeight
+import me.aberrantfox.judgebot.dataclasses.InfractionType
 import me.aberrantfox.judgebot.dataclasses.convertToInfractionType
+import me.aberrantfox.judgebot.utility.buildNotesEmbed
 import me.aberrantfox.judgebot.utility.buildUserStatusEmbed
 import me.aberrantfox.kjdautils.api.dsl.Conversation
 import me.aberrantfox.kjdautils.api.dsl.conversation
@@ -14,7 +15,7 @@ import me.aberrantfox.kjdautils.internal.arguments.*
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 
-val infractionChoiceArg = ChoiceArg("InfractionTypes", "Note", "Borderline", "Lightly", "Clearly", "Harshly")
+val infractionChoiceArg = ChoiceArg("InfractionTypes", "Note", "Borderline", "Light", "Clear", "Harsh")
 
 class InfractionConversation(private val messages: Messages,
                              private val infractionService: InfractionService,
@@ -41,7 +42,7 @@ class InfractionConversation(private val messages: Messages,
         val infractionType = convertToInfractionType(infractionChoice)
         val infractionDetails: String = blockingPrompt(SentenceArg) { messages.PROMPT_INFRACTION_DETAILS }
 
-        if (infractionType != InfractionWeight.Note) {
+        if (infractionType != InfractionType.Note) {
             addPersonalNote = blockingPrompt(BooleanArg("Add Personal Note", "yes", "no"))
             { messages.PROMPT_USER_ADD_PERSONAL_NOTE }
         }
@@ -50,10 +51,15 @@ class InfractionConversation(private val messages: Messages,
             personalNote = blockingPrompt(SentenceArg) { messages.PROMPT_PERSONAL_NOTE }
         }
 
-        val infraction = Infraction(this.user.name, infractionDetails, infractionType!!, guild.id, personalNote, ruleNumberChosen)
-        infractionService.infract(targetMember, guild, userRecord, infraction)
-
-        respond(buildUserStatusEmbed(targetMember, userRecord, guild, config, rules, true))
+        if (infractionType == InfractionType.Note) {
+            userRecord.addNote(infractionDetails, this.user.id, guild)
+            databaseService.users.updateUser(userRecord)
+            respond(buildNotesEmbed(targetMember, userRecord, guild, config))
+        } else {
+            val infraction = Infraction(this.user.id, infractionDetails, infractionType!!, guild.id, personalNote, ruleNumberChosen)
+            infractionService.infract(targetMember, guild, userRecord, infraction)
+            respond(buildUserStatusEmbed(targetMember, userRecord, guild, config, rules, true))
+        }
 
         next()
     }

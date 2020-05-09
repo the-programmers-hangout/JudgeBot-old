@@ -39,6 +39,11 @@ class UserOperations(private val connection: ConnectionService) {
         return this.updateUser(user)
     }
 
+    fun deleteNote(guild: Guild, user: GuildMember, noteId: Int): GuildMember {
+        user.deleteNote(noteId, guild)
+        return this.updateUser(user)
+    }
+
     fun incrementUserHistory(user: GuildMember, guildId: String): GuildMember {
         user.incrementHistoryCount(guildId)
         return this.updateUser(user)
