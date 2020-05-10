@@ -6,9 +6,7 @@ import me.aberrantfox.judgebot.services.Permission
 import me.aberrantfox.judgebot.services.PrefixService
 import me.aberrantfox.kjdautils.api.annotation.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.command.commands
-import me.aberrantfox.kjdautils.internal.arguments.RoleArg
-import me.aberrantfox.kjdautils.internal.arguments.TextChannelArg
-import me.aberrantfox.kjdautils.internal.arguments.WordArg
+import me.aberrantfox.kjdautils.internal.arguments.*
 import me.aberrantfox.kjdautils.internal.services.PersistenceService
 
 @CommandSet("Owner")
@@ -16,7 +14,7 @@ fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixSe
     command("setPrefix") {
         description = "Set the bot's prefix."
         requiredPermissionLevel = Permission.BotOwner
-
+        requiresGuild = true
         execute(WordArg("Prefix")) {
             val prefix = it.args.first
 
@@ -30,7 +28,7 @@ fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixSe
     command("setAdminRole") {
         description = "Sets the Administrator role  "
         requiredPermissionLevel = Permission.BotOwner
-
+        requiresGuild = true
         execute(RoleArg) {
             val (role) = it.args
             configuration.getGuildConfig(it.guild!!.id)?.adminRole = role.name
@@ -42,7 +40,7 @@ fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixSe
     command("setStaffRole") {
         description = "Sets the Staff role"
         requiredPermissionLevel = Permission.BotOwner
-
+        requiresGuild = true
         execute(RoleArg) {
             val (role) = it.args
             configuration.getGuildConfig(it.guild!!.id)?.staffRole = role.name
@@ -54,12 +52,44 @@ fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixSe
     command("setModeratorRole") {
         description = "Sets the Moderator role"
         requiredPermissionLevel = Permission.BotOwner
-
+        requiresGuild = true
         execute(RoleArg) {
             val (role) = it.args
             configuration.getGuildConfig(it.guild!!.id)?.moderatorRole = role.name
             persistenceService.save(configuration)
             return@execute it.respond("Moderator role set to \"${role.name}\"")
+        }
+    }
+
+    command("setLogChannel") {
+        requiredPermissionLevel = Permission.Administrator
+        requiresGuild = true
+        execute(TextChannelArg) {
+            val channel = it.args.first
+
+            val config = configuration.getGuildConfig(it.guild!!.id)
+            config?.loggingConfiguration?.loggingChannel = channel.id
+            persistenceService.save(configuration)
+
+            it.respond("Logging channel set to **${channel.name}**")
+        }
+    }
+
+    command("toggleLog") {
+        requiredPermissionLevel = Permission.Administrator
+        requiresGuild = true
+        execute(ChoiceArg("LogToggle", "Role", "Infraction", "Punishment"),
+                BooleanArg("On/Off", "On", "Off")) {
+            val (log, toggle) = it.args
+            val config = configuration.getGuildConfig(it.guild!!.id)
+
+            when(log.toLowerCase()) {
+                "role" -> config?.loggingConfiguration?.logRoles = toggle
+                "infraction" -> config?.loggingConfiguration?.logInfractions = toggle
+                "punishment" -> config?.loggingConfiguration?.logPunishments = toggle
+            }
+            persistenceService.save(configuration)
+            it.respond("**$log** logging has been turned **${if(toggle) "On" else "Off"}**")
         }
     }
 }

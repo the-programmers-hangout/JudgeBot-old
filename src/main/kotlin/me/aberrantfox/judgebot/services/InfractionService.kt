@@ -16,13 +16,15 @@ import org.joda.time.Days
 class InfractionService(private val config: BotConfiguration,
                         private val badPfpService: BadPfpService,
                         private val databaseService: DatabaseService,
-                        private val roleService: RoleService) {
+                        private val roleService: RoleService,
+                        private val loggingService: LoggingService) {
 
     fun infract(target: Member, guild: Guild, userRecord: GuildMember, infraction: Infraction): GuildMember {
         userRecord.addInfraction(infraction, calculateInfractionPoints(userRecord, infraction))
         val infractionEmbed = buildInfractionEmbed(target, userRecord, guild, infraction, config)
         val punishment = calculatePunishment(target, userRecord, guild)
 
+        loggingService.logInfraction(guild, target, infraction, punishment!!)
         applyPunishment(target, userRecord, punishment!!, guild)
         target.user.sendPrivateMessage(infractionEmbed)
         return databaseService.users.updateUser(userRecord)

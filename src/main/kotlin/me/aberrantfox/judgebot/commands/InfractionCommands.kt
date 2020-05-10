@@ -54,15 +54,15 @@ fun createInfractionCommands(conversationService: ConversationService,
         description = "Notifies the user that they should change their profile pic and applies a 30 minute mute. Bans the user if they don't change picture."
         requiresGuild = true
         requiredPermissionLevel = Permission.Moderator
-        execute(LowerMemberArg, BooleanArg("cancel", "apply", "cancel").makeOptional(true)) {
-            val target = it.args.first
+        execute(BooleanArg("cancel", "apply", "cancel").makeOptional(true), LowerMemberArg) {
+            val (cancel, target) = it.args
             val minutesUntilBan = 2L
             val timeLimit = 1000 * 60 * minutesUntilBan
 
-            if (!it.args.second)
+            if (!cancel)
                 when (badPfpService.hasBadPfp(target)) {
                     true -> {
-                        badPfpService.cancelBadPfp(target)
+                        badPfpService.cancelBadPfp(it.guild!!, target)
                         return@execute it.unsafeRespond("Badpfp cancelled for ${target.asMention} ")
                     }
                     false -> return@execute it.unsafeRespond("${target.asMention} does not have a an active badpfp")
