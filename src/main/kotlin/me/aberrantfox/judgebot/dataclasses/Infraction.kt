@@ -2,22 +2,21 @@ package me.aberrantfox.judgebot.dataclasses
 
 import java.util.Date;
 
-enum class InfractionWeight {
-    Note, Borderline, Lightly, Clearly, Harshly
+enum class InfractionType {
+    Note, Borderline, Light, Clear, Harsh
 }
 
-val infractionMap : HashMap<InfractionWeight, Int> = hashMapOf(
-        InfractionWeight.Note to 0,
-        InfractionWeight.Borderline to 1,
-        InfractionWeight.Lightly to 2,
-        InfractionWeight.Clearly to 3,
-        InfractionWeight.Harshly to 4
+val infractionMap : HashMap<InfractionType, Int> = hashMapOf(
+        InfractionType.Borderline to 0,
+        InfractionType.Light to 1,
+        InfractionType.Clear to 2,
+        InfractionType.Harsh to 3
 )
 
 data class Infraction(
         val moderator: String,
         val reason: String,
-        val weight: InfractionWeight,
+        val weight: InfractionType,
         val guildId: String,
         val infractionNote: String? = null,
         val ruleBroken: Int? = null,
@@ -25,4 +24,4 @@ data class Infraction(
         )
 
 fun convertToInfractionType(infraction: String) =
-        InfractionWeight.values().firstOrNull {it.name.toLowerCase() == infraction.toLowerCase()}
+        InfractionType.values().firstOrNull {it.name.toLowerCase() == infraction.toLowerCase()}

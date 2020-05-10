@@ -58,7 +58,7 @@ data class Messages(
 
     // Infractions
 
-        val PROMPT_USER_INFRACTION_TYPE: String = "Please input the weight of the Infraction you would like to issue. Acceptable values are: Note, Borderline, Lightly, Clearly, Harshly",
+        val PROMPT_USER_INFRACTION_TYPE: String = "Please input the weight of the Infraction you would like to issue. Acceptable values are: Note, Borderline, Light, Clear, Harsh",
         val PROMPT_USER_ADD_PERSONAL_NOTE: String = "Would you like to add a note relating to this Infraction?",
         val PROMPT_PERSONAL_NOTE: String = "Please input the note you would like to add.",
         val PROMPT_INFRACTION_DETAILS: String = "Please input the details of the Infraction.",

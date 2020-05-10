@@ -28,6 +28,13 @@
 | unblindfold | Lower Ranked member             | Use this to mute a member               |
 | unmute      | Lower Ranked member             | Use this to mute a member               |
 
+## Notes
+| Commands   | Arguments            | Description                                  |
+| ---------- | -------------------- | -------------------------------------------- |
+| deleteNote | Member, Integer      | Use this to add a delete a note from a user. |
+| note       | Member, Note Content | Use this to add a note to a user.            |
+| viewNotes  | Member               | Use this to add a note to a user.            |
+
 ## Owner
 | Commands         | Arguments | Description                   |
 | ---------------- | --------- | ----------------------------- |

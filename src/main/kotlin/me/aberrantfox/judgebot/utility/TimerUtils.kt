@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.entities.Role
 fun applyRoleWithTimer(member: Member, role: Role, millis: Long, fn: (Member) -> Unit): Job {
     member.guild.addRoleToMember(member, role).queue()
     return GlobalScope.launch {
-        delay(millis)
+        delay(millis * 1000)
         fn(member)
     }
 }
