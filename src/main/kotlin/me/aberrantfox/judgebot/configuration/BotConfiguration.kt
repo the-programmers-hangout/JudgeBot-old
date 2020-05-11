@@ -26,7 +26,15 @@ data class GuildConfiguration(
         var adminRole: String = "",
         var moderatorRole: String = "",
         var staffRole: String = "",
-        val security: Security = Security()
+        val security: Security = Security(),
+        var loggingConfiguration: LoggingConfiguration = LoggingConfiguration()
+)
+
+data class LoggingConfiguration(
+        var loggingChannel: String = "insert_id",
+        var logRoles: Boolean = true,
+        var logInfractions: Boolean = true,
+        var logPunishments: Boolean = true
 )
 
 data class Security(
@@ -39,21 +47,21 @@ data class Security(
         ),
         val pointsToPunishmentMap: HashMap<Int, PunishmentConfig> = hashMapOf(
                 0 to PunishmentConfig(PunishmentType.Warn),
-                3 to PunishmentConfig(PunishmentType.Mute, 60 * 5),
-                5 to PunishmentConfig(PunishmentType.Mute, 60 * 30),
-                8 to PunishmentConfig(PunishmentType.Mute, 60 * 60),
-                10 to PunishmentConfig(PunishmentType.Mute, 60 * 60 * 4),
-                12 to PunishmentConfig(PunishmentType.Mute, 60 * 60 * 16),
-                18 to PunishmentConfig(PunishmentType.Mute, 60 * 60 * 24),
-                20 to PunishmentConfig(PunishmentType.Mute, 60 * 60 * 48),
-                25 to PunishmentConfig(PunishmentType.Blindfold, 60 * 60 * 24),
-                30 to PunishmentConfig(PunishmentType.Blindfold, 60 * 60 * 48),
-                35 to PunishmentConfig(PunishmentType.Blindfold, 60 * 60 * 24 * 7),
-                40 to PunishmentConfig(PunishmentType.TemporaryBan, 60 * 60 * 24 * 14),
-                45 to PunishmentConfig(PunishmentType.TemporaryBan, 60 * 60 * 24 * 14),
-                50 to PunishmentConfig(PunishmentType.TemporaryBan, 60 * 60 * 24 * 30),
-                55 to PunishmentConfig(PunishmentType.AppealableBan, 60 * 60 * 24 * 30),
-                60 to PunishmentConfig(PunishmentType.AppealableBan, 60 * 60 * 24 * 90),
+                3 to PunishmentConfig(PunishmentType.Mute, 1000L * 60 * 5),
+                5 to PunishmentConfig(PunishmentType.Mute, 1000L * 60 * 30),
+                8 to PunishmentConfig(PunishmentType.Mute, 1000L * 60 * 60),
+                10 to PunishmentConfig(PunishmentType.Mute, 1000L * 60 * 60 * 4),
+                12 to PunishmentConfig(PunishmentType.Mute, 1000L * 60 * 60 * 16),
+                18 to PunishmentConfig(PunishmentType.Mute, 1000L * 60 * 60 * 24),
+                20 to PunishmentConfig(PunishmentType.Mute, 1000L * 60 * 60 * 48),
+                25 to PunishmentConfig(PunishmentType.Blindfold, 1000L * 60 * 60 * 24),
+                30 to PunishmentConfig(PunishmentType.Blindfold, 1000L * 60 * 60 * 48),
+                35 to PunishmentConfig(PunishmentType.Blindfold, 1000L * 60 * 60 * 24 * 7),
+                40 to PunishmentConfig(PunishmentType.TemporaryBan, 1000L * 60 * 60 * 24 * 14),
+                45 to PunishmentConfig(PunishmentType.TemporaryBan, 1000L * 60 * 60 * 24 * 14),
+                50 to PunishmentConfig(PunishmentType.TemporaryBan, 1000L * 60 * 60 * 24 * 30),
+                55 to PunishmentConfig(PunishmentType.AppealableBan, 1000L * 60 * 60 * 24 * 30),
+                60 to PunishmentConfig(PunishmentType.AppealableBan, 1000L * 60 * 60 * 24 * 90),
                 65 to PunishmentConfig(PunishmentType.PermanentBan)
         ),
         val pointsMax: Int = 65,

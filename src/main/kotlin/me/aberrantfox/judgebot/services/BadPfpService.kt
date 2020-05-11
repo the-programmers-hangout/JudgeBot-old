@@ -16,12 +16,14 @@ import net.dv8tion.jda.api.entities.Member
 
 @Service
 class BadPfpService(private val roleService: RoleService,
-                    private val discord: Discord) {
+                    private val discord: Discord,
+                    private val loggingService: LoggingService) {
     private val badPfpTracker = hashMapOf<Pair<GuildID, UserId>, Job>()
     private fun toKey(member: Member) = member.guild.id to member.user.id
 
     fun applyBadPfp(target: Member, punishmentConfig: PunishmentConfig, guild: Guild) {
         target.user.sendPrivateMessage(buildBadPfpEmbed(target.asMention, timeToString(punishmentConfig.time!!)))
+        loggingService.logPunishment(guild, target, PunishmentType.BadPfp)
         roleService.applyRole(target, punishmentConfig.time!!, "Bad Pfp Mute", PunishmentType.Mute)
         badPfpTracker[toKey(target)] = GlobalScope.launch {
             delay(punishmentConfig.time!!)
@@ -40,11 +42,12 @@ class BadPfpService(private val roleService: RoleService,
         return badPfpTracker.containsKey(toKey(target))
     }
 
-    fun cancelBadPfp(target: Member) {
+    fun cancelBadPfp(guild: Guild, target: Member) {
         val key = toKey(target)
         if (badPfpTracker.containsKey(key)) {
             badPfpTracker[key]?.cancel()
             badPfpTracker.remove(key)
+            loggingService.logPunishmentCancelled(guild, target, PunishmentType.BadPfp)
             roleService.removeRole(target, PunishmentType.Mute)
         }
     }

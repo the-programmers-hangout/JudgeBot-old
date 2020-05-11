@@ -29,7 +29,8 @@ enum class RoleState {
 @Service
 class RoleService(val configuration: BotConfiguration,
                   private val discord: Discord,
-                  private val databaseService: DatabaseService) {
+                  private val databaseService: DatabaseService,
+                  private val loggingService: LoggingService) {
 
     private val blindfoldMap = hashMapOf<GuildID, MuteRoleID>()
     private val muteMap = hashMapOf<GuildID, MuteRoleID>()
@@ -62,7 +63,8 @@ class RoleService(val configuration: BotConfiguration,
         val punishment = Punishment(user.id, guild.id, type, clearTime, reason)
         databaseService.punishments.addPunishment(punishment)
         member.user.sendPrivateMessage(buildInfractionEmbed(member.asMention, reason, type, timeToString(time))!!)
-        punishmentTimerMap[toKey(member)] = applyRoleWithTimer(member, getRole(guild, type)!!, time) {
+        loggingService.logRoleApplied(guild, member, getRole(guild, type), time)
+        punishmentTimerMap[toKey(member)] = applyRoleWithTimer(member, getRole(guild, type), time) {
             removeRole(member, type)
         }
     }
@@ -72,7 +74,8 @@ class RoleService(val configuration: BotConfiguration,
         val guild = member.guild
         val key = toKey(member)
         if (user.mutualGuilds.isNotEmpty()) {
-            guild.removeRoleFromMember(member, getRole(guild, type)!!).queue()
+            loggingService.logRoleRemoved(guild, member, getRole(guild, type))
+            guild.removeRoleFromMember(member, getRole(guild, type)).queue()
         }
         databaseService.punishments.removePunishment(member, guild, type)
         punishmentTimerMap[key]?.cancel()

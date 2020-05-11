@@ -14,7 +14,7 @@
 ## Infraction
 | Commands              | Arguments                     | Description                                                                                                                           |
 | --------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| badpfp                | Lower Ranked member, (cancel) | Notifies the user that they should change their profile pic and applies a 30 minute mute. Bans the user if they don't change picture. |
+| badpfp                | (cancel), Lower Ranked member | Notifies the user that they should change their profile pic and applies a 30 minute mute. Bans the user if they don't change picture. |
 | history, h            | Member                        | Use this to view a user's record                                                                                                      |
 | infract, warn, strike | Member                        | Use this to issue an infraction to a user                                                                                             |
 | punishmentInfo        | Member                        | View a user's points and next punishment level                                                                                        |
@@ -36,12 +36,14 @@
 | viewNotes  | Member               | Use this to add a note to a user.            |
 
 ## Owner
-| Commands         | Arguments | Description                   |
-| ---------------- | --------- | ----------------------------- |
-| setAdminRole     | Role      | Sets the Administrator role   |
-| setModeratorRole | Role      | Sets the Moderator role       |
-| setPrefix        | Prefix    | Set the bot's prefix.         |
-| setStaffRole     | Role      | Sets the Staff role           |
+| Commands         | Arguments         | Description                   |
+| ---------------- | ----------------- | ----------------------------- |
+| setAdminRole     | Role              | Sets the Administrator role   |
+| setLogChannel    | TextChannel       | No Description Provider       |
+| setModeratorRole | Role              | Sets the Moderator role       |
+| setPrefix        | Prefix            | Set the bot's prefix.         |
+| setStaffRole     | Role              | Sets the Staff role           |
+| toggleLog        | LogToggle, On/Off | No Description Provider       |
 
 ## Rules
 | Commands   | Arguments | Description                                  |
