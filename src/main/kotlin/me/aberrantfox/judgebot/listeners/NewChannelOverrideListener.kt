@@ -10,7 +10,7 @@ class NewChannelOverrideListener(private val roleService: RoleService) {
     @Subscribe
     fun onTextChannelCreate(event: TextChannelCreateEvent) {
         event.channel.createPermissionOverride(roleService.getRole(event.guild, PunishmentType.Mute))
-                .setDeny(Permission.MESSAGE_WRITE).queue()
+                .setDeny(Permission.MESSAGE_WRITE, Permission.MESSAGE_ADD_REACTION).queue()
         event.channel.createPermissionOverride(roleService.getRole(event.guild, PunishmentType.Blindfold))
                 .setDeny(Permission.MESSAGE_WRITE, Permission.VIEW_CHANNEL, Permission.MESSAGE_READ).queue()
     }
