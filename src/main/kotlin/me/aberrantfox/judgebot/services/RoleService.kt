@@ -113,23 +113,10 @@ class RoleService(val configuration: BotConfiguration,
         muteMap[guild.id] = mutedRole.id
 
         guild.textChannels
-                .filter {
-                    it.rolePermissionOverrides.none { override ->
-                        override.role == blindfoldRole
-                    }
-                }
                 .forEach {
-                    it.putPermissionOverride(blindfoldRole)
+                    it.upsertPermissionOverride(blindfoldRole)
                             .setDeny(Permission.MESSAGE_WRITE, Permission.VIEW_CHANNEL, Permission.MESSAGE_READ).queue()
-                }
-        guild.textChannels
-                .filter {
-                    it.rolePermissionOverrides.none { override ->
-                        override.role == mutedRole
-                    }
-                }
-                .forEach {
-                    it.createPermissionOverride(mutedRole).setDeny(Permission.MESSAGE_WRITE, Permission.MESSAGE_ADD_REACTION).queue()
+                    it.upsertPermissionOverride(mutedRole).setDeny(Permission.MESSAGE_WRITE, Permission.MESSAGE_ADD_REACTION).queue()
                 }
     }
 }
