@@ -19,7 +19,7 @@ fun createUtilityCommands(permissionsService: PermissionsService) = commands {
                 title = "${user.asTag}'s pfp"
                 color = Color.MAGENTA
                 description = "[Reverse Search]($reverseSearchUrl)"
-                image = user.effectiveAvatarUrl
+                image = "${user.effectiveAvatarUrl}?size=512"
             }
             it.respond(embed)
         }

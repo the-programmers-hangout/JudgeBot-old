@@ -8,9 +8,15 @@ data class GuildDetails (
         val guildId: String,
         val infractions: MutableList<Infraction> = mutableListOf<Infraction>(),
         val notes: MutableList<Note> = mutableListOf<Note>(),
+        val leaveHistory: MutableList<GuildLeave> = mutableListOf<GuildLeave>(),
         var historyCount: Int = 0,
         var points: Int = 0,
         var lastInfraction: Long = 0
+)
+
+data class GuildLeave (
+        val joinDate: Long,
+        val leaveDate: Long
 )
 
 data class GuildMember (
@@ -30,7 +36,11 @@ data class GuildMember (
 
     fun addNote(note: String, moderator: String, guild: Guild) = with(this.getGuildInfo(guild.id)) {
         val nextId: Int = if (this!!.notes.isEmpty()) 1 else this.notes.maxBy { it.id }!!.id + 1
-        this?.notes?.add(Note(note, moderator, DateTime.now().millis, nextId))
+        this.notes.add(Note(note, moderator, DateTime.now().millis, nextId))
+    }
+
+    fun addGuildLeave(joinDate: Long, leaveDate: Long, guild: Guild) = with(this.getGuildInfo(guild.id)) {
+        this?.leaveHistory?.add(GuildLeave(joinDate, leaveDate))
     }
 
     fun deleteNote(noteId: Int, guild: Guild) = with(this.getGuildInfo(guild.id)) {
