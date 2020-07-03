@@ -1,8 +1,7 @@
 package me.aberrantfox.judgebot.services.database
 
+import me.aberrantfox.judgebot.dataclasses.Ban
 import me.aberrantfox.judgebot.dataclasses.GuildInfo
-import me.aberrantfox.judgebot.dataclasses.GuildMember
-import me.aberrantfox.judgebot.dataclasses.Punishment
 import me.aberrantfox.kjdautils.api.annotation.Service
 import net.dv8tion.jda.api.entities.Guild
 import org.litote.kmongo.eq
@@ -14,9 +13,19 @@ import org.litote.kmongo.updateOne
 class GuildOperations(private val connection: ConnectionService) {
     private val guildCollection = connection.db.getCollection<GuildInfo>("GuildCollection")
 
-    fun banMember(guild: Guild, userId: String, ban: Punishment): GuildInfo = with(getGuild(guild.id)) {
+    fun setupGuild(guild: Guild): GuildInfo {
+        val guildInfo = GuildInfo(guild.id)
+        this.guildCollection.insertOne(guildInfo)
+        return guildInfo
+    }
+
+    fun banMember(guild: Guild, userId: String, ban: Ban): GuildInfo = with(getGuild(guild.id)) {
         this?.addBannedUser(ban)
         return updateGuild(guild.id, this!!)
+    }
+
+    fun getBanReason(guild: Guild, userId: String) = with(getGuild(guild.id)){
+        return@with this?.getBanRecord(userId)
     }
 
     fun updateGuild(guildId: String, updatedGuild: GuildInfo): GuildInfo {

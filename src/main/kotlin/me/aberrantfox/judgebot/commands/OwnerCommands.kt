@@ -2,6 +2,7 @@ package me.aberrantfox.judgebot.commands
 
 import me.aberrantfox.judgebot.configuration.BotConfiguration
 import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
+import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.Permission
 import me.aberrantfox.judgebot.services.PrefixService
 import me.aberrantfox.kjdautils.api.annotation.CommandSet
@@ -10,7 +11,10 @@ import me.aberrantfox.kjdautils.internal.arguments.*
 import me.aberrantfox.kjdautils.internal.services.PersistenceService
 
 @CommandSet("Owner")
-fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixService, persistenceService: PersistenceService) = commands {
+fun createOwnerCommands(configuration: BotConfiguration,
+                        prefixService: PrefixService,
+                        persistenceService: PersistenceService,
+                        databaseService: DatabaseService) = commands {
     command("setPrefix") {
         description = "Set the bot's prefix."
         requiredPermissionLevel = Permission.BotOwner
@@ -90,6 +94,16 @@ fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixSe
             }
             persistenceService.save(configuration)
             it.respond("**$log** logging has been turned **${if(toggle) "On" else "Off"}**")
+        }
+    }
+
+    command("setupGuild") {
+        requiredPermissionLevel = Permission.Administrator
+        requiresGuild = true
+        execute{
+            databaseService.guilds.setupGuild(it.guild!!)
+            persistenceService.save(configuration)
+            it.respond("Guild **${it.guild!!.id}** configured")
         }
     }
 }

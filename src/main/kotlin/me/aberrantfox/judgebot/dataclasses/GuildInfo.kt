@@ -2,14 +2,14 @@ package me.aberrantfox.judgebot.dataclasses
 
 data class GuildInfo (
         val guildId: String,
-        val bans: MutableList<Punishment> = mutableListOf()
+        val bans: MutableList<Ban> = mutableListOf()
 ) {
-    fun addBannedUser(banInfo: Punishment) {
+    fun addBannedUser(banInfo: Ban) {
         this.bans.add(banInfo)
     }
 
-    fun getBanReason(userId: String): String {
-        return this.bans.firstOrNull { it.userId == userId }?.reason ?: "No ban reason found."
+    fun getBanRecord(userId: String): Ban? {
+        return this.bans.firstOrNull { it.userId == userId }
     }
 
     fun setBanReason(userId: String, reason: String) {

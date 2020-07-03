@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Assertions.*
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DatabaseServiceTest {
-    val dbService = DatabaseService(TestData.botTestConfiguration, TestData.punishments, TestData.users, TestData.rules)
+    val dbService = DatabaseService(TestData.botTestConfiguration, TestData.punishments, TestData.users, TestData.rules, TestData.guilds)
 
     @BeforeAll
     internal fun `set up`() {

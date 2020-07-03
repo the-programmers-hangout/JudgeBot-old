@@ -4,9 +4,11 @@ import io.mockk.*
 import me.aberrantfox.judgebot.configuration.BotConfiguration
 import me.aberrantfox.judgebot.configuration.DatabaseConfiguration
 import me.aberrantfox.judgebot.configuration.GuildConfiguration
+import me.aberrantfox.judgebot.dataclasses.GuildInfo
 import me.aberrantfox.judgebot.services.EmbedService
 import me.aberrantfox.judgebot.services.database.RuleOperations
 import me.aberrantfox.judgebot.dataclasses.Rule
+import me.aberrantfox.judgebot.services.database.GuildOperations
 import me.aberrantfox.judgebot.services.database.PunishmentOperations
 import me.aberrantfox.judgebot.services.database.UserOperations
 import me.aberrantfox.kjdautils.api.dsl.command.ArgumentContainer
@@ -37,6 +39,7 @@ fun userMock() = mockk<UserOperations>(relaxed = true) {}
 
 fun ruleMock() = mockk<RuleOperations>(relaxed = true) {}
 
+fun guildOperationMock() = mockk<GuildOperations>(relaxed = true)
 
 fun databaseServiceMock() = mockk<RuleOperations>(relaxed = true) {
     every { getRule(1, "test-guild") } returns TestData.testRules.first()
@@ -65,5 +68,5 @@ object TestData {
     val punishments = punishmentMock()
     val users = userMock()
     val rules = ruleMock()
-
+    val guilds = guildOperationMock()
 }

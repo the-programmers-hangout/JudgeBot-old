@@ -6,10 +6,11 @@
 | (Argument) | This argument is optional. |
 
 ## Ban
-| Commands | Arguments                 | Description                                                                    |
-| -------- | ------------------------- | ------------------------------------------------------------------------------ |
-| ban      | Lower Ranked member, Text | Bans a member for the passed reason, deleting a given number of days messages. |
-| unban    | User                      | Unbans a target user                                                           |
+| Commands     | Arguments                 | Description                                                                    |
+| ------------ | ------------------------- | ------------------------------------------------------------------------------ |
+| ban          | Lower Ranked member, Text | Bans a member for the passed reason, deleting a given number of days messages. |
+| getBanReason | User                      | Gets ban reason a target user                                                  |
+| unban        | User                      | Unbans a target user                                                           |
 
 ## Infraction
 | Commands              | Arguments                     | Description                                                                                                                           |
@@ -43,6 +44,7 @@
 | setModeratorRole | Role              | Sets the Moderator role       |
 | setPrefix        | Prefix            | Set the bot's prefix.         |
 | setStaffRole     | Role              | Sets the Staff role           |
+| setupGuild       | <none>            | No Description Provider       |
 | toggleLog        | LogToggle, On/Off | No Description Provider       |
 
 ## Rules
