@@ -1,9 +1,8 @@
 package me.aberrantfox.judgebot.localization
 
 import me.aberrantfox.judgebot.configuration.Constants
-import me.aberrantfox.kjdautils.api.annotation.Data
+import me.jakejmattson.discordkt.api.dsl.data.Data
 
-@Data("config/messages.json")
 data class Messages(
     // Conversation
         val CONVERSATION_EXIT_STRING: String = "--exit",
@@ -66,7 +65,7 @@ data class Messages(
 
     // General Errors
         val ERROR_USER_NOT_IN_GUILD: String = "**Error:** User not in this Guild"
-        )
+        ): Data("config/messages.json")
 
 fun String.inject(vararg args: String) : String{
     var injectedString = this

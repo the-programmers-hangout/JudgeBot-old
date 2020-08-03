@@ -3,7 +3,7 @@ package me.aberrantfox.judgebot.services.database
 import me.aberrantfox.judgebot.dataclasses.GuildDetails
 import me.aberrantfox.judgebot.dataclasses.GuildMember
 import me.aberrantfox.judgebot.dataclasses.Note
-import me.aberrantfox.kjdautils.api.annotation.Service
+import me.jakejmattson.discordkt.api.annotations.Service
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 import org.joda.time.DateTime

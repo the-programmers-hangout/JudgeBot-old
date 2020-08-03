@@ -2,16 +2,15 @@ package me.aberrantfox.judgebot.configuration
 
 import me.aberrantfox.judgebot.dataclasses.PunishmentConfig
 import me.aberrantfox.judgebot.dataclasses.PunishmentType
-import me.aberrantfox.kjdautils.api.annotation.Data
+import me.jakejmattson.discordkt.api.dsl.data.Data
 
-@Data("config/config.json")
-data class BotConfiguration(
+data class Configuration(
         val owner: String = "insert-owner-id",
         val whitelist: List<String> = listOf("insert-valid-guild-ids"),
         val guilds: List<GuildConfiguration> = listOf(GuildConfiguration()),
         val dbConfiguration: DatabaseConfiguration = DatabaseConfiguration(),
         var prefix: String = "judge!"
-) {
+): Data("config/config.json") {
         fun getGuildConfig(guildId: String) = guilds.firstOrNull { it.id == guildId }
 }
 
@@ -27,6 +26,7 @@ data class GuildConfiguration(
         var moderatorRole: String = "",
         var staffRole: String = "",
         val security: Security = Security(),
+        var prefix: String = "",
         var loggingConfiguration: LoggingConfiguration = LoggingConfiguration()
 )
 

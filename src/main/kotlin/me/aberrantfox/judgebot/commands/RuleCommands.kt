@@ -8,14 +8,14 @@ import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
 import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.services.EmbedService
 import me.aberrantfox.judgebot.services.Permission
-import me.aberrantfox.kjdautils.api.annotation.CommandSet
-import me.aberrantfox.kjdautils.internal.services.ConversationService
-import me.aberrantfox.kjdautils.api.dsl.command.commands
+import me.jakejmattson.discordkt.api.annotations.CommandSet
+import me.jakejmattson.discordkt.api.dsl.command.commands
+import me.jakejmattson.discordkt.api.services.ConversationService
 
 @CommandSet("Rules")
 fun createRulesManagementCommands(conversationService: ConversationService,
-                         embeds: EmbedService,
-                         messages: Messages) = commands {
+                                  embeds: EmbedService,
+                                  messages: Messages) = commands {
 
     command("createRule") {
         description = messages.CREATE_RULE_DESCRIPTION
@@ -23,7 +23,7 @@ fun createRulesManagementCommands(conversationService: ConversationService,
         requiredPermissionLevel = Permission.Administrator
 
         execute {
-            conversationService.startConversation<RuleCreationConversation>(it.author, it.guild!!)
+            conversationService.startPrivateConversation<RuleCreationConversation>(it.author, it.guild!!)
         }
     }
     command("deleteRule") {
@@ -32,7 +32,7 @@ fun createRulesManagementCommands(conversationService: ConversationService,
         requiredPermissionLevel = Permission.Administrator
 
         execute {
-            conversationService.startConversation<RuleDeletionConversation>(it.author, it.guild!!)
+            conversationService.startPrivateConversation<RuleDeletionConversation>(it.author, it.guild!!)
         }
     }
     command("rules") {
@@ -59,7 +59,7 @@ fun createRulesManagementCommands(conversationService: ConversationService,
         requiredPermissionLevel = Permission.Administrator
 
         execute {
-            conversationService.startConversation<RuleUpdateConversation>(it.author, it.guild!!)
+            conversationService.startPrivateConversation<RuleUpdateConversation>(it.author, it.guild!!)
         }
     }
     command("rule") {

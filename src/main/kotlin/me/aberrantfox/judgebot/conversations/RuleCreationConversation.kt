@@ -6,9 +6,9 @@ import me.aberrantfox.judgebot.localization.Messages
 import me.aberrantfox.judgebot.localization.inject
 import me.aberrantfox.judgebot.dataclasses.Rule
 import me.aberrantfox.judgebot.services.DatabaseService
-import me.aberrantfox.kjdautils.api.dsl.Conversation
-import me.aberrantfox.kjdautils.api.dsl.conversation
-import me.aberrantfox.kjdautils.internal.arguments.*
+import me.jakejmattson.discordkt.api.arguments.*
+import me.jakejmattson.discordkt.api.dsl.conversation.Conversation
+import me.jakejmattson.discordkt.api.dsl.conversation.conversation
 import net.dv8tion.jda.api.entities.Guild
 import org.litote.kmongo.newId
 
@@ -20,7 +20,7 @@ class RuleCreationConversation(private val messages: Messages,
         val guildRules = databaseService.rules.getRulesSortedByNumber(guild.id)
         val lastUsedRuleNumber = if (guildRules.isNotEmpty()) guildRules.last().number else 0
 
-        val useNextRuleNumber = blockingPrompt(BooleanArg(truthValue = "Y", falseValue = "N")) {
+        val useNextRuleNumber = promptMessage(BooleanArg(truthValue = "Y", falseValue = "N"),
             if (guildRules.isNotEmpty()) {
                 messages.PROMPT_USE_NEXT_RULE_NUMBER.inject(
                         lastUsedRuleNumber.toString(),
@@ -31,38 +31,38 @@ class RuleCreationConversation(private val messages: Messages,
                         lastUsedRuleNumber.toString()
                 )
             }
-        }
+        )
 
         val ruleNumber = when {
             useNextRuleNumber -> lastUsedRuleNumber + 1
-            else -> blockingPromptUntil(
+            else -> promptUntil(
                     argumentType = IntegerArg,
-                    initialPrompt = { messages.PROMPT_RULE_NUMBER },
-                    until = { number -> !guildRules.any { it.number == number } },
-                    errorMessage = { messages.ERROR_RULE_NUMBER_EXISTS }
+                    prompt = messages.PROMPT_RULE_NUMBER,
+                    isValid = { number -> !guildRules.any { it.number == number } },
+                    error = messages.ERROR_RULE_NUMBER_EXISTS
             )
         }
 
-        val ruleShortName = blockingPromptUntil(
-                argumentType = WordArg,
-                initialPrompt = { messages.PROMPT_RULE_SHORTNAME },
-                until = { shortName -> shortName.length < 16 && !guildRules.any { it.shortName == shortName } },
-                errorMessage = { messages.ERROR_RULE_SHORTNAME_EXISTS }
+        val ruleShortName = promptUntil(
+                argumentType = AnyArg,
+                prompt = messages.PROMPT_RULE_SHORTNAME,
+                isValid = { shortName -> shortName.length < 16 && !guildRules.any { it.shortName == shortName } },
+                error = messages.ERROR_RULE_SHORTNAME_EXISTS
         )
 
-        val ruleTitle = blockingPrompt(SentenceArg) { messages.PROMPT_RULE_TITLE }
+        val ruleTitle = promptMessage(EveryArg, messages.PROMPT_RULE_TITLE)
 
-        val addLink = blockingPrompt(BooleanArg("Add Link to rule?", "Y", "N"))
-        { messages.PROMPT_UPDATE_RULE_LINK }
+        val addLink = promptMessage(BooleanArg("Add Link to rule?", "Y", "N"),
+            messages.PROMPT_UPDATE_RULE_LINK)
 
         val ruleLink = when {
-            addLink -> blockingPrompt(UrlArg) { messages.PROMPT_RULE_LINK }
+            addLink -> promptMessage(UrlArg, messages.PROMPT_RULE_LINK)
             else -> ""
         }
 
-        val ruleDescription = blockingPrompt(SentenceArg) { messages.PROMPT_RULE_DESCRIPTION }
+        val ruleDescription = promptMessage(EveryArg, messages.PROMPT_RULE_DESCRIPTION)
 
-        val ruleWeight = blockingPrompt(RuleWeightArg) { messages.PROMPT_RULE_WEIGHT }
+        val ruleWeight = promptMessage(RuleWeightArg, messages.PROMPT_RULE_WEIGHT)
 
         val newRule = Rule(newId(), guild.id, ruleNumber, ruleShortName, ruleTitle, ruleDescription, ruleLink, ruleWeight)
 

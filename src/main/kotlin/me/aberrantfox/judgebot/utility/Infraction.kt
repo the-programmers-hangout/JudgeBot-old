@@ -1,7 +1,7 @@
 package me.aberrantfox.judgebot.utility
 
 import me.aberrantfox.judgebot.dataclasses.PunishmentType
-import me.aberrantfox.kjdautils.api.dsl.embed
+import me.jakejmattson.discordkt.api.dsl.embed.embed
 import net.dv8tion.jda.api.entities.MessageEmbed
 import java.awt.Color
 
@@ -18,7 +18,7 @@ fun buildInfractionEmbed(userMention: String, reason: String, type: PunishmentTy
 }
 
 fun buildBadPfpEmbed(userMention: String, timeString: String) = embed {
-    title = "Bad PFP"
+    simpleTitle = "Bad PFP"
     description = """
                     | $userMention, We have flagged your profile picture as inappropriate.
                     | Please change it within the next $timeString or you will be banned
@@ -26,7 +26,7 @@ fun buildBadPfpEmbed(userMention: String, timeString: String) = embed {
 }
 
 fun buildWarnEmbed(userMention: String, reason: String) = embed {
-    title = "Mute"
+    simpleTitle = "Mute"
     description = """
                     | $userMention, you have been warned. A warning is a way for TPH staff to inform you that your behaviour needs to change or further infractions will follow.
                     | If you believe this to be in error, please contact Modmail.
@@ -42,7 +42,7 @@ fun buildWarnEmbed(userMention: String, reason: String) = embed {
 }
 
 fun buildMuteEmbed(userMention: String, timeString: String, reason: String) = embed {
-    title = "Mute"
+    simpleTitle = "Mute"
     description = """
                     | $userMention, you have been muted. A muted user cannot speak/post in channels.
                     | If you believe this to be in error, please contact Modmail.
@@ -63,7 +63,7 @@ fun buildMuteEmbed(userMention: String, timeString: String, reason: String) = em
 }
 
 fun buildBlindfoldEmbed(userMention: String, timeString: String, reason: String) = embed {
-    title = "Blindfold"
+    simpleTitle = "Blindfold"
     description = """
                     | $userMention, you have been muted. A blindfolded user cannot view channels.
                     | If you believe this to be in error, please contact Modmail.

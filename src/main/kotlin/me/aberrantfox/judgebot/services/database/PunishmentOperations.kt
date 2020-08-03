@@ -3,7 +3,7 @@ package me.aberrantfox.judgebot.services.database
 import com.mongodb.client.FindIterable
 import me.aberrantfox.judgebot.dataclasses.Punishment
 import me.aberrantfox.judgebot.dataclasses.PunishmentType
-import me.aberrantfox.kjdautils.api.annotation.Service
+import me.jakejmattson.discordkt.api.annotations.Service
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 import org.litote.kmongo.*

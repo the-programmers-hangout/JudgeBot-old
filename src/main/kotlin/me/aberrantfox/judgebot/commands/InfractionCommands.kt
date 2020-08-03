@@ -1,23 +1,23 @@
 package me.aberrantfox.judgebot.commands
 
 import me.aberrantfox.judgebot.arguments.LowerMemberArg
-import me.aberrantfox.judgebot.configuration.BotConfiguration
+import me.aberrantfox.judgebot.configuration.Configuration
 import me.aberrantfox.judgebot.conversations.InfractionConversation
 import me.aberrantfox.judgebot.dataclasses.PunishmentConfig
 import me.aberrantfox.judgebot.dataclasses.PunishmentType
 import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
 import me.aberrantfox.judgebot.services.*
-import me.aberrantfox.judgebot.utility.buildUserStatusEmbed
-import me.aberrantfox.kjdautils.api.annotation.CommandSet
-import me.aberrantfox.kjdautils.api.dsl.command.commands
-import me.aberrantfox.kjdautils.extensions.stdlib.toTimeString
-import me.aberrantfox.kjdautils.internal.arguments.*
-import me.aberrantfox.kjdautils.internal.services.ConversationResult
-import me.aberrantfox.kjdautils.internal.services.ConversationService
+import me.aberrantfox.judgebot.utility.buildUserStatusMenu
+import me.jakejmattson.discordkt.api.annotations.CommandSet
+import me.jakejmattson.discordkt.api.arguments.*
+import me.jakejmattson.discordkt.api.dsl.command.commands
+import me.jakejmattson.discordkt.api.extensions.stdlib.toTimeString
+import me.jakejmattson.discordkt.api.services.ConversationResult
+import me.jakejmattson.discordkt.api.services.ConversationService
 
 @CommandSet("Infraction")
 fun createInfractionCommands(conversationService: ConversationService,
-                             config: BotConfiguration,
+                             config: Configuration,
                              roleService: RoleService,
                              infractionService: InfractionService,
                              databaseService: DatabaseService,
@@ -27,7 +27,7 @@ fun createInfractionCommands(conversationService: ConversationService,
         requiresGuild = true
         requiredPermissionLevel = Permission.Staff
         execute(MemberArg()) {
-            val response = when (conversationService.startConversation<InfractionConversation>(it.author, it.guild!!, it.args.first)) {
+            val response = when (conversationService.startPrivateConversation<InfractionConversation>(it.author, it.guild!!, it.args.first)) {
                 ConversationResult.COMPLETE -> "Infraction completed."
                 ConversationResult.EXITED -> "Infraction cancelled."
                 ConversationResult.INVALID_USER -> "Cannot start a conversation with this user."
@@ -46,7 +46,7 @@ fun createInfractionCommands(conversationService: ConversationService,
             val user = databaseService.users.getOrCreateUser(it.args.first, it.guild!!.id)
             val rules = databaseService.rules.getRules(it.guild!!.id)
             databaseService.users.incrementUserHistory(user, it.guild!!.id)
-            it.respond(buildUserStatusEmbed(it.args.first, user, it.guild!!, config, rules, true))
+            it.respond(buildUserStatusMenu(it.args.first, user, it.guild!!, config, rules, true))
         }
     }
 

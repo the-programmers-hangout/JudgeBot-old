@@ -1,19 +1,19 @@
 package me.aberrantfox.judgebot.services
 
-import me.aberrantfox.judgebot.configuration.BotConfiguration
+import me.aberrantfox.judgebot.configuration.Configuration
 import me.aberrantfox.judgebot.dataclasses.*
 import me.aberrantfox.judgebot.utility.buildUserStatusText
 import me.aberrantfox.judgebot.utility.getEmbedColor
-import me.aberrantfox.kjdautils.api.annotation.Service
-import me.aberrantfox.kjdautils.api.dsl.embed
-import me.aberrantfox.kjdautils.extensions.jda.sendPrivateMessage
+import me.jakejmattson.discordkt.api.annotations.Service
+import me.jakejmattson.discordkt.api.dsl.embed.embed
+import me.jakejmattson.discordkt.api.extensions.jda.sendPrivateMessage
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 import org.joda.time.DateTime
 import org.joda.time.Days
 
 @Service
-class InfractionService(private val config: BotConfiguration,
+class InfractionService(private val config: Configuration,
                         private val badPfpService: BadPfpService,
                         private val databaseService: DatabaseService,
                         private val roleService: RoleService,
@@ -70,11 +70,11 @@ class InfractionService(private val config: BotConfiguration,
         }.maxBy { it.key }!!.value
     }
 
-    private fun buildInfractionEmbed(target: Member, member: GuildMember, guild:Guild, infraction: Infraction, config: BotConfiguration) =
+    private fun buildInfractionEmbed(target: Member, member: GuildMember, guild:Guild, infraction: Infraction, config: Configuration) =
             embed {
                 val memberStatus = member.getStatus(infraction.guildId, config)
                 color = getEmbedColor(memberStatus)
-                title = "${target.user.name}, you have been infracted"
+                simpleTitle = "${target.user.name}, you have been infracted"
                 thumbnail = guild.iconUrl
                 description = "Infractions are formal warnings for breaking the rules in TPH.\n" +
                         "If you think your infraction is undoubtedly unjustified, please **do not** post about it in a public channel but DM Modmail with your complaint."

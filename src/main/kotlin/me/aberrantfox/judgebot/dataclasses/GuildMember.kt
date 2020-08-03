@@ -1,6 +1,6 @@
 package me.aberrantfox.judgebot.dataclasses
 
-import me.aberrantfox.judgebot.configuration.BotConfiguration
+import me.aberrantfox.judgebot.configuration.Configuration
 import net.dv8tion.jda.api.entities.Guild
 import org.joda.time.DateTime
 
@@ -37,7 +37,7 @@ data class GuildMember (
         this?.notes?.removeIf { it.id == noteId }
     }
 
-    fun getStatus(guildId: String, config: BotConfiguration): String = with(this.getGuildInfo(guildId)) {
+    fun getStatus(guildId: String, config: Configuration): String = with(this.getGuildInfo(guildId)) {
         var status: String = ""
 
         for (entry in config.getGuildConfig(guildId)!!.security.pointsToStatusMap.toSortedMap()) {
