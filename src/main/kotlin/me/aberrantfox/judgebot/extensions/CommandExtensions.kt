@@ -2,7 +2,8 @@ package me.aberrantfox.judgebot.extensions
 
 import me.aberrantfox.judgebot.services.DEFAULT_REQUIRED_PERMISSION
 import me.aberrantfox.judgebot.services.Permission
-import me.aberrantfox.kjdautils.api.dsl.command.*
+import me.jakejmattson.discordkt.api.dsl.command.Command
+import me.jakejmattson.discordkt.api.dsl.command.CommandsContainer
 
 val setPermissions: MutableMap<CommandsContainer, Permission> = mutableMapOf()
 val commandPermissions: MutableMap<Command, Permission> = mutableMapOf()

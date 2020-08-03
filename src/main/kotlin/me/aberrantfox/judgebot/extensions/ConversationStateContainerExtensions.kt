@@ -1,11 +1,12 @@
 package me.aberrantfox.judgebot.extensions
 
-import me.aberrantfox.kjdautils.api.dsl.ConversationStateContainer
-import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
+import me.jakejmattson.discordkt.api.arguments.EveryArg
+import me.jakejmattson.discordkt.api.dsl.conversation.ConversationStateContainer
 
-fun ConversationStateContainer.next() = blockingPromptUntil(
-        argumentType = SentenceArg,
-        initialPrompt = { "Type anything to continue" },
-        until = { true },
-        errorMessage = { "" }
+
+fun ConversationStateContainer.next() = promptUntil(
+        argumentType = EveryArg,
+        prompt = "Type anything to continue",
+        isValid = { true },
+        error = ""
 )

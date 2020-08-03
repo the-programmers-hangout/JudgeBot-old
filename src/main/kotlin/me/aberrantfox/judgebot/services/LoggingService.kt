@@ -1,13 +1,13 @@
 package me.aberrantfox.judgebot.services
 
-import me.aberrantfox.judgebot.configuration.BotConfiguration
+import me.aberrantfox.judgebot.configuration.Configuration
 import me.aberrantfox.judgebot.dataclasses.Infraction
 import me.aberrantfox.judgebot.dataclasses.PunishmentConfig
 import me.aberrantfox.judgebot.dataclasses.PunishmentType
 import me.aberrantfox.judgebot.extensions.verboseDescriptor
 import me.aberrantfox.judgebot.utility.timeToString
-import me.aberrantfox.kjdautils.api.annotation.Service
-import me.aberrantfox.kjdautils.api.dsl.embed
+import me.jakejmattson.discordkt.api.annotations.Service
+import me.jakejmattson.discordkt.api.dsl.embed.embed
 import net.dv8tion.jda.api.entities.*
 
 enum class LogType {
@@ -15,7 +15,7 @@ enum class LogType {
 }
 
 @Service
-class LoggingService(private val config: BotConfiguration,
+class LoggingService(private val config: Configuration,
                      private val databaseService: DatabaseService) {
 
     private fun withLog(guild: Guild, logType: LogType, f: () -> MessageEmbed) =
@@ -32,7 +32,7 @@ class LoggingService(private val config: BotConfiguration,
         val rule = databaseService.rules.getRule(infraction.ruleBroken!!, guild.id)
 
         embed {
-            title = "User Infracted"
+            simpleTitle = "User Infracted"
             color = infoColor
             thumbnail = member.user.effectiveAvatarUrl
             addField("User", member.user.verboseDescriptor())
@@ -41,13 +41,13 @@ class LoggingService(private val config: BotConfiguration,
             addInlineField("Weight", infraction.weight.toString())
             addField("Rule Broken", "**#${infraction.ruleBroken}** ([${rule?.title}](${rule?.link}))")
             addField("Reason", infraction.reason)
-            addField("Punishment", "**${punishment.punishment}** for **${timeToString(punishment.time!!)}**")
+            addField("Punishment", "**${punishment.punishment}** for **${timeToString(punishment.time ?: 0)}**")
         }
     }
 
     fun logRoleApplied(guild: Guild, member: Member, role: Role, time: Long) = withLog(guild, LogType.Role) {
         embed {
-            title = "Role Added"
+            simpleTitle = "Role Added"
             color = successColor
             thumbnail = member.user.effectiveAvatarUrl
             addField("User", member.user.verboseDescriptor())
@@ -58,7 +58,7 @@ class LoggingService(private val config: BotConfiguration,
 
     fun logRoleRemoved(guild: Guild, member: Member, role: Role) = withLog(guild, LogType.Role) {
         embed {
-            title = "Role Removed"
+            simpleTitle = "Role Removed"
             color = failureColor
             thumbnail = member.user.effectiveAvatarUrl
             addField("User", member.user.verboseDescriptor())
@@ -68,7 +68,7 @@ class LoggingService(private val config: BotConfiguration,
 
     fun logPunishment(guild: Guild, member: Member, type: PunishmentType) = withLog(guild, LogType.Punishment) {
         embed {
-            title = "Punishment Applied"
+            simpleTitle = "Punishment Applied"
             color = successColor
             thumbnail = member.user.effectiveAvatarUrl
             addField("User", member.user.verboseDescriptor())
@@ -78,7 +78,7 @@ class LoggingService(private val config: BotConfiguration,
 
     fun logPunishmentCancelled(guild: Guild, member: Member, type: PunishmentType) = withLog(guild, LogType.Punishment) {
         embed {
-            title = "Punishment Cancelled"
+            simpleTitle = "Punishment Cancelled"
             color = failureColor
             thumbnail = member.user.effectiveAvatarUrl
             addField("User", member.user.verboseDescriptor())
@@ -88,7 +88,7 @@ class LoggingService(private val config: BotConfiguration,
 
     fun logUserBanned(guild: Guild, member: Member, reason: String) = withLog(guild, LogType.Punishment) {
         embed {
-            title = "User Banned"
+            simpleTitle = "User Banned"
             color = infoColor
             thumbnail = member.user.effectiveAvatarUrl
             addField("User", member.user.verboseDescriptor())
@@ -98,7 +98,7 @@ class LoggingService(private val config: BotConfiguration,
 
     fun logUserUnbanned(guild: Guild, member: User) = withLog(guild, LogType.Punishment) {
         embed {
-            title = "User Unbanned"
+            simpleTitle = "User Unbanned"
             color = infoColor
             thumbnail = member.effectiveAvatarUrl
             addField("User", member.verboseDescriptor())

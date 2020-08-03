@@ -1,39 +1,25 @@
 package me.aberrantfox.judgebot.commands
 
-import me.aberrantfox.judgebot.configuration.BotConfiguration
-import me.aberrantfox.judgebot.conversations.InfractionConversation
+import me.aberrantfox.judgebot.configuration.Configuration
 import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
 import me.aberrantfox.judgebot.services.DatabaseService
 import me.aberrantfox.judgebot.services.Permission
-import me.aberrantfox.judgebot.utility.buildNotesEmbed
-import me.aberrantfox.kjdautils.api.annotation.CommandSet
-import me.aberrantfox.kjdautils.api.dsl.command.commands
-import me.aberrantfox.kjdautils.internal.arguments.IntegerArg
-import me.aberrantfox.kjdautils.internal.arguments.MemberArg
-import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
+import me.jakejmattson.discordkt.api.annotations.CommandSet
+import me.jakejmattson.discordkt.api.arguments.*
+import me.jakejmattson.discordkt.api.dsl.command.commands
 
 @CommandSet("Notes")
 fun createNoteCommands(databaseService: DatabaseService,
-                       config: BotConfiguration) = commands {
+                       config: Configuration) = commands {
     command("note") {
         description = "Use this to add a note to a user."
         requiresGuild = true
         requiredPermissionLevel = Permission.Staff
-        execute(MemberArg, SentenceArg("Note Content")) {
+        execute(MemberArg, EveryArg("Note Content")) {
             val (target, note) = it.args
             val user = databaseService.users.getOrCreateUser(target, it.guild!!.id)
             databaseService.users.addNote(it.guild!!, user, note, it.author.id)
             it.respond("Note added.")
-        }
-    }
-
-    command("viewNotes") {
-        description = "Use this to add a note to a user."
-        requiresGuild = true
-        requiredPermissionLevel = Permission.Staff
-        execute(MemberArg) {
-            val user = databaseService.users.getOrCreateUser(it.args.first, it.guild!!.id)
-            it.respond(buildNotesEmbed(it.args.first, user, it.guild!!, config))
         }
     }
 

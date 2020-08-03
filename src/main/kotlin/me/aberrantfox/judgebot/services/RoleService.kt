@@ -1,16 +1,16 @@
 package me.aberrantfox.judgebot.services
 
 import kotlinx.coroutines.Job
-import me.aberrantfox.judgebot.configuration.BotConfiguration
+import me.aberrantfox.judgebot.configuration.Configuration
 import me.aberrantfox.judgebot.dataclasses.Punishment
 import me.aberrantfox.judgebot.dataclasses.PunishmentType
 import me.aberrantfox.judgebot.utility.applyRoleWithTimer
 import me.aberrantfox.judgebot.utility.buildInfractionEmbed
 import me.aberrantfox.judgebot.utility.timeToString
-import me.aberrantfox.kjdautils.api.annotation.Service
-import me.aberrantfox.kjdautils.discord.Discord
-import me.aberrantfox.kjdautils.extensions.jda.getRoleByName
-import me.aberrantfox.kjdautils.extensions.jda.sendPrivateMessage
+import me.jakejmattson.discordkt.api.Discord
+import me.jakejmattson.discordkt.api.annotations.Service
+import me.jakejmattson.discordkt.api.extensions.jda.getRoleByIdOrName
+import me.jakejmattson.discordkt.api.extensions.jda.sendPrivateMessage
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
@@ -27,7 +27,7 @@ enum class RoleState {
 }
 
 @Service
-class RoleService(val configuration: BotConfiguration,
+class RoleService(val configuration: Configuration,
                   private val discord: Discord,
                   private val databaseService: DatabaseService,
                   private val loggingService: LoggingService) {
@@ -104,8 +104,8 @@ class RoleService(val configuration: BotConfiguration,
     private fun setupRoles(guild: Guild) {
         val blindfoldRoleName = configuration.getGuildConfig(guild.id)!!.security.blindfoldRole
         val mutedRoleName = configuration.getGuildConfig(guild.id)!!.security.mutedRole
-        val possibleMutedRole = guild.getRoleByName(mutedRoleName, true)
-        val possibleBlindfoldRole = guild.getRoleByName(blindfoldRoleName, true)
+        val possibleMutedRole = guild.getRoleByIdOrName(mutedRoleName)
+        val possibleBlindfoldRole = guild.getRoleByIdOrName(blindfoldRoleName)
         val blindfoldRole = possibleBlindfoldRole ?: guild.createRole().setName(blindfoldRoleName).complete()
         val mutedRole = possibleMutedRole ?: guild.createRole().setName(mutedRoleName).complete()
 

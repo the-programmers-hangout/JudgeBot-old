@@ -33,27 +33,26 @@
 | ---------- | -------------------- | -------------------------------------------- |
 | deleteNote | Member, Integer      | Use this to add a delete a note from a user. |
 | note       | Member, Note Content | Use this to add a note to a user.            |
-| viewNotes  | Member               | Use this to add a note to a user.            |
 
 ## Owner
 | Commands         | Arguments         | Description                   |
 | ---------------- | ----------------- | ----------------------------- |
 | setAdminRole     | Role              | Sets the Administrator role   |
-| setLogChannel    | TextChannel       | No Description Provider       |
+| setLogChannel    | Text Channel      | <No Description>              |
 | setModeratorRole | Role              | Sets the Moderator role       |
 | setPrefix        | Prefix            | Set the bot's prefix.         |
 | setStaffRole     | Role              | Sets the Staff role           |
-| toggleLog        | LogToggle, On/Off | No Description Provider       |
+| toggleLog        | LogToggle, On/Off | <No Description>              |
 
 ## Rules
 | Commands   | Arguments | Description                                  |
 | ---------- | --------- | -------------------------------------------- |
-| createRule | <none>    | Use this to create new rules for your guild. |
-| deleteRule | <none>    | Use this to delete rules for your guild.     |
+| createRule |           | Use this to create new rules for your guild. |
+| deleteRule |           | Use this to delete rules for your guild.     |
 | rule       | Rule      | Display a given rule.                        |
-| ruleList   | <none>    | Displays all the rule headings.              |
-| rules      | <none>    | Displays all the rules and their weights.    |
-| updateRule | <none>    | Update a rule for this guild.                |
+| ruleList   |           | Displays all the rule headings.              |
+| rules      |           | Displays all the rules and their weights.    |
+| updateRule |           | Update a rule for this guild.                |
 
 ## Utility
 | Commands | Arguments | Description                                               |

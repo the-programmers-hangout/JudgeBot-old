@@ -1,25 +1,23 @@
 package me.aberrantfox.judgebot.commands
 
-import me.aberrantfox.judgebot.configuration.BotConfiguration
+import me.aberrantfox.judgebot.configuration.Configuration
 import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
 import me.aberrantfox.judgebot.services.Permission
-import me.aberrantfox.judgebot.services.PrefixService
-import me.aberrantfox.kjdautils.api.annotation.CommandSet
-import me.aberrantfox.kjdautils.api.dsl.command.commands
-import me.aberrantfox.kjdautils.internal.arguments.*
-import me.aberrantfox.kjdautils.internal.services.PersistenceService
+import me.jakejmattson.discordkt.api.annotations.CommandSet
+import me.jakejmattson.discordkt.api.arguments.*
+import me.jakejmattson.discordkt.api.dsl.command.commands
 
 @CommandSet("Owner")
-fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixService, persistenceService: PersistenceService) = commands {
+fun createOwnerCommands(configuration: Configuration) = commands {
     command("setPrefix") {
         description = "Set the bot's prefix."
         requiredPermissionLevel = Permission.BotOwner
         requiresGuild = true
-        execute(WordArg("Prefix")) {
+        execute(AnyArg("Prefix")) {
             val prefix = it.args.first
 
-            prefixService.setPrefix(prefix)
-            persistenceService.save(configuration)
+            configuration.getGuildConfig(it.guild!!.id)?.prefix = prefix
+            configuration.save()
 
             it.respond("Prefix set to: $prefix")
         }
@@ -32,7 +30,7 @@ fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixSe
         execute(RoleArg) {
             val (role) = it.args
             configuration.getGuildConfig(it.guild!!.id)?.adminRole = role.name
-            persistenceService.save(configuration)
+            configuration.save()
             return@execute it.respond("Administrator role set to \"${role.name}\"")
         }
     }
@@ -44,7 +42,7 @@ fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixSe
         execute(RoleArg) {
             val (role) = it.args
             configuration.getGuildConfig(it.guild!!.id)?.staffRole = role.name
-            persistenceService.save(configuration)
+            configuration.save()
             return@execute it.respond("Staff role set to \"${role.name}\"")
         }
     }
@@ -56,7 +54,7 @@ fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixSe
         execute(RoleArg) {
             val (role) = it.args
             configuration.getGuildConfig(it.guild!!.id)?.moderatorRole = role.name
-            persistenceService.save(configuration)
+            configuration.save()
             return@execute it.respond("Moderator role set to \"${role.name}\"")
         }
     }
@@ -69,7 +67,7 @@ fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixSe
 
             val config = configuration.getGuildConfig(it.guild!!.id)
             config?.loggingConfiguration?.loggingChannel = channel.id
-            persistenceService.save(configuration)
+            configuration.save()
 
             it.respond("Logging channel set to **${channel.name}**")
         }
@@ -88,7 +86,7 @@ fun createOwnerCommands(configuration: BotConfiguration, prefixService: PrefixSe
                 "infraction" -> config?.loggingConfiguration?.logInfractions = toggle
                 "punishment" -> config?.loggingConfiguration?.logPunishments = toggle
             }
-            persistenceService.save(configuration)
+            configuration.save()
             it.respond("**$log** logging has been turned **${if(toggle) "On" else "Off"}**")
         }
     }

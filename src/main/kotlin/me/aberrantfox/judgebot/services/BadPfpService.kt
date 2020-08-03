@@ -8,9 +8,9 @@ import me.aberrantfox.judgebot.dataclasses.PunishmentConfig
 import me.aberrantfox.judgebot.dataclasses.PunishmentType
 import me.aberrantfox.judgebot.utility.buildBadPfpEmbed
 import me.aberrantfox.judgebot.utility.timeToString
-import me.aberrantfox.kjdautils.api.annotation.Service
-import me.aberrantfox.kjdautils.discord.Discord
-import me.aberrantfox.kjdautils.extensions.jda.sendPrivateMessage
+import me.jakejmattson.discordkt.api.Discord
+import me.jakejmattson.discordkt.api.annotations.Service
+import me.jakejmattson.discordkt.api.extensions.jda.sendPrivateMessage
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 

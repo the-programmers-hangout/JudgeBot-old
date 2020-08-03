@@ -6,11 +6,10 @@ import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
 import me.aberrantfox.judgebot.services.Permission
 import me.aberrantfox.judgebot.services.RoleService
 import me.aberrantfox.judgebot.services.RoleState
-import me.aberrantfox.kjdautils.api.annotation.CommandSet
-import me.aberrantfox.kjdautils.api.dsl.command.commands
-import me.aberrantfox.kjdautils.extensions.jda.fullName
-import me.aberrantfox.kjdautils.internal.arguments.SentenceArg
-import me.aberrantfox.kjdautils.internal.arguments.TimeStringArg
+import me.jakejmattson.discordkt.api.annotations.CommandSet
+import me.jakejmattson.discordkt.api.arguments.*
+import me.jakejmattson.discordkt.api.dsl.command.commands
+import me.jakejmattson.discordkt.api.extensions.jda.fullName
 import kotlin.math.roundToLong
 
 @CommandSet("Mutes")
@@ -19,7 +18,7 @@ fun createMuteCommands(roleService: RoleService) = commands {
         description = "Use this to mute a member"
         requiresGuild = true
         requiredPermissionLevel = Permission.Staff
-        execute(LowerMemberArg, TimeStringArg, SentenceArg) {
+        execute(LowerMemberArg, TimeArg, EveryArg) {
             val (targetMember, time, reason) = it.args
             roleService.applyRole(targetMember, time.roundToLong() * 1000, reason, PunishmentType.Mute)
             it.respond("User ${targetMember.fullName()} has been muted")
@@ -53,7 +52,7 @@ fun createMuteCommands(roleService: RoleService) = commands {
         description = "Use this to mute a member"
         requiresGuild = true
         requiredPermissionLevel = Permission.Moderator
-        execute(LowerMemberArg, TimeStringArg, SentenceArg) {
+        execute(LowerMemberArg, TimeArg, EveryArg) {
             val (targetMember, time, reason) = it.args
             roleService.applyRole(targetMember, time.roundToLong() * 1000, reason, PunishmentType.Blindfold)
             it.respond("User ${targetMember.fullName()} has been blindfolded")

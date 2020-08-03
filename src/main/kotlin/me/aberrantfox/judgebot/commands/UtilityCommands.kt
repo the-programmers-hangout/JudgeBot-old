@@ -1,10 +1,10 @@
 package me.aberrantfox.judgebot.commands
 
 import me.aberrantfox.judgebot.services.PermissionsService
-import me.aberrantfox.kjdautils.api.annotation.CommandSet
-import me.aberrantfox.kjdautils.api.dsl.command.commands
-import me.aberrantfox.kjdautils.api.dsl.embed
-import me.aberrantfox.kjdautils.internal.arguments.UserArg
+import me.jakejmattson.discordkt.api.annotations.CommandSet
+import me.jakejmattson.discordkt.api.arguments.*
+import me.jakejmattson.discordkt.api.dsl.command.commands
+import me.jakejmattson.discordkt.api.dsl.embed.embed
 import java.awt.Color
 
 @CommandSet("Utility")
@@ -16,7 +16,7 @@ fun createUtilityCommands(permissionsService: PermissionsService) = commands {
             val reverseSearchUrl = "<https://www.google.com/searchbyimage?&image_url=${user.effectiveAvatarUrl}>"
 
             val embed = embed {
-                title = "${user.asTag}'s pfp"
+                simpleTitle = "${user.asTag}'s pfp"
                 color = Color.MAGENTA
                 description = "[Reverse Search]($reverseSearchUrl)"
                 image = user.effectiveAvatarUrl

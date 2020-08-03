@@ -1,7 +1,7 @@
 package mock
 
 import io.mockk.*
-import me.aberrantfox.judgebot.configuration.BotConfiguration
+import me.aberrantfox.judgebot.configuration.Configuration
 import me.aberrantfox.judgebot.configuration.DatabaseConfiguration
 import me.aberrantfox.judgebot.configuration.GuildConfiguration
 import me.aberrantfox.judgebot.services.EmbedService
@@ -9,10 +9,10 @@ import me.aberrantfox.judgebot.services.database.RuleOperations
 import me.aberrantfox.judgebot.dataclasses.Rule
 import me.aberrantfox.judgebot.services.database.PunishmentOperations
 import me.aberrantfox.judgebot.services.database.UserOperations
-import me.aberrantfox.kjdautils.api.dsl.command.ArgumentContainer
-import me.aberrantfox.kjdautils.api.dsl.command.CommandEvent
-import me.aberrantfox.kjdautils.discord.Discord
-import me.aberrantfox.kjdautils.internal.services.ConversationService
+import me.jakejmattson.discordkt.api.Discord
+import me.jakejmattson.discordkt.api.dsl.command.CommandEvent
+import me.jakejmattson.discordkt.api.dsl.command.GenericContainer
+import me.jakejmattson.discordkt.api.services.ConversationService
 import net.dv8tion.jda.api.entities.Guild
 import org.litote.kmongo.newId
 
@@ -22,7 +22,7 @@ fun guildMock() = mockk<Guild>(relaxed = true) {
 
 fun discordMock() = mockk<Discord>(relaxed = true)
 
-fun commandEventMock() = mockk<CommandEvent<ArgumentContainer>>(relaxed = true) {
+fun commandEventMock() = mockk<CommandEvent<GenericContainer>>(relaxed = true) {
     every { discord } returns discordMock()
     every { guild } returns guildMock()
 }
@@ -55,7 +55,7 @@ object TestData {
             Rule(newId(), "test-guild", 3, "testRule3", "testTitle3", "testDescription3", "", 3)
     )
 
-    val botTestConfiguration: BotConfiguration = BotConfiguration(
+    val botTestConfiguration: Configuration = Configuration(
             owner = "test-owner",
             whitelist = listOf("testGuild"),
             guilds = listOf(GuildConfiguration("test-guild-id", "test-owner-id")),

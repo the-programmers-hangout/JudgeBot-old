@@ -1,14 +1,17 @@
 package me.aberrantfox.judgebot
 
 import com.google.gson.Gson
-import me.aberrantfox.kjdautils.api.dsl.PrefixDeleteMode
-import me.aberrantfox.kjdautils.api.dsl.embed
-import me.aberrantfox.kjdautils.api.startBot
-import me.aberrantfox.kjdautils.extensions.jda.fullName
+import me.aberrantfox.judgebot.configuration.Configuration
+import me.aberrantfox.judgebot.extensions.requiredPermissionLevel
+import me.aberrantfox.judgebot.services.BotStatsService
+import me.aberrantfox.judgebot.services.PermissionsService
+import me.jakejmattson.discordkt.api.dsl.bot
+import me.jakejmattson.discordkt.api.extensions.jda.fullName
+import me.jakejmattson.discordkt.api.extensions.jda.toMember
 import java.awt.Color
 import kotlin.system.exitProcess
 
-data class Properties(val author: String, val version: String, val kutils: String, val repository: String)
+data class Properties(val author: String, val version: String, val discordKt: String, val repository: String)
 
 private val propFile = Properties::class.java.getResource("/properties.json").readText()
 val project = Gson().fromJson(propFile, Properties::class.java)
@@ -21,7 +24,56 @@ fun main(args: Array<String>) {
         exitProcess(-1)
     }
 
-    startBot(token,"me.aberrantfox.judgebot.") {
+    bot(token) {
+        configure {
+            allowMentionPrefix = true
+            val (configuration, permissionsService, botStatsService)
+                    = it.getInjectionObjects(Configuration::class, PermissionsService::class, BotStatsService::class)
 
+            prefix {
+                it.guild?.let {
+                    configuration.getGuildConfig(it.id)?.prefix.takeUnless { it.isNullOrBlank() } ?: "judge!"
+                } ?: "<none>"
+            }
+
+            colors {
+                infoColor = Color.CYAN
+                failureColor = Color.RED
+                successColor = Color.GREEN
+            }
+
+            mentionEmbed {
+                val channel = it.channel
+                val self = channel.jda.selfUser
+                val requiredRole = configuration.getGuildConfig(it.guild!!.id)?.staffRole ?: "<Not Configured>"
+
+                color = Color.MAGENTA
+                thumbnail = self.effectiveAvatarUrl
+                addField(self.fullName(), "A bot for managing discord infractions in an intelligent and user-friendly way.")
+                addInlineField("Required role", requiredRole)
+                addInlineField("Prefix", configuration.prefix)
+
+                with(project) {
+                    val kotlinVersion = KotlinVersion.CURRENT
+
+                    addField("Bot Info", "```" +
+                            "Version: $version\n" +
+                            "DiscordKt: $discordKt\n" +
+                            "Kotlin: $kotlinVersion\n" +
+                            "Ping: ${botStatsService.ping}\n" +
+                            "Uptime: ${botStatsService.uptime}" +
+                            "```")
+
+                    addInlineField("Source", repository)
+                }
+            }
+
+            visibilityPredicate predicate@{
+                it.guild ?: return@predicate false
+                val member = it.user.toMember(it.guild!!)!!
+                val permission = it.command.requiredPermissionLevel
+                permissionsService.hasClearance(member, permission)
+            }
+        }
     }
 }
