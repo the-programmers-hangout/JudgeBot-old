@@ -54,3 +54,8 @@ Page 3 (or higher, depending on # of notes) shows the user's join/leave history 
 ![Page 2](./images/Notes.png)
 
 ![Page 3](./images/Joins.png)
+
+### Logging
+All punishments and infractions are logged to allow staff members to see the outcome of the infractions (as the infraction flow is done via conversations).
+
+![Log](./images/Log.png)
