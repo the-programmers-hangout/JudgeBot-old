@@ -2,15 +2,14 @@ package me.aberrantfox.judgebot.services.database
 
 import me.aberrantfox.judgebot.dataclasses.GuildDetails
 import me.aberrantfox.judgebot.dataclasses.GuildMember
-import me.aberrantfox.judgebot.dataclasses.Note
 import me.jakejmattson.discordkt.api.annotations.Service
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
-import org.joda.time.DateTime
 import org.litote.kmongo.eq
 import org.litote.kmongo.findOne
 import org.litote.kmongo.getCollection
 import org.litote.kmongo.updateOne
+import java.time.OffsetDateTime
 
 @Service
 class UserOperations(private val connection: ConnectionService) {
@@ -46,6 +45,11 @@ class UserOperations(private val connection: ConnectionService) {
 
     fun incrementUserHistory(user: GuildMember, guildId: String): GuildMember {
         user.incrementHistoryCount(guildId)
+        return this.updateUser(user)
+    }
+
+    fun insertGuildLeave(user: GuildMember, guild: Guild, joinDateTime: Long, leaveDateTime: Long): GuildMember {
+        user.addGuildLeave(joinDateTime, leaveDateTime, guild)
         return this.updateUser(user)
     }
 }

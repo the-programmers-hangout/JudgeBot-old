@@ -8,7 +8,12 @@ import me.aberrantfox.judgebot.services.PermissionsService
 import me.jakejmattson.discordkt.api.dsl.bot
 import me.jakejmattson.discordkt.api.extensions.jda.fullName
 import me.jakejmattson.discordkt.api.extensions.jda.toMember
+import net.dv8tion.jda.api.JDABuilder
+import net.dv8tion.jda.api.requests.GatewayIntent
+import net.dv8tion.jda.api.utils.ChunkingFilter
+import net.dv8tion.jda.api.utils.MemberCachePolicy
 import java.awt.Color
+import java.util.*
 import kotlin.system.exitProcess
 
 data class Properties(val author: String, val version: String, val discordKt: String, val repository: String)
@@ -25,6 +30,13 @@ fun main(args: Array<String>) {
     }
 
     bot(token) {
+        client { token ->
+            JDABuilder.createDefault(token)
+                    .setChunkingFilter(ChunkingFilter.ALL)
+                    .enableIntents(EnumSet.allOf(GatewayIntent::class.java))
+                    .setMemberCachePolicy(MemberCachePolicy.ALL)
+        }
+
         configure {
             allowMentionPrefix = true
             val (configuration, permissionsService, botStatsService)

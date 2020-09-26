@@ -4,7 +4,6 @@ import me.aberrantfox.judgebot.services.PermissionsService
 import me.jakejmattson.discordkt.api.dsl.arguments.*
 import me.jakejmattson.discordkt.api.dsl.command.CommandEvent
 import me.jakejmattson.discordkt.api.extensions.stdlib.trimToID
-import me.jakejmattson.discordkt.api.extensions.jda.tryRetrieveSnowflake
 import net.dv8tion.jda.api.entities.Member
 
 open class LowerMemberArg(override val name : String = "Lower Ranked member") : ArgumentType<Member>() {
@@ -16,7 +15,7 @@ open class LowerMemberArg(override val name : String = "Lower Ranked member") : 
     override fun convert(arg: String, args: List<String>, event: CommandEvent<*>): ArgumentResult<Member> {
         val permissions = event.discord.getInjectionObjects(PermissionsService::class)
 
-        val retrieved =  event.discord.jda.tryRetrieveSnowflake {
+        val retrieved =  event.discord.retrieveEntity {
             event.guild?.getMemberById(arg.trimToID())
         } as Member? ?: return Error("Couldn't retrieve member: $arg")
 

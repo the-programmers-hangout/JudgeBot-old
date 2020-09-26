@@ -1,15 +1,16 @@
 # Commands
 
-## Key
-| Symbol     | Meaning                    |
-| ---------- | -------------------------- |
-| (Argument) | This argument is optional. |
+## Key 
+| Symbol      | Meaning                        |
+| ----------- | ------------------------------ |
+| (Argument)  | Argument is not required.      |
 
 ## Ban
-| Commands | Arguments                 | Description                                                                    |
-| -------- | ------------------------- | ------------------------------------------------------------------------------ |
-| ban      | Lower Ranked member, Text | Bans a member for the passed reason, deleting a given number of days messages. |
-| unban    | User                      | Unbans a target user                                                           |
+| Commands           | Arguments                 | Description                                                                    |
+| ------------------ | ------------------------- | ------------------------------------------------------------------------------ |
+| ban                | Lower Ranked member, Text | Bans a member for the passed reason, deleting a given number of days messages. |
+| testjoinleave, tjl | User                      | <No Description>                                                               |
+| unban              | User                      | Unbans a target user                                                           |
 
 ## Infraction
 | Commands              | Arguments                     | Description                                                                                                                           |
