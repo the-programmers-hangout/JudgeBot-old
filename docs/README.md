@@ -55,7 +55,21 @@ Page 3 (or higher, depending on # of notes) shows the user's join/leave history 
 
 ![Page 3](./images/Joins.png)
 
+### Infraction Flow
+Unlike Hotbot, Judgebot's infractions are conversation based. The `infract` command takes a User ID and starts a conversation with the moderator. The moderator sees the user's history first, and then is prompted to add the details for the infraction. An example is shown below.
+
+![Infractions](./images/Infractions.png)
+
+
+### Infraction (Infracted Member side)
+As mentioned above, when a user is infracted, they receive a "Hotbot like" message, but also the details about which rule they are being infracted for. This will hopefully help them see the reason for their infraction and stop them questioning it.
+
+![Infraction](./images/Infraction.png)
+
+
 ### Logging
 All punishments and infractions are logged to allow staff members to see the outcome of the infractions (as the infraction flow is done via conversations).
 
 ![Log](./images/Log.png)
+
+
