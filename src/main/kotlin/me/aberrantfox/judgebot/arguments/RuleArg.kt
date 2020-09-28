@@ -1,21 +1,26 @@
 package me.aberrantfox.judgebot.arguments
 
-import me.aberrantfox.judgebot.configuration.Rule
-import me.aberrantfox.kjdautils.api.dsl.command.CommandEvent
-import me.aberrantfox.kjdautils.internal.command.ArgumentResult
-import me.aberrantfox.kjdautils.internal.command.ArgumentType
-import me.aberrantfox.kjdautils.internal.command.ConsumptionType
+import me.aberrantfox.judgebot.dataclasses.Rule
+import me.aberrantfox.judgebot.services.DatabaseService
+import me.jakejmattson.discordkt.api.dsl.arguments.ArgumentResult
+import me.jakejmattson.discordkt.api.dsl.arguments.ArgumentType
+import me.jakejmattson.discordkt.api.dsl.arguments.Success
+import me.jakejmattson.discordkt.api.dsl.arguments.Error
+import me.jakejmattson.discordkt.api.dsl.command.CommandEvent
+import net.dv8tion.jda.api.entities.Guild
 
+open class RuleArg(override val name : String = "Rule"): ArgumentType<Rule>() {
+    override fun generateExamples(event: CommandEvent<*>): MutableList<String> = mutableListOf("1", "2")
 
-open class RuleArg(override val name : String = "Macro"): ArgumentType<Rule>() {
     companion object : RuleArg()
 
-    override val examples = arrayListOf("1", "2", "3", "4")
-    override val consumptionType = ConsumptionType.Single
-
     override fun convert(arg: String, args: List<String>, event: CommandEvent<*>): ArgumentResult<Rule> {
-        val guild = event.guild ?: return ArgumentResult.Error("Rule arguments cannot be used outside of guilds.")
+        val guild : Guild = event.guild ?: return Error("Rule arguments cannot be used outside of guilds.")
 
-        return ArgumentResult.Success(Rule(), listOf("a"))
+        val databaseService: DatabaseService = event.discord.getInjectionObjects(DatabaseService::class)
+
+        val rule: Rule? = databaseService.rules.getRule(arg.toInt(), guild.id)
+
+        return if (rule == null) Error("Rule not found.") else Success(rule)
     }
 }

@@ -1,0 +1,5 @@
+{
+  "version": "${version}",
+  "discordKt": "${discordKt.version}",
+  "repository": "${project.repository}"
+}
